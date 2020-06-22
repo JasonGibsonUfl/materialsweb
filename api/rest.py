@@ -34,12 +34,7 @@ class QueryEngine():
                 all_results = all_results.filter(structure__spacegroup__number=space_group_number)
             else:
                 all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number)
-        if(dimension != None):
-            if len(all_results) > 0:
-                all_results = all_results.filter(calculation__dimension=dimension)
-            else:
-                all_results = Entry.objects.filter(calculation__dimension=dimension)
-
+        if(dimension)
         all_results = all_results.distinct()
         #all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number,
         #                                  calculation__band_gap__range=band_gap_range,
@@ -56,7 +51,6 @@ class QueryEngine():
 
     def element_query_set(self, elements):
         element_query=QueryEngine.element_query(self, elements=elements)
-        query_set =[]
         for el in element_query:
             try:
                 query_set = query_set.filter(el)
