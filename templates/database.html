@@ -1,0 +1,413 @@
+{% load static %}
+
+<head xmlns="http://www.w3.org/1999/html">
+    <title>Bulk Materials</title>
+    <link rel="icon" href="{% static 'Images/Black_Icon.png' %}" sizes="16x16">
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'CSS/dbstyle.css' %}" />
+    <link rel="stylesheet" href="{% static 'CSS/sortable-theme-dark.css' %}" />
+    <link href='https://fonts.googleapis.com/css?family=Nunito:300'
+        rel='stylesheet' type='text/css'>
+    <link href="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.min.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.js"></script>
+
+</head>
+
+<body onload="displayResults()">
+
+<style>
+
+
+</style>
+  <div id="HomePageHeaderBox">
+
+
+      <a href="/">
+            <img src="{% static "Images/Icon.png" %}" id="Icon" style="display: inline; width: 102; height: 115; position: relative; top: 2px; left: 42px;"/>
+      </a>
+      <h1 id="HomePageHeader">Bulk Materials</h1>
+      <div id="Menu">
+          <a class="hvr-float-shadow" href="/">Home</a>
+          <a class="hvr-float-shadow" href="/about">About</a>
+          <a class="hvr-float-shadow" href="/docs">Docs</a>
+          <a class="hvr-float-shadow" href="/contact">Contact</a>
+          <a class="hvr-float-shadow" href="/api" id="Api">API</a>
+          {% if is_signed_in %}
+            <a class="hvr-float-shadow" href="/logout" id="SignOut">Sign Out</a>
+          {% else %}
+            <a class="hvr-float-shadow" href="/login" id="SignOut">Sign In</a>
+          {% endif %}
+      </div>
+  </div>
+
+  <script type="text/javascript" src="{% static "javascript/3Dmol/jquery.js" %}">
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="{% static "parallax.js" %}"></script>
+  <script src="{% static "javascript/3Dmol/3Dmol-nojquery-min.js" %}"></script>
+
+  <script>
+  function add(ev) {
+      var elt_name = (ev.target.id + "-");
+      var formulabox = document.getElementById("FormulaBox");
+      var oldformula = formulabox.value;
+      if (oldformula.indexOf(elt_name) != -1) {
+          formulabox.value = oldformula.replace(elt_name,"");
+          document.getElementById(ev.target.id).style.backgroundColor = "black";
+      } else {
+          formulabox.value = (oldformula + elt_name);
+          document.getElementById(ev.target.id).style.backgroundColor = "#fcb040";
+      }
+  }
+  </script>
+
+  <div class="live_element" style="left: 50px; top: 180px;" id="H" onclick="add(event)">H</div>
+  <div class="live_element" style="left: 50px; top: 235px;" id="Li" onclick="add(event)">Li</div>
+  <div class="live_element" style="left: 50px; top: 290px;" id="Na" onclick="add(event)">Na</div>
+  <div class="live_element" style="left: 50px; top: 345px;" id="K" onclick="add(event)">K</div>
+  <div class="live_element" style="left: 50px; top: 400px;" id="Rb" onclick="add(event)">Rb</div>
+  <div class="live_element" style="left: 50px; top: 455px;" id="Cs" onclick="add(event)">Cs</div>
+
+  <div class="live_element" style="left: 105px; top: 235px;" id="Be" onclick="add(event)">Be</div>
+  <div class="live_element" style="left: 105px; top: 290px;" id="Mg" onclick="add(event)">Mg</div>
+  <div class="live_element" style="left: 105px; top: 345px;" id="Ca" onclick="add(event)">Ca</div>
+  <div class="live_element" style="left: 105px; top: 400px;" id="Sr" onclick="add(event)">Sr</div>
+  <div class="live_element" style="left: 105px; top: 455px;" id="Ba" onclick="add(event)">Ba</div>
+
+  <div class="live_element" style="left: 160px; top: 345px;" id="Sc" onclick="add(event)">Sc</div>
+  <div class="live_element" style="left: 160px; top: 400px;" id="Y" onclick="add(event)">Y</div>
+  <div class="placeholder" style="left: 160px; top: 455px;" id="La_placeholder">La</div>
+  <div class="live_element" style="left: 160px; top: 530px;" id="La" onclick="add(event)">La</div>
+  <div class="live_element" style="left: 160px; top: 585px;" id="Ac" onclick="add(event)">Ac</div>
+
+  <div class="live_element" style="left: 215px; top: 345px;" id="Ti" onclick="add(event)">Ti</div>
+  <div class="live_element" style="left: 215px; top: 400px;" id="Zr" onclick="add(event)">Zr</div>
+  <div class="live_element" style="left: 215px; top: 455px;" id="Hf" onclick="add(event)">Hf</div>
+  <div class="live_element" style="left: 215px; top: 530px;" id="Ce" onclick="add(event)">Ce</div>
+  <div class="live_element" style="left: 215px; top: 585px;" id="Th" onclick="add(event)">Th</div>
+
+  <div class="live_element" style="left: 270px; top: 345px;" id="V" onclick="add(event)">V</div>
+  <div class="live_element" style="left: 270px; top: 400px;" id="Nb" onclick="add(event)">Nb</div>
+  <div class="live_element" style="left: 270px; top: 455px;" id="Ta" onclick="add(event)">Ta</div>
+  <div class="live_element" style="left: 270px; top: 530px;" id="Pr" onclick="add(event)">Pr</div>
+  <div class="live_element" style="left: 270px; top: 585px;" id="Pa" onclick="add(event)">Pa</div>
+
+  <div class="live_element" style="left: 325px; top: 345px;" id="Cr" onclick="add(event)">Cr</div>
+  <div class="live_element" style="left: 325px; top: 400px;" id="Mo" onclick="add(event)">Mo</div>
+  <div class="live_element" style="left: 325px; top: 455px;" id="W" onclick="add(event)">W</div>
+  <div class="live_element" style="left: 325px; top: 530px;" id="Nd" onclick="add(event)">Nd</div>
+  <div class="live_element" style="left: 325px; top: 585px;" id="U" onclick="add(event)">U</div>
+
+  <div class="live_element" style="left: 380px; top: 345px;" id="Mn" onclick="add(event)">Mn</div>
+  <div class="live_element" style="left: 380px; top: 400px;" id="Tc" onclick="add(event)">Tc</div>
+  <div class="live_element" style="left: 380px; top: 455px;" id="Re" onclick="add(event)">Re</div>
+  <div class="live_element" style="left: 380px; top: 530px;" id="Pm" onclick="add(event)">Pm</div>
+  <div class="live_element" style="left: 380px; top: 585px;" id="Np" onclick="add(event)">Np</div>
+
+  <div class="live_element" style="left: 435px; top: 345px;" id="Fe" onclick="add(event)">Fe</div>
+  <div class="live_element" style="left: 435px; top: 400px;" id="Ru" onclick="add(event)">Ru</div>
+  <div class="live_element" style="left: 435px; top: 455px;" id="Os" onclick="add(event)">Os</div>
+  <div class="live_element" style="left: 435px; top: 530px;" id="Sm" onclick="add(event)">Sm</div>
+  <div class="live_element" style="left: 435px; top: 585px;" id="Pu" onclick="add(event)">Pu</div>
+
+  <div class="live_element" style="left: 490px; top: 345px;" id="Co" onclick="add(event)">Co</div>
+  <div class="live_element" style="left: 490px; top: 400px;" id="Rh" onclick="add(event)">Rh</div>
+  <div class="live_element" style="left: 490px; top: 455px;" id="Ir" onclick="add(event)">Ir</div>
+  <div class="live_element" style="left: 490px; top: 530px;" id="Eu" onclick="add(event)">Eu</div>
+  <div class="live_element" style="left: 490px; top: 585px;" id="Am" onclick="add(event)">Am</div>
+
+  <div class="live_element" style="left: 545px; top: 345px;" id="Ni" onclick="add(event)">Ni</div>
+  <div class="live_element" style="left: 545px; top: 400px;" id="Pd" onclick="add(event)">Pd</div>
+  <div class="live_element" style="left: 545px; top: 455px;" id="Pt" onclick="add(event)">Pt</div>
+  <div class="live_element" style="left: 545px; top: 530px;" id="Gd" onclick="add(event)">Gd</div>
+  <div class="live_element" style="left: 545px; top: 585px;" id="Cm" onclick="add(event)">Cm</div>
+
+  <div class="live_element" style="left: 600px; top: 345px;" id="Cu" onclick="add(event)">Cu</div>
+  <div class="live_element" style="left: 600px; top: 400px;" id="Ag" onclick="add(event)">Ag</div>
+  <div class="live_element" style="left: 600px; top: 455px;" id="Au" onclick="add(event)">Au</div>
+  <div class="live_element" style="left: 600px; top: 530px;" id="Tb" onclick="add(event)">Tb</div>
+  <div class="live_element" style="left: 600px; top: 585px;" id="Bk" onclick="add(event)">Bk</div>
+
+  <div class="live_element" style="left: 655px; top: 345px;" id="Zn" onclick="add(event)">Zn</div>
+  <div class="live_element" style="left: 655px; top: 400px;" id="Cd" onclick="add(event)">Cd</div>
+  <div class="live_element" style="left: 655px; top: 455px;" id="Hg" onclick="add(event)">Hg</div>
+  <div class="live_element" style="left: 655px; top: 530px;" id="Dy" onclick="add(event)">Dy</div>
+  <div class="live_element" style="left: 655px; top: 585px;" id="Cf" onclick="add(event)">Cf</div>
+
+  <div class="live_element" style="left: 710px; top: 235px;" id="B" onclick="add(event)">B</div>
+  <div class="live_element" style="left: 710px; top: 290px;" id="Al" onclick="add(event)">Al</div>
+  <div class="live_element" style="left: 710px; top: 345px;" id="Ga" onclick="add(event)">Ga</div>
+  <div class="live_element" style="left: 710px; top: 400px;" id="In" onclick="add(event)">In</div>
+  <div class="live_element" style="left: 710px; top: 455px;" id="Tl" onclick="add(event)">Tl</div>
+  <div class="live_element" style="left: 710px; top: 530px;" id="Ho" onclick="add(event)">Ho</div>
+  <div class="live_element" style="left: 710px; top: 585px;" id="Es" onclick="add(event)">Es</div>
+
+  <div class="live_element" style="left: 765px; top: 235px;" id="C" onclick="add(event)">C</div>
+  <div class="live_element" style="left: 765px; top: 290px;" id="Si" onclick="add(event)">Si</div>
+  <div class="live_element" style="left: 765px; top: 345px;" id="Ge" onclick="add(event)">Ge</div>
+  <div class="live_element" style="left: 765px; top: 400px;" id="Sn" onclick="add(event)">Sn</div>
+  <div class="live_element" style="left: 765px; top: 455px;" id="Pb" onclick="add(event)">Pb</div>
+  <div class="live_element" style="left: 765px; top: 530px;" id="Er" onclick="add(event)">Er</div>
+  <div class="live_element" style="left: 765px; top: 585px;" id="Fm" onclick="add(event)">Fm</div>
+
+  <div class="live_element" style="left: 820px; top: 235px;" id="N" onclick="add(event)">N</div>
+  <div class="live_element" style="left: 820px; top: 290px;" id="P" onclick="add(event)">P</div>
+  <div class="live_element" style="left: 820px; top: 345px;" id="As" onclick="add(event)">As</div>
+  <div class="live_element" style="left: 820px; top: 400px;" id="Sb" onclick="add(event)">Sb</div>
+  <div class="live_element" style="left: 820px; top: 455px;" id="Bi" onclick="add(event)">Bi</div>
+  <div class="live_element" style="left: 820px; top: 530px;" id="Tm" onclick="add(event)">Tm</div>
+  <div class="live_element" style="left: 820px; top: 585px;" id="Md" onclick="add(event)">Md</div>
+
+  <div class="live_element" style="left: 875px; top: 235px;" id="O" onclick="add(event)">O</div>
+  <div class="live_element" style="left: 875px; top: 290px;" id="S" onclick="add(event)">S</div>
+  <div class="live_element" style="left: 875px; top: 345px;" id="Se" onclick="add(event)">Se</div>
+  <div class="live_element" style="left: 875px; top: 400px;" id="Te" onclick="add(event)">Te</div>
+  <div class="live_element" style="left: 875px; top: 455px;" id="Po" onclick="add(event)">Po</div>
+  <div class="live_element" style="left: 875px; top: 530px;" id="Yb" onclick="add(event)">Yb</div>
+  <div class="live_element" style="left: 875px; top: 585px;" id="No" onclick="add(event)">No</div>
+
+  <div class="live_element" style="left: 930px; top: 235px;" id="F" onclick="add(event)">F</div>
+  <div class="live_element" style="left: 930px; top: 290px;" id="Cl" onclick="add(event)">Cl</div>
+  <div class="live_element" style="left: 930px; top: 345px;" id="Br" onclick="add(event)">Br</div>
+  <div class="live_element" style="left: 930px; top: 400px;" id="I" onclick="add(event)">I</div>
+  <div class="live_element" style="left: 930px; top: 455px;" id="At" onclick="add(event)">At</div>
+  <div class="live_element" style="left: 930px; top: 530px;" id="Lu" onclick="add(event)">Lu</div>
+  <div class="live_element" style="left: 930px; top: 585px;" id="Lr" onclick="add(event)">Lr</div>
+
+  <div class="live_element" style="left: 985px; top: 180px;" id="He" onclick="add(event)">He</div>
+  <div class="live_element" style="left: 985px; top: 235px;" id="Ne" onclick="add(event)">Ne</div>
+  <div class="live_element" style="left: 985px; top: 290px;" id="Ar" onclick="add(event)">Ar</div>
+  <div class="live_element" style="left: 985px; top: 345px;" id="Kr" onclick="add(event)">Kr</div>
+  <div class="live_element" style="left: 985px; top: 400px;" id="Xe" onclick="add(event)">Xe</div>
+  <div class="live_element" style="left: 985px; top: 455px;" id="Rn" onclick="add(event)">Rn</div>
+
+
+    <table data-sortable class="sortable-theme-dark" style="position: relative; top: 450px; left: 50px;">
+      <thead>
+        <tr>
+            <th style="cursor: pointer; width: 250px;">Material</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+
+          {% for results in all_results %}
+            <tr>
+
+              <td style="width: 150px;">
+                <a style="top: 0px; color: white;" href = '/database/{{  results.id  }}'> {{  results.composition.formula  }}</a>
+            </td>
+
+            </tr>
+          {% endfor %}
+
+        </tr>
+      </tbody>
+    </table>
+
+    <form method="post">{% csrf_token %}
+        <input type="text" id="FormulaBox" name="FormulaBox"
+            placeholder="'V-Al-C', 'Nb2SiN', or mpquery">
+        <input type="submit" value="Submit" name="Submit" id="Submit">
+
+
+        <div class="sidenav">
+          <a style="font-size: 30">Filters</a>
+          <hr>
+          <a>Band Gap (eV)</a>
+          <div id="bandGap"></div>
+          <br>
+          <input type="number" min="0" max="9.99" step="0.01" id="band_gap_min" style="left:0; width:85; display block; margin: 7" name="band_gap_min">
+          <input type="number" min="0.01" max="10" step="0.01" id="band_gap_max"  style="left:0; width:85; display block; margin: 5" name="band_gap_max">
+          <hr>
+
+          <a>Formation Energy (eV)</a>
+          <div id="formationEnergy"></div>
+          <br>
+          <input type="number" min="-4" max="3.99" step="0.01" id="formation_energy_min" style="left:0; width:85; display block; margin: 7" name="formation_energy_min">
+          <input type="number" min="-3.99" max="4" step="0.01" id="formation_energy_max"  style="left:0; width:85; display block; margin: 5" name="formation_energy_max">
+          <hr>
+          <a>Crystal System</a>
+          <div>
+            <div>
+              <input type="checkbox" name="hexagonal" id="hexagonal" >
+              <label for="hexagonal" style="color:#818181; ">Hexagonal</label>
+            </div>
+            <div >
+              <input type="checkbox" name="monoclinic" id="monoclinic" >
+              <label for="monoclinic" style="color:#818181; ">Monoclinic</label>
+            </div>
+            <div>
+              <input type="checkbox" name="orthorhombic" id="orthorhombic">
+              <label for="orthorhombic" style="color:#818181;">Orthorhombic</label>
+            </div>
+            <div>
+              <input type="checkbox" name="cubic" id="cubic">
+              <label for="cubic" style="color:#818181;">Cubic</label>
+            </div>
+            <div>
+              <input type="checkbox" name="tetragonal" id="tetragonal">
+              <label for="tetragonal" style="color:#818181;">Tetragonal</label>
+            </div>
+            <div>
+              <input type="checkbox" name="trigonal" id="trigonal">
+              <label for="trigonal" style="color:#818181;">Trigonal</label>
+            </div>
+            <div>
+              <input type="checkbox" name="triclinic" id="triclinic">
+              <label for="triclinic" style="color:#818181;">Triclinic</label>
+            </div>
+          </div>
+          <hr>
+          <div>
+            <a >Dimensional</a>
+            <input type="checkbox" name="3D" id="3D">
+            <label for="3D" style="color:#818181">3D</label>
+            <input type="checkbox" name="2D" id="2D">
+            <label for="2D" style="color:#818181">2D</label>
+            <input type="checkbox" name="1D" id="1D">
+            <label for="1D" style="color:#818181">1D</label>
+          </div>
+          <hr>
+       </div>
+    </form>
+
+
+
+    <!-- Trigger/Open The Modal -->
+    <button id="Help">[Help]</button>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">X</span>
+        <p>There are several ways to query the database:</p>
+        <p>1. Click on elements to search for a general composition</p>
+        <p>2. Enter a specific formula</p>
+        <p>3. Enter an mpquery (dictionary-style search). For example, entering
+          {} will return all materials in the database. Entering
+          {'elements':{'$in':['Y']}} will return all materials that contain Y.
+          Please see the <a style="color: #fcb040; font-size: 16;" target="_blank" href="https://github.com/materialsproject/mapidoc">
+          Materials Project API documentation</a> for more details on the
+          mpquery syntax.</p>
+      </div>
+
+    </div>
+
+    <script>
+    // Get the modal
+    var modal = document.getElementById('myModal');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("Help");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    </script>
+
+    <script src="{% static 'javascript/install.js' %}"></script>
+    <script src="{% static 'javascript/sortable.js' %}"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-85193239-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+<script>
+
+</script>
+
+<script>
+var formationEnergySlider = document.getElementById('formationEnergy');
+
+noUiSlider.create(formationEnergySlider, {
+    start: [-4, 4],
+    connect: true,
+    range: {
+        'min': -4,
+        'max': 4
+    }
+});
+
+var inputNumberFE =[
+  document.getElementById('formation_energy_min'),
+  document.getElementById('formation_energy_max')
+  ];
+
+formationEnergySlider.noUiSlider.on('update', function (values, handle) {
+    inputNumberFE[handle].value = values[handle];
+
+});
+
+select.addEventListener('change', function () {
+    formationEnergySlider.noUiSlider.set([this.value, null]);
+});
+
+inputNumberFE.addEventListener('change', function () {
+    FormationEnergySlider.noUiSlider.set([null, this.value]);
+});
+</script>
+
+<script>
+var bandGapSlider = document.getElementById('bandGap');
+
+noUiSlider.create(bandGapSlider, {
+    start: [0, 10],
+    connect: true,
+    range: {
+        'min': 0,
+        'max': 10
+    }
+});
+
+var inputNumber =[
+  document.getElementById('band_gap_min'),
+  document.getElementById('band_gap_max')
+  ];
+
+bandGapSlider.noUiSlider.on('update', function (values, handle) {
+    inputNumber[handle].value = values[handle];
+
+});
+
+select.addEventListener('change', function () {
+    bandGapSlider.noUiSlider.set([this.value, null]);
+});
+
+inputNumber.addEventListener('change', function () {
+    bandGapSlider.noUiSlider.set([null, this.value]);
+});
+</script>
+
+<style>
+.noUi-connect {
+    background: #fcb040;
+}
+
+</style>
+</body>
