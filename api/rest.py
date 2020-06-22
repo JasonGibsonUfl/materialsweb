@@ -34,7 +34,7 @@ class QueryEngine():
                 all_results = all_results.filter(structure__spacegroup__number=space_group_number)
             else:
                 all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number)
-        if(dimension)
+
         all_results = all_results.distinct()
         #all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number,
         #                                  calculation__band_gap__range=band_gap_range,
