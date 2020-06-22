@@ -7,7 +7,8 @@ class QueryEngine():
     db = dba.connect(read_default_file='/etc/mysql/my.cnf')
     cursor = db.cursor()
 
-    def get_calculation(self, band_gap_range=None, formation_energy_range=None, elements=None, space_group_number=None):
+    def get_calculation(self, band_gap_range=None, formation_energy_range=None, elements=None, space_group_number=None,
+                        dimension=None):
         # TODO: Throw error for more than 2 inputs
         #all_results = Entry.objects.filter(calculation__band_gap__range=band_gap_range,
         #                                   calculation__formation_energy__range=formation_energy_range)
@@ -33,6 +34,11 @@ class QueryEngine():
                 all_results = all_results.filter(structure__spacegroup__number=space_group_number)
             else:
                 all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number)
+        if(dimension != None):
+            if len(all_results) > 0:
+                all_results = all_results.filter(calculation__dimension=dimension)
+            else:
+                all_results = Entry.objects.filter(calculation__dimension=dimension)
 
         all_results = all_results.distinct()
         #all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number,
