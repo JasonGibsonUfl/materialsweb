@@ -56,6 +56,7 @@ class QueryEngine():
 
     def element_query_set(self, elements):
         element_query=QueryEngine.element_query(self, elements=elements)
+        query_set =[]
         for el in element_query:
             try:
                 query_set = query_set.filter(el)
