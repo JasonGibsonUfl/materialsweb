@@ -1,6 +1,7 @@
 {% extends 'home.html' %}
 {% load staticfiles %}
 {% static "" as baseUrl %}
+{% block apps %}
 
 <body onload="downloadResults();">
 
@@ -45,3 +46,4 @@
     </p>
 
 </body>
+{% endblock %}
