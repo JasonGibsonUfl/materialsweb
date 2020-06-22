@@ -99,7 +99,7 @@ def database_view(request, *args,**kwargs):
         
         if all(v == 0 for v in dimensions):
             dimensions = None
-        print('Dime  '+ dimensions)
+        print(dimensions)
         qe = QueryEngine()
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range, formation_energy_range=formation_energy_range ,dimension=dimensions)
 
