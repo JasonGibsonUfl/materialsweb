@@ -31,5 +31,6 @@ urlpatterns = [
     path('database/<int:pk>', views.result_view, name='result'),
     path('', include('api.urls')),
     path('gasp', views.gasp_view, name='gasp'),
+    path('substrate', views.substrate_view, name='substrate'),
 
 ]

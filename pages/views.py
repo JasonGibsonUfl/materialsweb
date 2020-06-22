@@ -32,6 +32,9 @@ def home_view(request, *args,**kwargs):
 def gasp_view(request, *args,**kwargs):
     return render(request, 'gasp.html', {})
 
+def substrate_view(request, *args,**kwargs):
+    return render(request, 'substrate.html', {})
+
 def about_view(request, *args,**kwargs):
     return render(request, 'about.html', {})
 
