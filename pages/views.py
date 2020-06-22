@@ -29,6 +29,8 @@ def home_view(request, *args,**kwargs):
     context= {"is_signed_in": is_signed_in}
     return render(request, 'home.html', context)
 
+def gasp_view(request, *args,**kwargs):
+    return render(request, 'gasp.html', {})
 
 def about_view(request, *args,**kwargs):
     return render(request, 'about.html', {})

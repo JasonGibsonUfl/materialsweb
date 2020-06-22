@@ -30,4 +30,6 @@ urlpatterns = [
     path('database', views.database_view, name='database'),
     path('database/<int:pk>', views.result_view, name='result'),
     path('', include('api.urls')),
+    path('gasp', views.gasp_view, name='gasp'),
+
 ]
