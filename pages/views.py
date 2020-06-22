@@ -63,6 +63,9 @@ def api_view(request, *args,**kwargs):
 def database_view(request, *args,**kwargs):
     if request.POST.get('Submit'):
         context = {}
+        dim1 = 0
+        dim2 = dim1
+        dim3 = dim2
         formula = request.POST.get('FormulaBox')
         formula = str(formula).split('-')
         print(formula)
@@ -85,9 +88,20 @@ def database_view(request, *args,**kwargs):
             formation_energy_range = [str(float(formation_energy_min)*1000.0), str(float(formation_energy_max)*1000.0)]
         if band_gap_min == '0.00' and band_gap_max == '10.00':
             band_range = None
-        print('test'+str(request.POST.get('2D')))
+
+        if str(request.POST.get('3D')) == 'on':
+            dim3 = 3
+        if str(request.POST.get('2D')) == 'on':
+            dim2 = 2
+        if str(request.POST.get('1D')) == 'on':
+            dim1 = 1
+        dimensions = [dim3, dim2, dim1]
+        
+        if all(v == 0 for v in dimensions):
+            dimensions = None
+        print('Dime  '+ dimensions)
         qe = QueryEngine()
-        all_results = qe.get_calculation(elements=formula, band_gap_range=band_range, formation_energy_range=formation_energy_range,)
+        all_results = qe.get_calculation(elements=formula, band_gap_range=band_range, formation_energy_range=formation_energy_range ,dimension=dimensions)
 
         context = {
             'all_results': all_results
