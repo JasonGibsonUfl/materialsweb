@@ -85,7 +85,7 @@ def database_view(request, *args,**kwargs):
             formation_energy_range = [str(float(formation_energy_min)*1000.0), str(float(formation_energy_max)*1000.0)]
         if band_gap_min == '0.00' and band_gap_max == '10.00':
             band_range = None
-        print(request.POST.get('2D'))
+        print('test'+str(request.POST.get('2D')))
         qe = QueryEngine()
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range, formation_energy_range=formation_energy_range,)
 
