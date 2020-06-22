@@ -109,6 +109,7 @@ def result_view(request, *args, **kwargs):
     path = entry.path
     calculation = Calculation.objects.get(path=path)
     band_gap = round(calculation.dos.find_gap(),3)
+    ##TEST
     if band_gap != 0:
         if(calculation.is_direct):
             direct = 'direct'
