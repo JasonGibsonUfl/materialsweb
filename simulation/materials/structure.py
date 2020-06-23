@@ -192,7 +192,7 @@ class Structure(models.Model, object):
         else:
             translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
             for site in structure.sites:
-                if site._coords[2] > 0.9 or site._coords[2] < 0:
+                if site._frac_coords[2] > 0.9 or site._frac_coords[2] < 0:
                     needs_shift = True
             if needs_shift:
                 structure.apply_operation(translation)
