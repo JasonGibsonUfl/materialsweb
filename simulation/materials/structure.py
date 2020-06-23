@@ -199,8 +199,7 @@ class Structure(models.Model, object):
             structure.make_supercell([6, 6, 1])
 
         print(structure.lattice.b)
-       xyz_structure = [str(structure.num_sites),
-                         structure.composition.reduced_formula]
+        xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
         for site in structure.sites:
             element = site._species.reduced_formula.replace('2', '')
             atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))
