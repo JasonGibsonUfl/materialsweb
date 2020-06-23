@@ -169,7 +169,6 @@ class Structure(models.Model, object):
     def __len__(self):
         return len(self.atoms)
 
-    def get_abc
 
     def get_jmol(self):
         from pymatgen.core.operations import SymmOp
