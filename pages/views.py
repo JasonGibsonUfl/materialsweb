@@ -151,8 +151,8 @@ def result_view(request, *args, **kwargs):
     path = str(path.split('/')[-1])
     label = path
     formation_energy = calculation.formation_energy
-    a = structure.a
-    b = structure.b
+    a = structure.lattice.a
+    b = structure.lattice.b
     structure = Structure.objects.get(label=path)
     print(calculation)
     context = {
