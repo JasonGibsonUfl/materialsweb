@@ -197,6 +197,7 @@ class Structure(models.Model, object):
                     needs_shift = True
             if needs_shift:
                 structure.apply_operation(translation)
+                print('frac_coord: '+ str(site._frac_coords[2]))
             structure.make_supercell([6, 6, 1])
 
         print(structure.lattice.b)
