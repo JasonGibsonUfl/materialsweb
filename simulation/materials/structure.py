@@ -172,8 +172,11 @@ class Structure(models.Model, object):
 
 
     def get_jmol(self):
+        from pymatgen.core.operations import SymmOp
         structure = StructureP.from_file(self.entry.path+'/POSCAR')
-        structure.make_supercell([6,6,6])
+        translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
+        structure.apply_operation(translation)
+        structure.make_supercell([6,6,1])
         xyz_structure = [str(structure.num_sites),
                          structure.composition.reduced_formula]
         for site in structure.sites:
