@@ -96,7 +96,7 @@ def database_view(request, *args,**kwargs):
         if str(request.POST.get('1D')) == 'on':
             dim1 = 1
         dimensions = [dim3, dim2, dim1]
-        
+        print(dimensions)
         if all(v == 0 for v in dimensions):
             dimensions = None
         select_crystal_systems=[]
@@ -104,9 +104,13 @@ def database_view(request, *args,**kwargs):
         for system in crystall_systems:
             if str(request.POST.get(system)) == 'on':
                 select_crystal_systems.append(system)
+        if len(select_crystal_systems)==0:
+            select_crystal_systems=None
         print(select_crystal_systems)
         qe = QueryEngine()
-        all_results = qe.get_calculation(elements=formula, band_gap_range=band_range, formation_energy_range=formation_energy_range ,dimension=dimensions)
+        all_results = qe.get_calculation(elements=formula, band_gap_range=band_range,
+                                         formation_energy_range=formation_energy_range,dimension=dimensions,
+                                        crystal_system=select_crystal_systems, )
 
         context = {
             'all_results': all_results

@@ -8,7 +8,7 @@ class QueryEngine():
     cursor = db.cursor()
 
     def get_calculation(self, band_gap_range=None, formation_energy_range=None, elements=None, space_group_number=None,
-                        dimension=None):
+                        dimension=None, crystal_system= None):
         # TODO: Throw error for more than 2 inputs
         #all_results = Entry.objects.filter(calculation__band_gap__range=band_gap_range,
         #                                   calculation__formation_energy__range=formation_energy_range)
@@ -41,10 +41,13 @@ class QueryEngine():
             else:
                 all_results = Entry.objects.filter(calculation__dimension__in=dimension)
 
+        if ( crystal_system!= None):
+            if len(all_results) > 0:
+                all_results = all_results.filter(structure__spacegroup__lattice_system__in=crystal_system)
+            else:
+                all_results = Entry.objects.filter(structure__spacegroup__lattice_system__in=crystal_system)
+
         all_results = all_results.distinct()
-        #all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number,
-        #                                  calculation__band_gap__range=band_gap_range,
-        #                                   calculation__formation_energy__range=formation_energy_range).distinct()
 
         return all_results
 
