@@ -131,6 +131,7 @@ def database_view(request, *args,**kwargs):
 
 def result_view(request, *args, **kwargs):
     full_path = request.get_full_path()
+    print(full_path)
     mwid = full_path.split('/')[-1]
     entry = Entry.objects.get(id=mwid)
     path = entry.path

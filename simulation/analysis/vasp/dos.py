@@ -5,7 +5,7 @@ import logging
 import gzip
 
 import numpy as np
-
+from pathlib import Path
 import simulation
 import simulation.custom as custom
 from simulation.utils import *
@@ -47,19 +47,34 @@ class DOS(models.Model):
     @classmethod
     def read(cls, doscar='', efermi=0.0):
         print(doscar)
-        try:
-            band_structure = Vasprun(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml').get_band_structure()
-            print(band_structure.get_band_gap())
-            dos = DOS(file=doscar)
-            dos._efermi = 0.0
-            dos.read_doscar(dos.file)
-            dos.efermi = band_structure.efermi
-            gap = band_structure.get_band_gap()
-            dos.gap = gap['energy']
-            dos.is_directBG = gap['direct']
+        if Path(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml' ).is_file():
+            try:
+                band_structure = Vasprun(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml').get_band_structure()
+                print(band_structure.get_band_gap())
+                dos = DOS(file=doscar)
+                dos._efermi = 0.0
+                dos.read_doscar(dos.file)
+                dos.efermi = band_structure.efermi
+                gap = band_structure.get_band_gap()
+                dos.gap = gap['energy']
+                dos.is_directBG = gap['direct']
 
-        except ValueError:
-            raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
+            except ValueError:
+                raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
+        elif Path(doscar[0:(len(doscar) - 7)] + '/hse_bands/vasprun.xml').is_file():
+            try:
+                band_structure = Vasprun(doscar[0:(len(doscar) - 7)] + '/pbe_bands/vasprun.xml').get_band_structure()
+                print(band_structure.get_band_gap())
+                dos = DOS(file=doscar)
+                dos._efermi = 0.0
+                dos.read_doscar(dos.file)
+                dos.efermi = band_structure.efermi
+                gap = band_structure.get_band_gap()
+                dos.gap = gap['energy']
+                dos.is_directBG = gap['direct']
+
+            except ValueError:
+                raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
         return dos
 
     @property
