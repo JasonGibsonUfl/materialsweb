@@ -177,7 +177,7 @@ class Structure(models.Model, object):
         if structure.lattice.a == max(structure.lattice.abc):
             translation = SymmOp.from_rotation_and_translation(translation_vec=(structure.lattice.a / 2, 0, 0))
             for site in structure.sites:
-                if site._frac_coords[0] > 0.9 or site._frac_coords[0] < 0:
+                if site._frac_coords[0] > 0.9 or site._frac_coords[0] < 0.1:
                     needs_shift = True
             if needs_shift:
                 structure.apply_operation(translation)
@@ -185,7 +185,7 @@ class Structure(models.Model, object):
         elif structure.lattice.b == max(structure.lattice.abc):
             translation = SymmOp.from_rotation_and_translation(translation_vec=(0, structure.lattice.b / 2, 0))
             for site in structure.sites:
-                if site._coords[1] > 0.9 or site._coords[1] < 0:
+                if site._coords[1] > 0.9 or site._coords[1] < 0.1:
                     needs_shift = True
             if needs_shift:
                 structure.apply_operation(translation)
@@ -193,7 +193,7 @@ class Structure(models.Model, object):
         else:
             translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
             for site in structure.sites:
-                if site._frac_coords[2] > 0.9 or site._frac_coords[2] < 0:
+                if site._frac_coords[2] > 0.9 or site._frac_coords[2] < 0.1:
                     needs_shift = True
             if needs_shift:
                 structure.apply_operation(translation)
