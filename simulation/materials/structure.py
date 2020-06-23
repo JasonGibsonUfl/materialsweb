@@ -180,12 +180,13 @@ class Structure(models.Model, object):
             element = site._species.reduced_formula.replace('2', '')
             atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))
             xyz_structure.append(atom)
-        string = str(xyz_structure)
-        string = string.replace('[', '')
-        string = string.replace(']', '')
-        string = string.replace(', ', r'\n')
-        string = string.replace("'", "")
-        return string
+        return '+'.join(xyz_structure)
+        #string = str(xyz_structure)
+        #string = string.replace('[', '')
+        #string = string.replace(']', '')
+        #string = string.replace(', ', r'\n')
+        #string = string.replace("'", "")
+        #return string
 
     @staticmethod
     def create(cell, atoms=[], **kwargs):
