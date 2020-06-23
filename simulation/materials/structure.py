@@ -172,8 +172,8 @@ class Structure(models.Model, object):
 
 
     def get_jmol(self):
-        structure = StructureP.from_file(self.entry.path+'/CONTCAR')
-        structure.make_supercell([6,6,1])
+        structure = StructureP.from_file(self.entry.path+'/POSCAR')
+        structure.make_supercell([6,1,6])
         xyz_structure = [str(structure.num_sites),
                          structure.composition.reduced_formula]
         for site in structure.sites:
