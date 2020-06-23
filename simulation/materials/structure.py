@@ -172,6 +172,7 @@ class Structure(models.Model, object):
 
     def get_jmol(self):
         from pymatgen.core.operations import SymmOp
+        needs_shift = False
         structure = StructureP.from_file(self.entry.path+'/POSCAR')
         if structure.lattice.a == max(structure.lattice.abc):
             translation = SymmOp.from_rotation_and_translation(translation_vec=(structure.lattice.a / 2, 0, 0))
