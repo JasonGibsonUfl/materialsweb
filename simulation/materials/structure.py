@@ -174,10 +174,35 @@ class Structure(models.Model, object):
     def get_jmol(self):
         from pymatgen.core.operations import SymmOp
         structure = StructureP.from_file(self.entry.path+'/POSCAR')
+        if structure.lattice.a == max(structure.lattice.abc):
+            translation = SymmOp.from_rotation_and_translation(translation_vec=(structure.lattice.a / 2, 0, 0))
+            for site in structure.sites:
+                if site._fcoords[0] > 0.9 or site._fcoords[0] < 0:
+                    needs_shift = True
+            if needs_shift:
+                structure.apply_operation(translation)
+            structure.make_supercell([1, 6, 6])
+        elif structure.lattice.b == max(structure.lattice.abc):
+            translation = SymmOp.from_rotation_and_translation(translation_vec=(0, structure.lattice.b / 2, 0))
+            for site in structure.sites:
+                if site._fcoords[1] > 0.9 or site._fcoords[1] < 0:
+                    needs_shift = True
+            if needs_shift:
+                structure.apply_operation(translation)
+            structure.make_supercell([6, 1, 6])
+        else:
+            translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
+            for site in structure.sites:
+                if site._fcoords[2] > 0.9 or site._fcoords[2] < 0:
+                    needs_shift = True
+            if needs_shift:
+                structure.apply_operation(translation)
+            structure.make_supercell([6, 6, 1])
+
         print(structure.lattice.b)
-        translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
-        structure.apply_operation(translation)
-        structure.make_supercell([6,6,1])
+        #translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
+        #structure.apply_operation(translation)
+        #structure.make_supercell([6,6,1])
         xyz_structure = [str(structure.num_sites),
                          structure.composition.reduced_formula]
         for site in structure.sites:
