@@ -139,6 +139,7 @@ def result_view(request, *args, **kwargs):
     band_gap = round(calculation.dos.find_gap(),3)
     ##TEST
     if band_gap != 0:
+        print('bandGap  ' + str(calculation.is_direct))
         if(calculation.is_direct):
             direct = 'direct'
         else:
