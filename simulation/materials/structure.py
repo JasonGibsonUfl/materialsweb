@@ -169,7 +169,7 @@ class Structure(models.Model, object):
     def __len__(self):
         return len(self.atoms)
 
-
+    def get_abc
 
     def get_jmol(self):
         from pymatgen.core.operations import SymmOp
@@ -200,10 +200,7 @@ class Structure(models.Model, object):
             structure.make_supercell([6, 6, 1])
 
         print(structure.lattice.b)
-        #translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
-        #structure.apply_operation(translation)
-        #structure.make_supercell([6,6,1])
-        xyz_structure = [str(structure.num_sites),
+       xyz_structure = [str(structure.num_sites),
                          structure.composition.reduced_formula]
         for site in structure.sites:
             element = site._species.reduced_formula.replace('2', '')

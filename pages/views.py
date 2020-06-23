@@ -135,6 +135,7 @@ def result_view(request, *args, **kwargs):
     mwid = full_path.split('/')[-1]
     entry = Entry.objects.get(id=mwid)
     path = entry.path
+    structure = StructureP.from_file(path + '/POSCAR')
     calculation = Calculation.objects.get(path=path)
     band_gap = round(calculation.dos.find_gap(),3)
     ##TEST
@@ -149,11 +150,9 @@ def result_view(request, *args, **kwargs):
     path = str(path.split('/')[-1])
     label = path
     formation_energy = calculation.formation_energy
+    a = structure.a
+    b = structure.b
     structure = Structure.objects.get(label=path)
-    a = [abs(structure.x1), abs(structure.x2), abs(structure.x3)]
-    a = max(a)
-    b = max([abs(structure.y1), abs(structure.y2), abs(structure.y3)])
-
     print(calculation)
     context = {
         'entry': entry,
