@@ -172,7 +172,7 @@ class Structure(models.Model, object):
 
 
     def get_jmol(self):
-        structure = StructureP.from_file(self.entry.path+'/POSCAR')
+        structure = StructureP.from_file(self.entry.path+'/CONTCAR')
         structure.make_supercell([6,6,1])
         xyz_structure = [str(structure.num_sites),
                          structure.composition.reduced_formula]
@@ -180,13 +180,13 @@ class Structure(models.Model, object):
             element = site._species.reduced_formula.replace('2', '')
             atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))
             xyz_structure.append(atom)
-        return '+'.join(xyz_structure)
-        #string = str(xyz_structure)
-        #string = string.replace('[', '')
-        #string = string.replace(']', '')
-        #string = string.replace(', ', r'\n')
-        #string = string.replace("'", "")
-        #return string
+        #return '+'.join(xyz_structure)
+        string = str(xyz_structure)
+        string = string.replace('[', '')
+        string = string.replace(']', '')
+        string = string.replace(', ', r'\n')
+        string = string.replace("'", "")
+        return string
 
     @staticmethod
     def create(cell, atoms=[], **kwargs):
