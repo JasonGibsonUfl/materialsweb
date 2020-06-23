@@ -3,6 +3,7 @@ from simulation.materials.entry import Entry
 from simulation.analysis.vasp.calculation import Calculation
 from simulation.materials.structure import Structure
 from api.rest import QueryEngine
+from pymatgen.core.structure import Structure as StructureP
 from django.db.models import Q
 import ast
 import re
