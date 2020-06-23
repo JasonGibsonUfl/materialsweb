@@ -99,7 +99,12 @@ def database_view(request, *args,**kwargs):
         
         if all(v == 0 for v in dimensions):
             dimensions = None
-        print(dimensions)
+        select_crystal_systems=[]
+        crystall_systems = ['hexagonal', 'monoclinic', 'orthorhombic', 'cubic', 'tetragonal', 'trigonal', 'triclinic']
+        for system in crystall_systems:
+            if str(request.POST.get(system)) == 'on':
+                select_crystal_systems.append(system)
+        print(select_crystal_systems)
         qe = QueryEngine()
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range, formation_energy_range=formation_energy_range ,dimension=dimensions)
 
