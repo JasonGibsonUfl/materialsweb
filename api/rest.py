@@ -2,11 +2,12 @@ import pymysql as dba
 from simulation.materials.entry import Entry
 from simulation.analysis.vasp.calculation import Calculation
 from django.db.models import Q
-from django.core.management import setup_environ
-from materialsweb2 import settings
+import os
+import django
 
 class QueryEngine():
-    setup_environ(settings)
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "materialsweb2.settings")
+    django.setup()
     # TODO: change to read only .cnf file
     db = dba.connect(read_default_file='/etc/mysql/my.cnf')
     cursor = db.cursor()
