@@ -1880,3 +1880,14 @@ class Calculation(models.Model):
         fixed_calc.set_chgcar(calc)
         fixed_calc.write()
         return fixed_calc
+'''Machine Learning'''
+    def get_soap(self):
+        ml=vasp.read_vasp('../mp-90/CONTCAR')
+        periodic_soap = SOAP(
+        species=["Cr"],
+        rcut=6,
+        nmax=8,
+        lmax=8,
+        )
+        soap = periodic_soap.create(ml)
+        return soap

@@ -82,34 +82,12 @@ WSGI_APPLICATION = 'materialsweb2.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-'''
-DATABASES = {
-    'default': {
-        'ENGINE' : 'djongo',
-        'NAME' : 'vasp',
-        'HOST' : 'localhost:27017' ,
-        'USER' : 'jason' ,
-        'PASSWORD' : 'jason' ,
-        
-        }
-}
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.path.join(BASE_DIR, 'db.mysql'),
-    },
-    'OPTIONS': {
-        # ...
-        'timeout': 20,
-        # ...
-    }
-}
-'''
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'HOST': '10.5.46.39',
+        'PORT': '',
         'OPTIONS': {
             'read_default_file': '/etc/mysql/my.cnf',
             'charset': 'utf8mb4',
