@@ -86,8 +86,8 @@ WSGI_APPLICATION = 'materialsweb2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '10.5.46.39',
-        'PORT': '',
+        #'HOST': '10.5.46.39',
+        #'PORT': '',
         'OPTIONS': {
             'read_default_file': '/etc/mysql/my.cnf',
             'charset': 'utf8mb4',
