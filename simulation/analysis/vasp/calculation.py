@@ -41,6 +41,9 @@ from simulation.materials.entry import Entry
 from simulation.analysis.vasp.dos import DOS
 from simulation.analysis.thermodynamics.equilibrium import Equilibrium
 from simulation.analysis.vasp.potential import Potential
+from ase.io import vasp
+from dscribe.descriptors import SOAP
+
 logger = logging.getLogger(__name__)
 
 re_iter = re.compile('([0-9]+)\( *([0-9]+)\)')
@@ -1883,12 +1886,27 @@ class Calculation(models.Model):
 
     '''Machine Learning'''
     def get_soap(self):
-        ml=vasp.read_vasp('../mp-90/CONTCAR')
+        import urllib
+
+        url = 'http://10.5.46.39/static/database/'+self.label+'/POSCAR'
+        file = urllib.request.urlopen(url)
+        i = 0
+        with open('PoSCAR','a') as poscar:
+
+            for line in file:
+                decoded_line = line.decode("utf-8")
+                if i == 5:
+                    species = (str(line).strip().split()[1:-1])
+                i = i + 1
+                poscar.write(decoded_line)
+        ml=vasp.read_vasp('./PoSCAR')
+        os.remove('./PoSCAR')
         periodic_soap = SOAP(
-        species=["Cr"],
+        species=species,
         rcut=6,
         nmax=8,
         lmax=8,
         )
         soap = periodic_soap.create(ml)
+        #soap = 1
         return soap

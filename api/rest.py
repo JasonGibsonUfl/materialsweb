@@ -1,16 +1,18 @@
+import os
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "materialsweb2.settings")
+
+django.setup()
 import pymysql as dba
 from simulation.materials.entry import Entry
 from simulation.analysis.vasp.calculation import Calculation
 from django.db.models import Q
-import os
-import django
 
 class QueryEngine():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "materialsweb2.settings")
-    django.setup()
+
     # TODO: change to read only .cnf file
-    db = dba.connect(read_default_file='/etc/mysql/my.cnf')
-    cursor = db.cursor()
+    #db = dba.connect(read_default_file='/etc/mysql/my.cnf')
+    #cursor = db.cursor()
 
     def get_calculation(self, band_gap_range=None, formation_energy_range=None, elements=None, space_group_number=None,
                         dimension=None, crystal_system= None):
