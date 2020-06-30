@@ -89,8 +89,8 @@ DATABASES = {
         'HOST': '10.5.46.39',
         'PORT': '',
         'OPTIONS': {
-            'read_default_file': './my.cnf',
-            #'read_default_file': '/etc/mysql/my.cnf',
+            #'read_default_file': './my.cnf',
+            'read_default_file': '/etc/mysql/my.cnf',
             'charset': 'utf8mb4',
         },
     }
