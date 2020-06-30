@@ -1885,7 +1885,7 @@ class Calculation(models.Model):
         return fixed_calc
 
     '''Machine Learning'''
-    def get_soap(self):
+    def get_soap(self, rcut=6, nmax=8, lmax=8):
         import urllib
 
         url = 'http://10.5.46.39/static/database/'+self.label+'/POSCAR'
@@ -1903,9 +1903,9 @@ class Calculation(models.Model):
         os.remove('./PoSCAR')
         periodic_soap = SOAP(
         species=species,
-        rcut=6,
-        nmax=8,
-        lmax=8,
+        rcut=rcut,
+        nmax=nmax,
+        lmax=lmax,
         )
         soap = periodic_soap.create(ml)
         #soap = 1
