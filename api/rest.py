@@ -26,15 +26,15 @@ class QueryEngine():
 
         if band_gap_range != None:
             if len(all_results)>0:
-                all_results = all_results.filter(calculation__band_gap__range=band_gap_range)
+                all_results = all_results.filter(band_gap__range=band_gap_range)
             else:
-                all_results = Calculation.objects.filter(calculation__band_gap__range=band_gap_range)
+                all_results = Calculation.objects.filter(band_gap__range=band_gap_range)
 
         if formation_energy_range != None :
             if len(all_results) > 0:
-                all_results = all_results.filter(calculation__formation_energy__range=formation_energy_range)
+                all_results = all_results.filter(formation_energy__range=formation_energy_range)
             else:
-                all_results = Calculation.objects.filter(calculation__formation_energy__range=formation_energy_range)
+                all_results = Calculation.objects.filter(formation_energy__range=formation_energy_range)
 
         if(space_group_number != None):
             if len(all_results)>0:
@@ -44,9 +44,9 @@ class QueryEngine():
 
         if (dimension != None):
             if len(all_results) > 0:
-                all_results = all_results.filter(calculation__dimension__in=dimension)
+                all_results = all_results.filter(dimension__in=dimension)
             else:
-                all_results = Calculation.objects.filter(calculation__dimension__in=dimension)
+                all_results = Calculation.objects.filter(dimension__in=dimension)
 
         if ( crystal_system!= None):
             if len(all_results) > 0:
