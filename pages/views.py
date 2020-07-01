@@ -115,7 +115,7 @@ def database_view(request, *args,**kwargs):
         print(type(all_results))
         for a in all_results:
             if a.band_gap == None:
-                a.band_gap = 0
+                a.band_gap = 0.0
             else:
                 a.band_gap = round(float(a.band_gap),4)
 
