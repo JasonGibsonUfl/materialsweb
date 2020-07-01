@@ -127,7 +127,7 @@ def database_view(request, *args,**kwargs):
     #context.update({"is_signed_in": is_signed_in})
     #print("HERE"+str(len(formula.split('-'))))
 
-    return render(request, 'twod.html', context)
+    return render(request, 'database.html', context)
 
 
 def result_view(request, *args, **kwargs):
