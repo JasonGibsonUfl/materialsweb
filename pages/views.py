@@ -62,8 +62,7 @@ def api_view(request, *args,**kwargs):
 
 
 def database_view(request, *args,**kwargs):
-    import gc
-    gc.collect()
+   
     qe = QueryEngine()
 
     if request.POST.get('Submit'):
@@ -138,9 +137,7 @@ def database_view(request, *args,**kwargs):
         #context = 'TEMP'
     else:
         split_formula = ''
-        context = {'redform': '', 'alp': '', 'clp': '',
-                   'structure': CAFFEINE,
-                   'evpa': '', 'ion_conc': '-6', 'all_results': ''}
+        context = { 'all_results': all_results}
     #is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
     #context.update({"is_signed_in": is_signed_in})
     #print("HERE"+str(len(formula.split('-'))))
