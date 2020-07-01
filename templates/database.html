@@ -188,7 +188,11 @@
   <div class="live_element" style="left: 985px; top: 345px;" id="Kr" onclick="add(event)">Kr</div>
   <div class="live_element" style="left: 985px; top: 400px;" id="Xe" onclick="add(event)">Xe</div>
   <div class="live_element" style="left: 985px; top: 455px;" id="Rn" onclick="add(event)">Rn</div>
-
+  <script>
+    function roundNumber(num, places) {
+    return Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
+}
+  </script>
 
     <table data-sortable class="sortable-theme-dark" style="position: relative; top: 450px; left: 50px;">
       <thead>
@@ -207,7 +211,7 @@
               </td>
 
               <td style="width: 50px";>
-                <a  style="top: 0px; color: white;" >Math.round({{ results.band_gap }}*100)/100</a>
+                <a  style="top: 0px; color: white;" roundNumber({{ results.band_gap }})</a>
               </td>
 
             </tr>
