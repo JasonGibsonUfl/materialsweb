@@ -21,6 +21,7 @@ class QueryEngine():
         #all_results = Entry.objects.filter(calculation__band_gap__range=band_gap_range,
         #                                   calculation__formation_energy__range=formation_energy_range)
         all_results = []
+        print('len all '+len(all_results))
         if elements != None:
             print("ELEMENTS")
             all_results = QueryEngine.element_query_set(self,elements)
