@@ -135,11 +135,8 @@ def database_view(request, *args,**kwargs):
         print(len(context['all_results']))
         #context = 'TEMP'
     else:
-        split_formula = ''
         context = { 'all_results': ''}
-    #is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
-    #context.update({"is_signed_in": is_signed_in})
-    #print("HERE"+str(len(formula.split('-'))))
+
 
     return render(request, 'database.html', context)
 
