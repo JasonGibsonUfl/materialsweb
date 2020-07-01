@@ -215,6 +215,21 @@ class Structure(models.Model, object):
         string = string.replace("'", "")
         return string
 
+    def get_jmol3(self):
+        structure = StructureP.from_file(self.entry.path + '/POSCAR')
+        structure.make_supercell([2, 2, 2])
+        xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
+        for site in structure.sites:
+            element = site._species.reduced_formula.replace('2', '')
+            atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))
+            xyz_structure.append(atom)
+        string = str(xyz_structure)
+        string = string.replace('[', '')
+        string = string.replace(']', '')
+        string = string.replace(', ', r'\n')
+        string = string.replace("'", "")
+        return string
+
     @staticmethod
     def create(cell, atoms=[], **kwargs):
         """

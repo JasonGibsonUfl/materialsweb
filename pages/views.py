@@ -170,14 +170,16 @@ def result_view(request, *args, **kwargs):
     structure = Structure.objects.get(label=path)
     print(calculation)
     if calculation.dimension == 2:
-        print('JFDSKJJFDSALKDSAJGLKFGDAJAFDGLFDSA')
+       data=structure.get_jmol2()
+    else:
+        data=structure.get_jmol3()
     context = {
         'entry': entry,
         'path': path,
         'a': a,
         'b': b,
         'structure': structure,
-        'data': structure.get_jmol2(),
+        'data': data,
         'label': label,
         'formation_energy': formation_energy,
         'band_gap': band_gap,
