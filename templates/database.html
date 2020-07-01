@@ -192,14 +192,22 @@
       <tbody id="tableBody">
 
           {% for results in all_results %}
+
             <tr>
 
               <td style="width: 150px;">
                 <a style="top: 0px; color: white;" href = '/database/{{  results.id  }}'> {{  results.composition.formula  }}</a>
               </td>
+
               <td style="width: 50px";>
-                <a style="top: 0px; color: white;" > {{  results.band_gap  }}</a>
+                <a id='bandgap' style="top: 0px; color: white;" ></a>
               </td>
+              <script>
+                var bandgap = "{{  results.band_gap  }}"
+                bandgap.toFixed(4)
+                document.getElementById("bandgap").innerHTML = bandgap;
+
+              </script>
 
             </tr>
           {% endfor %}
