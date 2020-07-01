@@ -13,7 +13,7 @@
 
 </head>
 
-<body onload="displayResults();">
+<body onload="displayResults()">
 
 <style>
 
@@ -61,68 +61,6 @@
       }
   }
   </script>
-
-    <script>
-    function displayResults() {
-      alert();
-        var all_results = {{ all_results }};
-        alert('TR');
-        var table = document.getElementById("tableBody");
-
-        if (all_results.length) {
-
-          for ( var i=0, len = all_results.length; i < len; i++ ) {
-            new_option = document.createElement("a");
-            formula = all_results[i].split(" ")[0];
-            mwid = all_results[i].split(" ")[1];
-            spacegroup = all_results[i].split(" ")[2];
-            numSites = Number(all_results[i].split(" ")[3]);
-            bandGap = Number(all_results[i].split(" ")[4]);
-            theoryLevel = all_results[i].split(" ")[5];
-
-            new_option.id = mwid;
-            var optionText = document.createTextNode(mwid);
-            new_option.appendChild(optionText);
-            new_option.href = "/twodmaterials/result/" + new_option.id;
-            new_option.target = "_blank";
-            new_option.style.color = "white";
-            new_option.addEventListener("mouseover", function (ev) {ev.target.style.color = "#fcb040"});
-            new_option.addEventListener("mouseout", function (ev) {ev.target.style.color = "white"});
-
-            var row = document.createElement("tr");
-            table.appendChild(row);
-            var mwidCell = document.createElement("td");
-            row.appendChild(mwidCell);
-            mwidCell.style.width= '150px';
-            var formulaCell = document.createElement("td");
-            row.appendChild(formulaCell);
-            var spacegroupCell = document.createElement("td");
-            row.appendChild(spacegroupCell);
-            var numSitesCell = document.createElement("td");
-            row.appendChild(numSitesCell);
-            var bandGapCell = document.createElement("td");
-            row.appendChild(bandGapCell);
-            var theoryLevelCell = document.createElement("td");
-            row.appendChild(theoryLevelCell);
-
-            mwidCell.appendChild(new_option);
-            formulaCell.innerHTML = 'formula';
-            spacegroupCell.innerHTML = 'spacegroup';
-            numSitesCell.innerHTML = 'numSites';
-            bandGapCell.innerHTML = 'bandGap';
-            theoryLevelCell.innerHTML = 'theoryLevel';
-
-            var tds = document.getElementsByTagName('td');
-
-//            for (var j = 0; j < tds.length; j++)
-//                tds[j].style.width = '150px';
-
-          }
-        } else {
-            document.getElementById('noResultsModal').style.display = "block";
-        };
-    }
-    </script>
 
   <div class="live_element" style="left: 50px; top: 180px;" id="H" onclick="add(event)">H</div>
   <div class="live_element" style="left: 50px; top: 235px;" id="Li" onclick="add(event)">Li</div>
@@ -251,7 +189,7 @@
             <th style="cursor: pointer; width: 250px;">Material</th>
         </tr>
       </thead>
-      <tbody id="tableBody"><!--
+      <tbody id="tableBody">
 
           {% for results in all_results %}
 
@@ -261,29 +199,17 @@
                 <a style="top: 0px; color: white;" href = '/database/{{  results.id  }}'> {{  results.composition.formula  }}</a>
               </td>
 
-              <td style="width: 150px;">
-                <a style="top: 0px; color: white;" >{{  results.dimension  }}</a>
+              <td style="width: 50px";>
+                <a  style="top: 0px; color: white;" >{{ results.band_gap }}</a>
               </td>
 
             </tr>
 
+          {% endfor %}
+
         </tr>
-          {% endfor %}-->
       </tbody>
     </table>
-<!--
-    {% for results in all_results %}
-          <script>
-            window.onload(){
-            var bandgap = "{{  results.band_gap  }}";
-            alert(bandgap)
-            bandgap.toFixed(1);
-            document.getElementById('{{  results.id  }}').style.color = 'green';
-
-            document.getElementById('{{  results.id  }}').innerHTML = bandgap;
-            };
-          </script>
-    {% endfor %}-->
 
     <form method="post">{% csrf_token %}
         <input type="text" id="FormulaBox" name="FormulaBox"
