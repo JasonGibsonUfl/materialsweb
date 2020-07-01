@@ -112,8 +112,9 @@ def database_view(request, *args,**kwargs):
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range,
                                          formation_energy_range=formation_energy_range,dimension=dimensions,
                                         crystal_system=select_crystal_systems, )
+        print(type(all_results))
         for a in all_results:
-            print(a.band_gap)
+            a.band_gap = round(a.band_gap,4)
 
         context = {
             'all_results': all_results
