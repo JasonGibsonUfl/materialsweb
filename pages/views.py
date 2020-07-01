@@ -62,8 +62,11 @@ def api_view(request, *args,**kwargs):
 
 
 def database_view(request, *args,**kwargs):
+    import gc
+    gc.collect()
+    qe = QueryEngine()
+
     if request.POST.get('Submit'):
-        qe = QueryEngine()
         context = {}
         dim1 = 0
         dim2 = dim1
