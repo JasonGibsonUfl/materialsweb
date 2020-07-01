@@ -200,7 +200,7 @@
               </td>
 
               <td style="width: 150px;">
-                <a  id='{{  results.id  }}' style="top: 0px; color: white;" ></a>
+                <a style="top: 0px; color: white;" >{{  results.dimension  }}</a>
               </td>
 
             </tr>
@@ -209,6 +209,7 @@
           {% endfor %}
       </tbody>
     </table>
+<!--
     {% for results in all_results %}
           <script>
             window.onload(){
@@ -220,7 +221,7 @@
             document.getElementById('{{  results.id  }}').innerHTML = bandgap;
             };
           </script>
-    {% endfor %}
+    {% endfor %}-->
 
     <form method="post">{% csrf_token %}
         <input type="text" id="FormulaBox" name="FormulaBox"
