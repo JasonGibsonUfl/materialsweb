@@ -64,7 +64,8 @@
 
     <script>
     function displayResults() {
-        var all_results = {{ all_results|safe }};
+        var all_results = {{ all_results }};
+        alert('TR');
         var table = document.getElementById("tableBody");
 
         if (all_results.length) {
