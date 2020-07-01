@@ -220,7 +220,7 @@ class Structure(models.Model, object):
         structure = StructureP.from_file(self.entry.path + '/POSCAR')
         analyzer = SpacegroupAnalyzer(structure)
         structure = analyzer.get_refined_structure()
-        structure.make_supercell([2, 2, 2])
+        structure.make_supercell([5, 5, 5)
         xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
         for site in structure.sites:
             element = site._species.reduced_formula.replace('2', '')
