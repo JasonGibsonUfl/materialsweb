@@ -200,17 +200,17 @@
               </td>
 
               <td style="width: 50px";>
-                <a  style="top: 0px; color: white;" ><div id="bandgap"></div></a>
+                <a  style="top: 0px; color: white;" ><div id=''{{  results.id  }}'></div></a>
               </td>
+
+            </tr>
               <script>
                 function(){
                   var bandgap = "{{  results.band_gap  }}"
                   bandgap.toFixed(4)
-                  document.getElementById("bandgap").innerHTML = bandgap;
+                  document.getElementById('{{  results.id  }}').innerHTML = bandgap;
                 }()
               </script>
-
-            </tr>
           {% endfor %}
 
         </tr>
