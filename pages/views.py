@@ -137,7 +137,7 @@ def database_view(request, *args,**kwargs):
         #context = 'TEMP'
     else:
         split_formula = ''
-        context = { 'all_results': all_results}
+        context = { 'all_results': ''}
     #is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
     #context.update({"is_signed_in": is_signed_in})
     #print("HERE"+str(len(formula.split('-'))))
