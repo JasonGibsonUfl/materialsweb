@@ -250,6 +250,70 @@
       </tbody>
     </table>
 
+          <div class="sidenav">
+          <a style="font-size: 30">Filters</a>
+          <hr>
+          <a>Band Gap (eV)</a>
+          <div id="bandGap"></div>
+          <br>
+          <input type="number" min="0" max="9.99" step="0.01" id="band_gap_min" style="left:0; width:85; display block; margin: 7" name="band_gap_min">
+          <input type="number" min="0.01" max="10" step="0.01" id="band_gap_max"  style="left:0; width:85; display block; margin: 5" name="band_gap_max">
+          <hr>
+
+          <a>Formation Energy (eV)</a>
+          <div id="formationEnergy"></div>
+          <br>
+          <input type="number" min="-4" max="3.99" step="0.01" id="formation_energy_min" style="left:0; width:85; display block; margin: 7" name="formation_energy_min">
+          <input type="number" min="-3.99" max="4" step="0.01" id="formation_energy_max"  style="left:0; width:85; display block; margin: 5" name="formation_energy_max">
+          <hr>
+          <a>Crystal System</a>
+          <div>
+            <div>
+              <input type="checkbox" name="hexagonal" id="hexagonal" >
+              <label for="hexagonal" style="color:#818181; ">Hexagonal</label>
+            </div>
+            <div >
+              <input type="checkbox" name="monoclinic" id="monoclinic" >
+              <label for="monoclinic" style="color:#818181; ">Monoclinic</label>
+            </div>
+            <div>
+              <input type="checkbox" name="orthorhombic" id="orthorhombic">
+              <label for="orthorhombic" style="color:#818181;">Orthorhombic</label>
+            </div>
+            <div>
+              <input type="checkbox" name="cubic" id="cubic">
+              <label for="cubic" style="color:#818181;">Cubic</label>
+            </div>
+            <div>
+              <input type="checkbox" name="tetragonal" id="tetragonal">
+              <label for="tetragonal" style="color:#818181;">Tetragonal</label>
+            </div>
+            <div>
+              <input type="checkbox" name="trigonal" id="trigonal">
+              <label for="trigonal" style="color:#818181;">Trigonal</label>
+            </div>
+            <div>
+              <input type="checkbox" name="triclinic" id="triclinic">
+              <label for="triclinic" style="color:#818181;">Triclinic</label>
+            </div>
+          </div>
+          <hr>
+          <div>
+            <a >Dimensional</a>
+            <input type="checkbox" name="3D" id="3D">
+            <label for="3D" style="color:#818181">3D</label>
+            <input type="checkbox" name="2D" id="2D">
+            <label for="2D" style="color:#818181">2D</label>
+            <input type="checkbox" name="1D" id="1D">
+            <label for="1D" style="color:#818181">1D</label>
+          </div>
+          <hr>
+       </div>
+    </form>
+
+
+
+
     <form method="post">{% csrf_token %}
         <input type="text" id="FormulaBox" name="FormulaBox" class="formulabox"
             placeholder="'Ca-I', 'V2O5', 'mw-40', or mpquery">
@@ -341,5 +405,73 @@
       ga('send', 'pageview');
 
     </script>
+
+<script>
+var formationEnergySlider = document.getElementById('formationEnergy');
+
+noUiSlider.create(formationEnergySlider, {
+    start: [-4, 4],
+    connect: true,
+    range: {
+        'min': -4,
+        'max': 4
+    }
+});
+
+var inputNumberFE =[
+  document.getElementById('formation_energy_min'),
+  document.getElementById('formation_energy_max')
+  ];
+
+formationEnergySlider.noUiSlider.on('update', function (values, handle) {
+    inputNumberFE[handle].value = values[handle];
+
+});
+
+select.addEventListener('change', function () {
+    formationEnergySlider.noUiSlider.set([this.value, null]);
+});
+
+inputNumberFE.addEventListener('change', function () {
+    FormationEnergySlider.noUiSlider.set([null, this.value]);
+});
+</script>
+
+<script>
+var bandGapSlider = document.getElementById('bandGap');
+
+noUiSlider.create(bandGapSlider, {
+    start: [0, 10],
+    connect: true,
+    range: {
+        'min': 0,
+        'max': 10
+    }
+});
+
+var inputNumber =[
+  document.getElementById('band_gap_min'),
+  document.getElementById('band_gap_max')
+  ];
+
+bandGapSlider.noUiSlider.on('update', function (values, handle) {
+    inputNumber[handle].value = values[handle];
+
+});
+
+select.addEventListener('change', function () {
+    bandGapSlider.noUiSlider.set([this.value, null]);
+});
+
+inputNumber.addEventListener('change', function () {
+    bandGapSlider.noUiSlider.set([null, this.value]);
+});
+</script>
+
+<style>
+.noUi-connect {
+    background: #fcb040;
+}
+</style>
 
 </body>
