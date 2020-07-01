@@ -204,14 +204,14 @@
               </td>
 
             </tr>
-              <script>
-
+          <script>
+            alert();
                   var bandgap = "{{  results.band_gap  }}";
                   bandgap.toFixed(4);
                   alert(bandgap);
                   document.getElementById('{{  results.id  }}').innerHTML = bandgap;
 
-              </script>
+          </script>
           {% endfor %}
 
         </tr>
