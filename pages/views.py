@@ -125,7 +125,7 @@ def database_view(request, *args,**kwargs):
             elif a.formation_energy == 0.0:
                 a.formation_energy = '0.0000'
             else:
-                a.formation_energy = round(float(a.band_gap),4)
+                a.formation_energy = round(float(a.formation_energy),4)
 
         context = {
             'all_results': all_results
