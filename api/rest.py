@@ -28,31 +28,31 @@ class QueryEngine():
             if len(all_results)>0:
                 all_results = all_results.filter(calculation__band_gap__range=band_gap_range)
             else:
-                all_results = Entry.objects.filter(calculation__band_gap__range=band_gap_range)
+                all_results = Calculation.objects.filter(calculation__band_gap__range=band_gap_range)
 
         if formation_energy_range != None :
             if len(all_results) > 0:
                 all_results = all_results.filter(calculation__formation_energy__range=formation_energy_range)
             else:
-                all_results = Entry.objects.filter(calculation__formation_energy__range=formation_energy_range)
+                all_results = Calculation.objects.filter(calculation__formation_energy__range=formation_energy_range)
 
         if(space_group_number != None):
             if len(all_results)>0:
                 all_results = all_results.filter(structure__spacegroup__number=space_group_number)
             else:
-                all_results = Entry.objects.filter(structure__spacegroup__number=space_group_number)
+                all_results = Calculation.objects.filter(structure__spacegroup__number=space_group_number)
 
         if (dimension != None):
             if len(all_results) > 0:
                 all_results = all_results.filter(calculation__dimension__in=dimension)
             else:
-                all_results = Entry.objects.filter(calculation__dimension__in=dimension)
+                all_results = Calculation.objects.filter(calculation__dimension__in=dimension)
 
         if ( crystal_system!= None):
             if len(all_results) > 0:
                 all_results = all_results.filter(structure__spacegroup__lattice_system__in=crystal_system)
             else:
-                all_results = Entry.objects.filter(structure__spacegroup__lattice_system__in=crystal_system)
+                all_results = Calculation.objects.filter(structure__spacegroup__lattice_system__in=crystal_system)
 
         all_results = all_results.distinct()
 
@@ -71,5 +71,5 @@ class QueryEngine():
             try:
                 query_set = query_set.filter(el)
             except:
-                query_set = Entry.objects.filter(el)
+                query_set = Calculation.objects.filter(el)
         return query_set
