@@ -170,8 +170,7 @@ class Structure(models.Model, object):
         return len(self.atoms)
 
 
-    def get_jmol(self):
-        print('Calculation' + str(self.calculation))
+    def get_jmol2(self):
         from pymatgen.core.operations import SymmOp
         needs_shift = False
         structure = StructureP.from_file(self.entry.path+'/POSCAR')

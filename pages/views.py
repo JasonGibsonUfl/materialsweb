@@ -175,7 +175,7 @@ def result_view(request, *args, **kwargs):
         'a': a,
         'b': b,
         'structure': structure,
-        'data': structure.get_jmol(),
+        'data': structure.get_jmol2(),
         'label': label,
         'formation_energy': formation_energy,
         'band_gap': band_gap,
