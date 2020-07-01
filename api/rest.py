@@ -25,6 +25,8 @@ class QueryEngine():
         if elements != None:
             print("ELEMENTS")
             all_results = Calculation.objects.filter(element_set=elements.pop(0))
+            for e in elements:
+                all_results = all_results.filter(element_set=e)
             #all_results = QueryEngine.element_query_set(self,elements)
 
         if band_gap_range != None:
