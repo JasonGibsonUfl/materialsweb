@@ -171,6 +171,7 @@ class Structure(models.Model, object):
 
 
     def get_jmol(self):
+        print('Calculation' + str(self.calculation))
         from pymatgen.core.operations import SymmOp
         needs_shift = False
         structure = StructureP.from_file(self.entry.path+'/POSCAR')
