@@ -14,7 +14,7 @@ class QueryEngine():
     #db = dba.connect(read_default_file='/etc/mysql/my.cnf')
     #cursor = db.cursor()
 
-    def get_calculation(self, band_gap_range=None, formation_energy_range=None, elements=None, space_group_number=None,
+    def get_calculation(self, band_gap_range=None, formation_energy_range=None, elements=[], space_group_number=None,
                         dimension=None, crystal_system= None):
         print('query info    '+ ' band_gap_range: '+str(band_gap_range),' formation_energy_range: '+str(formation_energy_range)+' elements: '+str(elements)+' space_group_number: '+str(space_group_number)+' dimension: '+str(dimension)+' crystal_system: '+str(crystal_system))
         # TODO: Throw error for more than 2 inputs
@@ -22,7 +22,7 @@ class QueryEngine():
         #                                   calculation__formation_energy__range=formation_energy_range)
         all_results = []
         print('len all '+str(len(all_results)))
-        if elements != None:
+        if len(elements) >0:
             print("ELEMENTS")
             all_results = Calculation.objects.filter(element_set=elements.pop(0))
             for e in elements:
