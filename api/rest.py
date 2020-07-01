@@ -25,7 +25,8 @@ class QueryEngine():
         print('len all '+str(len(all_results)))
         if elements != None:
             print("ELEMENTS")
-            all_results = QueryEngine.element_query_set(self,elements)
+            all_results = Calculation.objects.filter(element_set__in=elements)
+            #all_results = QueryEngine.element_query_set(self,elements)
 
         if band_gap_range != None:
             if len(all_results)>0:
@@ -69,8 +70,8 @@ class QueryEngine():
         return Ql
 
     def element_query_set(self, elements):
-        element_query=QueryEngine.element_query(self, elements=elements)
-        for el in element_query:
+        element_query2=QueryEngine.element_query(self, elements=elements)
+        for el in element_query2:
             try:
                 query_set = query_set.filter(el)
             except:
