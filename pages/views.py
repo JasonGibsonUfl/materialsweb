@@ -120,12 +120,12 @@ def database_view(request, *args,**kwargs):
                 a.band_gap = '0.0000'
             else:
                 a.band_gap = round(float(a.band_gap),4)
-            if a.formation_energy == None :
-                a.formation_energy = 'None'
-            elif a.formation_energy == 0.0:
-                a.formation_energy = '0.0000'
-            else:
-                a.formation_energy = round(float(a.formation_energy),4)
+            #if a.formation_energy == None :
+                #a.formation_energy = 'None'
+            #elif a.formation_energy == 0.0:
+                #a.formation_energy = '0.0000'
+            #else:
+                #a.formation_energy = round(float(a.formation_energy),4)
 
         context = {
             'all_results': all_results
