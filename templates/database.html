@@ -65,7 +65,8 @@
    <script>
     function displayResults() {
         alert("ACT");
-
+        var all_results = {{ all_results|safe }};
+        alert(all_results.length);
     };
     </script>
 
