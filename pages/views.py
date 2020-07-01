@@ -170,7 +170,8 @@ def result_view(request, *args, **kwargs):
     structure = Structure.objects.get(label=path)
     print(calculation)
     if calculation.dimension == 2:
-       data=structure.get_jmol2()
+        print(calculation.dimension)
+        data=structure.get_jmol2()
     else:
         data=structure.get_jmol3()
     context = {
