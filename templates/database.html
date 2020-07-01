@@ -199,7 +199,7 @@
                 <a style="top: 0px; color: white;" href = '/database/{{  results.id  }}'> {{  results.composition.formula  }}</a>
               </td>
 
-              <td style="width: 50px";>
+              <td style="width: 150px";>
                 <a  id='{{  results.id  }}' style="top: 0px; color: white;" ></a>
               </td>
 
@@ -210,6 +210,8 @@
             alert(bandgap)
             bandgap.toFixed(1);
             alert(bandgap);
+            document.getElementById('{{  results.id  }}').style.color = 'green';
+
             document.getElementById('{{  results.id  }}').innerHTML = bandgap;
 
           </script>
