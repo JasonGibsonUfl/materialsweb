@@ -38,9 +38,9 @@ class QueryEngine():
 
         if(space_group_number != None):
             if len(all_results)>0:
-                all_results = all_results.filter(structure__spacegroup__number=space_group_number)
+                all_results = all_results.filter(entry__structure__spacegroup__number=space_group_number)
             else:
-                all_results = Calculation.objects.filter(structure__spacegroup__number=space_group_number)
+                all_results = Calculation.objects.filter(entry__structure__spacegroup__number=space_group_number)
 
         if (dimension != None):
             if len(all_results) > 0:
@@ -50,9 +50,9 @@ class QueryEngine():
 
         if ( crystal_system!= None):
             if len(all_results) > 0:
-                all_results = all_results.filter(structure__spacegroup__lattice_system__in=crystal_system)
+                all_results = all_results.filter(entry__structure__spacegroup__lattice_system__in=crystal_system)
             else:
-                all_results = Calculation.objects.filter(structure__spacegroup__lattice_system__in=crystal_system)
+                all_results = Calculation.objects.filter(entry__structure__spacegroup__lattice_system__in=crystal_system)
 
         all_results = all_results.distinct()
 
