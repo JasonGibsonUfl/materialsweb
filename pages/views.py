@@ -114,7 +114,7 @@ def database_view(request, *args,**kwargs):
                                         crystal_system=select_crystal_systems, )
         print(type(all_results))
         for a in all_results:
-            a.band_gap = round(float(a.band_gap),4)
+            print(round(float(a.band_gap),4))
 
         context = {
             'all_results': all_results
