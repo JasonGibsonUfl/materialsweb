@@ -16,6 +16,7 @@ class QueryEngine():
 
     def get_calculation(self, band_gap_range=None, formation_energy_range=None, elements=None, space_group_number=None,
                         dimension=None, crystal_system= None):
+        print('query info    '+ ' band_gap_range: '+band_gap_range,' formation_energy_range: '+formation_energy_range+' elements: '+elements+' space_group_number: '+space_group_number+' dimension: '+dimension+' crystal_system: '+crystal_system)
         # TODO: Throw error for more than 2 inputs
         #all_results = Entry.objects.filter(calculation__band_gap__range=band_gap_range,
         #                                   calculation__formation_energy__range=formation_energy_range)
