@@ -115,11 +115,17 @@ def database_view(request, *args,**kwargs):
         print(type(all_results))
         for a in all_results:
             if a.band_gap == None :
-                a.band_gap = '0.0000'
+                a.band_gap = 'None'
             elif a.band_gap == 0.0:
                 a.band_gap = '0.0000'
             else:
                 a.band_gap = round(float(a.band_gap),4)
+            if a.formation_energy == None :
+                a.formation_energy = 'None'
+            elif a.formation_energy == 0.0:
+                a.formation_energy = '0.0000'
+            else:
+                a.formation_energy = round(float(a.band_gap),4)
 
         context = {
             'all_results': all_results
