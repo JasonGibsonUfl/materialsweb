@@ -169,6 +169,8 @@ def result_view(request, *args, **kwargs):
     b = structure.lattice.b
     structure = Structure.objects.get(label=path)
     print(calculation)
+    if calculation.dimension == 2:
+        print('JFDSKJJFDSALKDSAJGLKFGDAJAFDGLFDSA')
     context = {
         'entry': entry,
         'path': path,
