@@ -204,22 +204,22 @@
               </td>
 
             </tr>
+
+        </tr>
+      </tbody>
+    </table>
+    {% for results in all_results %}
           <script>
 
             var bandgap = "{{  results.band_gap  }}";
             alert(bandgap)
             bandgap.toFixed(1);
-            alert(bandgap);
             document.getElementById('{{  results.id  }}').style.color = 'green';
 
             document.getElementById('{{  results.id  }}').innerHTML = bandgap;
 
           </script>
-          {% endfor %}
-
-        </tr>
-      </tbody>
-    </table>
+    {% endfor %}
 
     <form method="post">{% csrf_token %}
         <input type="text" id="FormulaBox" name="FormulaBox"
