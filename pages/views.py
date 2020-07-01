@@ -63,6 +63,7 @@ def api_view(request, *args,**kwargs):
 
 def database_view(request, *args,**kwargs):
     if request.POST.get('Submit'):
+        qe = QueryEngine()
         context = {}
         dim1 = 0
         dim2 = dim1
@@ -108,7 +109,7 @@ def database_view(request, *args,**kwargs):
         if len(select_crystal_systems)==0:
             select_crystal_systems=None
         print(select_crystal_systems)
-        qe = QueryEngine()
+        all_results = []
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range,
                                          formation_energy_range=formation_energy_range,dimension=dimensions,
                                         crystal_system=select_crystal_systems, )
