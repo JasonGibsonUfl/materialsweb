@@ -205,12 +205,12 @@
 
             </tr>
               <script>
-                function(){
+
                   var bandgap = "{{  results.band_gap  }}";
                   bandgap.toFixed(4);
-                  alert(bandgap)
+                  alert(bandgap);
                   document.getElementById('{{  results.id  }}').innerHTML = bandgap;
-                }()
+
               </script>
           {% endfor %}
 
