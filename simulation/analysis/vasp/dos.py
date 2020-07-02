@@ -100,7 +100,7 @@ class DOS(models.Model):
     @property
     def energy(self):
         """Return the array with the energies."""
-        return self.data[0, :]
+        return self.data[0][:]
 
     def find_vbm(self, tol=1e-3):
         self.vbm = self.band_structure.get_vbm()['energy']
