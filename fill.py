@@ -11,7 +11,7 @@ a=os.walk('/var/www/materialsweb/static/database/MAX_phases/all_competitors')
 for b in a:
         c=b[0].split('/')
         if c[-1] != 'pbe_bands' and c[-1] != 'hse_bands':
-                path = '/var/www/materialsweb/static/database/'+c[-1]
+                path = '/var/www/materialsweb/static/database/MAX_phases/all_competitors/'+c[-1]
                 try:
                     calc = Calculation().read(path)
                     calc.create_all(path)
