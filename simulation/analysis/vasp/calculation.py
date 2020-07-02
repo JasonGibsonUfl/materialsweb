@@ -207,12 +207,11 @@ class Calculation(models.Model):
             f.seek(0, 2)
             f.seek(f.tell() - 2, 0)
             zk = int(f.read())
-            print(zk)
             if zk == 1:
-                print('in)')
+                return 2
+            elif zk == 2:
                 return 2
             else:
-                print('else')
                 return 3
 
     def get_formation_energy(self, label):

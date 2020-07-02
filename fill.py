@@ -17,6 +17,6 @@ for b in a:
                     calc.create_all(path)
                     calc.save()
                 except:
-                    print(path)
+                    print(path+'')
 
 
