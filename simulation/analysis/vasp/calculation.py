@@ -190,9 +190,12 @@ class Calculation(models.Model):
 
         #create DOS
         #dos = DOS(entry=entry)
-        dos=DOS.read(source+'/DOSCAR')
-        dos.save()
-        self.dos = dos
+        try:
+            dos=DOS.read(source+'/DOSCAR')
+            dos.save()
+            self.dos = dos
+        except:
+            print("DOS AINT WORKING")
         label = path.split('/')[-1]
         self.formation_energy = self.get_formation_energy(label)
         try:
