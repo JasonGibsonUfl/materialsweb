@@ -13,10 +13,10 @@ for b in a:
         if c[-1] != 'pbe_bands' and c[-1] != 'hse_bands':
                 path = '/var/www/materialsweb/static/database/'+c[-1]
                 try:
-                    #calc = Calculation().read(path)
-                    #calc.create_all(path)
-                    #calc.save()
-                    print('Path: '+path)
+                    calc = Calculation().read(path)
+                    calc.create_all(path)
+                    calc.save()
+                    #print('Path: '+path)
                 except:
                     print(path+'')
 
