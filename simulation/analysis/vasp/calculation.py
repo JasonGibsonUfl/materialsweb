@@ -261,6 +261,7 @@ class Calculation(models.Model):
         self.meta_data.set(self.error_objects)
         if not self.formation is None:
             self.formation.save()
+        self.save()
 
     # django caching
     _potentials = None
