@@ -87,6 +87,10 @@ class DOS(models.Model):
                     dos.gap = gap['energy']
                     dos.is_directBG = gap['direct']
 
+                except ValueError:
+                    raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
+
+
         return dos
 
     @property
