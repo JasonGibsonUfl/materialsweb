@@ -58,10 +58,9 @@ class DOS(models.Model):
                 gap = band_structure.get_band_gap()
                 dos.gap = gap['energy']
                 dos.is_directBG = gap['direct']
-
-        except ValueError:
-            raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
-        return dos
+            except ValueError:
+                raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
+            return dos
 
     @property
     def efermi(self):
