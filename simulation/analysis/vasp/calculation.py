@@ -197,8 +197,6 @@ class Calculation(models.Model):
             dos.save()
 
         except:
-            dos.delete()
-            dos = None
             print("DOS AINT WORKING")
         label = path.split('/')[-1]
         self.formation_energy = self.get_formation_energy(label)
