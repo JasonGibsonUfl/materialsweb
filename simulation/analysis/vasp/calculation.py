@@ -261,6 +261,7 @@ class Calculation(models.Model):
         self.potential_set.set(self.potentials)
         self.element_set.set([Element.get(e) for e in set(self.elements)])
         self.meta_data.set(self.error_objects)
+        self.dimension = self.get_dimension()
         if not self.formation is None:
             self.formation.save()
         self.save()
