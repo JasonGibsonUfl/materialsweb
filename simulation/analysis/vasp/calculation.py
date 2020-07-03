@@ -197,6 +197,7 @@ class Calculation(models.Model):
             dos.save()
 
         except:
+            dos.delete()
             dos = None
             print("DOS AINT WORKING")
         label = path.split('/')[-1]
