@@ -191,9 +191,9 @@ class Calculation(models.Model):
         #create DOS
         #dos = DOS(entry=entry)
         #try:
-        dos=DOS.read(source+'/DOSCAR')
-        dos.save()
-        self.dos = dos
+        #dos=DOS.read(source+'/DOSCAR')
+        #dos.save()
+        #self.dos = dos
         #except:
             #print("DOS AINT WORKING")
         label = path.split('/')[-1]
