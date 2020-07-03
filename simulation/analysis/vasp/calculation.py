@@ -250,7 +250,7 @@ class Calculation(models.Model):
             print('Input')
             print(self.composition)
 
-        if self.dos is not None:
+        if self.dos.data is not None:
             self.dos.entry = self.entry
             self.dos.save()
             self.dos = self.dos
