@@ -235,6 +235,7 @@ class Calculation(models.Model):
 
     @transaction.atomic
     def save(self, *args, **kwargs):
+        print('SAVING')
         if self.output is not None:
             if self.entry:
                 self.output.entry = self.entry
@@ -262,6 +263,7 @@ class Calculation(models.Model):
         self.element_set.set([Element.get(e) for e in set(self.elements)])
         self.meta_data.set(self.error_objects)
         self.dimension = self.get_dimension()
+        print(self.dimension)
         if not self.formation is None:
             self.formation.save()
         self.save()
