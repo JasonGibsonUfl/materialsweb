@@ -192,9 +192,9 @@ class Calculation(models.Model):
         #try:
         #dos = DOS(entry=entry)
         #dos.read_doscar(path+'/DOSCAR')
-        dos = DOS.read(path+'/DOSCAR')
-        self.dos = dos
+        dos = DOS.read(source+'/DOSCAR')
         dos.save()
+        self.dos = dos
 
         #except:
             #print("DOS AINT WORKING")
@@ -205,7 +205,7 @@ class Calculation(models.Model):
         except:
             print("CHGCAR does not exist")
         self.dimension = self.get_dimension()
-        #self.save()
+        self.save()
 
     def get_dimension(self):
         with open(self.path + '/KPOINTS', 'r') as f:
@@ -252,7 +252,7 @@ class Calculation(models.Model):
             print('Input')
             print(self.composition)
 
-        if self.dos.data is not None:
+        if self.dos is not None:
             self.dos.entry = self.entry
             self.dos.save()
             self.dos = self.dos
