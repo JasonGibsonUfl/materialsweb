@@ -59,7 +59,8 @@ def value_formatter(value):
         return '%0.8g' % value
     else:
         return str(value)
-
+global url
+url = 'http://10.5.46.39/static/database/'
 
 def vasp_format(key, value):
     return ' %s = %s' % (key.upper(), value_formatter(value))
@@ -203,10 +204,10 @@ class Calculation(models.Model):
             zk = int(f.read())
             print(zk)
             if zk == 1:
-                print('in)')
+                return 2
+            elif zk == 2:
                 return 2
             else:
-                print('else')
                 return 3
 
     def get_formation_energy(self, label):
@@ -1880,3 +1881,85 @@ class Calculation(models.Model):
         fixed_calc.set_chgcar(calc)
         fixed_calc.write()
         return fixed_calc
+
+    '''Machine Learning'''
+    def get_soap(self, rcut=6, nmax=8, lmax=8):
+
+        urlp = url + self.label+'/POSCAR'
+        file = urllib.request.urlopen(urlp)
+        i = 0
+        species = self.composition.element_list.split('_')[0:-1]
+        print(species)
+        with open('PoSCAR','a') as poscar:
+            for line in file:
+                decoded_line = line.decode("utf-8")
+                poscar.write(decoded_line)
+        ml=vasp.read_vasp('./PoSCAR')
+        os.remove('./PoSCAR')
+        periodic_soap = SOAP(
+        species=species,
+        rcut=rcut,
+        nmax=nmax,
+        lmax=lmax,
+        )
+        soap = periodic_soap.create(ml)
+        #soap = 1
+        return soap
+
+
+    def prep_ml_formation_energy(self, fileroot='.'):
+        os.mkdir('formation_energy')
+        os.chdir('formation_energy')
+        urlo = url + self.label + '/OSZICAR'
+        fileo = urllib.request.urlopen(urlo)
+        urlx = url + self.label + '/XDATCAR'
+        filex = urllib.request.urlopen(urlx)
+        with open('OsZICAR','a') as oszicar:
+            for line in fileo:
+                decoded_line = line.decode("utf-8")
+                oszicar.write(decoded_line)
+        with open('XdATCAR','a') as xdatcar:
+            for line in filex:
+                decoded_line = line.decode("utf-8")
+                xdatcar.write(decoded_line)
+
+
+        from pymatgen.io.vasp import Xdatcar
+        from pymatgen.io.vasp import Oszicar
+        from sklearn.cluster import KMeans
+        import numpy as np
+        n = 100  # number of steps to sample
+        s_extension = 'poscar'
+        e_extension = 'energy'
+        prefix = ''  # prefix for files, e.g. name of structure
+        # e.g. "[root]/[prefix][i].[poscar]" where i=1,2,...,n
+        s_list = Xdatcar('XdATCAR').structures
+        e_list = [step['E0'] for step in Oszicar('OsZICAR').ionic_steps]
+        if n < len(s_list) - 1:
+            # the idea here is to obtain a subset of n energies
+            # such that the energies are as evenly-spaced as possible
+            # we do this in energy-space not in relaxation-space
+            # because energies drop fast and then level off
+            idx_to_keep = []
+            fitting_data = np.array(e_list)[:, np.newaxis]  # kmeans expects 2D
+            kmeans_model = KMeans(n_clusters=n)
+            kmeans_model.fit(fitting_data)
+            cluster_centers = sorted(kmeans_model.cluster_centers_.flatten())
+            for centroid in cluster_centers:
+                closest_idx = np.argmin(np.subtract(e_list, centroid) ** 2)
+                idx_to_keep.append(closest_idx)
+            idx_to_keep[-1] = len(e_list) - 1  # replace the last
+            idx_list = np.arange(len(s_list))
+            idx_batched = np.array_split(idx_list[:-1], n)
+            idx_kept = [batch[0] for batch in idx_batched]
+            idx_kept.append(idx_list[-1])
+        else:
+            idx_kept = np.arange(len(e_list))
+
+        for j, idx in enumerate(idx_kept):
+            filestem = str(j)
+            s_filename = '{}/{}{}.{}'.format(fileroot, prefix, filestem, s_extension)
+            e_filename = '{}/{}{}.{}'.format(fileroot, prefix, filestem, e_extension)
+            s_list[idx].to(fmt='poscar', filename=s_filename)
+            with open(e_filename, 'w') as f:
+                f.write(str(e_list[idx]))

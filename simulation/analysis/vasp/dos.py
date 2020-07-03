@@ -14,7 +14,7 @@ from simulation.utils.rendering.renderer import Renderer
 from pymatgen.io.vasp.outputs import Vasprun, Locpot
 from pymatgen.electronic_structure.bandstructure import BandStructure
 logger = logging.getLogger(__name__)
-
+from pathlib import Path
 
 class DOS(models.Model):
     """
@@ -47,16 +47,17 @@ class DOS(models.Model):
     @classmethod
     def read(cls, doscar='', efermi=0.0):
         print(doscar)
-        try:
-            band_structure = Vasprun(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml').get_band_structure()
-            print(band_structure.get_band_gap())
-            dos = DOS(file=doscar)
-            dos._efermi = 0.0
-            dos.read_doscar(dos.file)
-            dos.efermi = band_structure.efermi
-            gap = band_structure.get_band_gap()
-            dos.gap = gap['energy']
-            dos.is_directBG = gap['direct']
+        if Path(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml' ).is_file():
+            try:
+                band_structure = Vasprun(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml').get_band_structure()
+                print(band_structure.get_band_gap())
+                dos = DOS(file=doscar)
+                dos._efermi = 0.0
+                dos.read_doscar(dos.file)
+                dos.efermi = band_structure.efermi
+                gap = band_structure.get_band_gap()
+                dos.gap = gap['energy']
+                dos.is_directBG = gap['direct']
 
         except ValueError:
             raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
