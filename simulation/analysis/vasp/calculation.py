@@ -203,7 +203,7 @@ class Calculation(models.Model):
         except:
             print("CHGCAR does not exist")
         self.dimension = self.get_dimension()
-        self.save()
+        #self.save()
 
     def get_dimension(self):
         with open(self.path + '/KPOINTS', 'r') as f:
