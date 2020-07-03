@@ -21,7 +21,7 @@ import yaml
 import fractions as frac
 import decimal as dec
 import logging
-
+from materialsweb2 import settings
 import simulation
 from simulation.utils.math import *
 import simulation.data as data
@@ -36,7 +36,7 @@ re_formula = re.compile('([A-Z][a-z]?)([0-9\.]*)')
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 ## Parsing
-with open("/home/jason/dev/materialsweb2/simulation/data/elements/data.yaml", 'r') as stream:
+with open(settings.BASE_DIR+"/simulation/data/elements/data.yaml", 'r') as stream:
     data = yaml.safe_load(stream)
 def is_comp(value):
     new_value = str(value)
