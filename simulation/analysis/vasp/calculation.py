@@ -615,7 +615,8 @@ class Calculation(models.Model):
             print('IN one')
             return self.outcar
         if not exists(self.path):
-            print('in TWO')
+            print(self.path)
+            print(exists(self.path))
             return
         elif exists(self.path + '/OUTCAR'):
             print('IN THREE')
