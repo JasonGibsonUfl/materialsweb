@@ -257,13 +257,14 @@ class Calculation(models.Model):
             self.dos.entry = self.entry
             self.dos.save()
             self.dos = self.dos
+        self.dimension = self.get_dimension()
+        print(self.dimension)
         super(Calculation, self).save(*args, **kwargs)
         self.hubbard_set.set(self.hubbards)
         self.potential_set.set(self.potentials)
         self.element_set.set([Element.get(e) for e in set(self.elements)])
         self.meta_data.set(self.error_objects)
-        self.dimension = self.get_dimension()
-        print(self.dimension)
+
         if not self.formation is None:
             self.formation.save()
         self.save()
