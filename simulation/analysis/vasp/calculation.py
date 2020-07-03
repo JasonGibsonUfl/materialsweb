@@ -190,9 +190,9 @@ class Calculation(models.Model):
 
         #create DOS
         #try:
-        dos = DOS(entry=entry)
+        #dos = DOS(entry=entry)
         #dos.read_doscar(path+'/DOSCAR')
-        dos.read(path+'/DOSCAR')
+        dos = DOS.read(path+'/DOSCAR')
         self.dos = dos
         dos.save()
 
