@@ -46,14 +46,11 @@ class NumpyArrayField(models.TextField):
         return np.array(pickle.loads(str(value)))
 
     def get_prep_value(self, value):
-        print(value)
         if isinstance(value, list):
             return str(value)
         elif isinstance(value, np.ndarray):
             return str(value.tolist())
             #return pickle.dumps(value.tolist())
-        elif value is None:
-            return None
         else:
             raise TypeError('%s is not a list or numpy array' % value)
 
