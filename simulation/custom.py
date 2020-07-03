@@ -52,7 +52,7 @@ class NumpyArrayField(models.TextField):
         elif isinstance(value, np.ndarray):
             return str(value.tolist())
             #return pickle.dumps(value.tolist())
-        elif isinstance(value, None):
+        elif value is None:
             return None
         else:
             raise TypeError('%s is not a list or numpy array' % value)
