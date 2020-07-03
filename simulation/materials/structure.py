@@ -170,12 +170,58 @@ class Structure(models.Model, object):
         return len(self.atoms)
 
 
-
-    def get_jmol(self):
+    def get_jmol2(self):
+        from pymatgen.core.operations import SymmOp
+        needs_shift = False
         structure = StructureP.from_file(self.entry.path+'/POSCAR')
-        structure.make_supercell([6,6,1])
-        xyz_structure = [str(structure.num_sites),
-                         structure.composition.reduced_formula]
+        if structure.lattice.a == max(structure.lattice.abc):
+            translation = SymmOp.from_rotation_and_translation(translation_vec=(structure.lattice.a / 2, 0, 0))
+            for site in structure.sites:
+                if site._frac_coords[0] > 0.9 or site._frac_coords[0] < 0.1:
+                    needs_shift = True
+            if needs_shift:
+                structure.apply_operation(translation)
+            structure.make_supercell([1, 6, 6])
+        elif structure.lattice.b == max(structure.lattice.abc):
+            translation = SymmOp.from_rotation_and_translation(translation_vec=(0, structure.lattice.b / 2, 0))
+            for site in structure.sites:
+                if site._coords[1] > 0.9 or site._coords[1] < 0.1:
+                    needs_shift = True
+            if needs_shift:
+                structure.apply_operation(translation)
+            structure.make_supercell([6, 1, 6])
+        else:
+            translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
+            for site in structure.sites:
+                if site._frac_coords[2] > 0.9 or site._frac_coords[2] < 0.1:
+                    needs_shift = True
+            if needs_shift:
+                structure.apply_operation(translation)
+
+            structure.make_supercell([6, 6, 1])
+            print('frac_coord: '+ str(site._frac_coords[2]))
+
+        print(structure.lattice.b)
+        xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
+        for site in structure.sites:
+            element = site._species.reduced_formula.replace('2', '')
+            atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))
+            xyz_structure.append(atom)
+        #return '+'.join(xyz_structure)
+        string = str(xyz_structure)
+        string = string.replace('[', '')
+        string = string.replace(']', '')
+        string = string.replace(', ', r'\n')
+        string = string.replace("'", "")
+        return string
+
+    def get_jmol3(self):
+        from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+        structure = StructureP.from_file(self.entry.path + '/POSCAR')
+        analyzer = SpacegroupAnalyzer(structure)
+        structure = analyzer.get_refined_structure()
+        structure.make_supercell([2, 2, 2])
+        xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
         for site in structure.sites:
             element = site._species.reduced_formula.replace('2', '')
             atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))

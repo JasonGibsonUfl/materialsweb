@@ -75,7 +75,7 @@ def parse_comp(value):
     return dict(comp)
 
 def parse_space(value):
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         space = re.sub('[-,_]', ' ', value)
         space = [ unit_comp(parse_comp(b)) for b in space.split()]
     elif isinstance(value, (list,set)):
