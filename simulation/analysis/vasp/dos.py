@@ -335,6 +335,8 @@ class DOS(models.Model):
         for nd in range(ndos):
             dos.append(np.array([float(x) for x in f.readline().split()]))
         self.data = np.array(dos).T
+        print("HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print(self.data)
         # Next we have one block per atom, if INCAR contains the stuff
         # necessary for generating site-projected DOS
         dos = []
