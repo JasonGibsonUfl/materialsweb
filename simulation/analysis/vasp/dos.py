@@ -46,7 +46,7 @@ class DOS(models.Model):
 
     @classmethod
     def read(cls, doscar='', efermi=0.0):
-        print(Vasprun(doscar[0:(len(doscar) - 7)] + '/vasprun.xml').get_band_structure())
+        print((doscar[0:(len(doscar) - 7)] + '/vasprun.xml'))
         print('TOP')
         try:
             dos = DOS(file=doscar)
