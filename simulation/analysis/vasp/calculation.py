@@ -12,6 +12,7 @@ import re
 import ast
 import subprocess
 from collections import defaultdict
+import urllib
 from os.path import exists, isfile, isdir
 
 from lxml import etree
@@ -42,7 +43,8 @@ from simulation.analysis.vasp.dos import DOS
 from simulation.analysis.thermodynamics.equilibrium import Equilibrium
 from simulation.analysis.vasp.potential import Potential
 logger = logging.getLogger(__name__)
-
+from ase.io import vasp
+from dscribe.descriptors import SOAP
 re_iter = re.compile('([0-9]+)\( *([0-9]+)\)')
 
 
