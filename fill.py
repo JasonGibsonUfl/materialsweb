@@ -9,6 +9,16 @@ from simulation.analysis.vasp.calculation import Calculation
 import os
 a=os.walk('/var/www/materialsweb/static/database/MAX_phases/all_competitors')
 for b in a:
+        if len(b[1])==0:
+           path = b[0]
+           try:
+               calc = Calculation().read(path)
+               calc.create_all(path)
+               calc.save()
+           except:
+               print(path)
+'''
+for b in a:
         c=b[0].split('/')
         if c[-1] != 'pbe_bands' and c[-1] != 'hse_bands':
                 path = '/var/www/materialsweb/static/database/MAX_phases/all_competitors/'+c[-1]
@@ -19,5 +29,6 @@ for b in a:
                     #print('Path: '+path)
                 except:
                     print(path+'')
+'''
 
 
