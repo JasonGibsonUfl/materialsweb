@@ -319,7 +319,9 @@ class DOS(models.Model):
 
     def read_doscar(self, fname="DOSCAR"):
         """Read a VASP DOSCAR file"""
+        print('Reading DOSCAR')
         if os.path.getsize(fname) < 300:
+            print('TOO BIG')
             return
         if os.path.splitext(fname)[1] == '.gz':
             f = gzip.open(fname, 'rb')
