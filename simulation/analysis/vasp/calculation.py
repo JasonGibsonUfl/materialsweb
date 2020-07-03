@@ -192,7 +192,7 @@ class Calculation(models.Model):
         try:
             dos = DOS(entry=entry)
             dos.read(path+'/DOSCAR')
-            dos.read_doscar(path+'/DOSCAR')
+            #dos.read_doscar(path+'/DOSCAR')
             self.dos = dos
             dos.save()
 
