@@ -612,10 +612,13 @@ class Calculation(models.Model):
 
         """
         if not self.outcar is None:
+            print('IN one')
             return self.outcar
         if not exists(self.path):
+            print('in TWO')
             return
         elif exists(self.path + '/OUTCAR'):
+            print('IN THREE')
             self.outcar = open(self.path + '/OUTCAR').read().splitlines()
         elif exists(self.path + '/OUTCAR.gz'):
             outcar = gzip.open(self.path + '/OUTCAR.gz', 'rb').read()
