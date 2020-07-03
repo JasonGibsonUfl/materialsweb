@@ -46,6 +46,7 @@ class NumpyArrayField(models.TextField):
         return np.array(pickle.loads(str(value)))
 
     def get_prep_value(self, value):
+        print(value)
         if isinstance(value, list):
             return str(value)
         elif isinstance(value, np.ndarray):

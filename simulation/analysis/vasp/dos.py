@@ -47,6 +47,8 @@ class DOS(models.Model):
     @classmethod
     def read(cls, doscar='', efermi=0.0):
         print(doscar)
+        print('TOP')
+        print(Vasprun(doscar[0:(len(doscar) - 7)] + '/vasprun.xml').get_band_structure())
         try:
             dos = DOS(file=doscar)
         except ValueError:
@@ -83,6 +85,7 @@ class DOS(models.Model):
                 raise simulation.analysis.vasp.calculation.VaspError('Could not parse DOSCAR')
             else:
                 try:
+                    print('Inside else statement')
                     band_structure = Vasprun(doscar[0:(len(doscar) - 7)] + '/vasprun.xml').get_band_structure()
                     print(band_structure.get_band_gap())
                     dos = DOS(file=doscar)
