@@ -28,6 +28,7 @@ SECRET_KEY = '$!1k)%r9#tyk!k!c-t7asxv3-l-6=^u)9(wm=ckna$o-zn(6no'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 
 # Application definition
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.admindocs',
     'reset_migrations',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
 ]
 
 MIDDLEWARE = [

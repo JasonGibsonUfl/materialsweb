@@ -1883,13 +1883,36 @@ class Calculation(models.Model):
         fixed_calc.set_chgcar(calc)
         fixed_calc.write()
         return fixed_calc
+    '''Get Files'''
+    def write_poscar(self):
+        urlp = url + self.label+'/POSCAR'
+        file = urllib.request.urlopen(urlp)
+        with open('POSCAR','a') as poscar:
+            for line in file:
+                decoded_line = line.decode("utf-8")
+                poscar.write(decoded_line)
+
+    def write_kpoints(self):
+        urlp = url + self.label+'/KPOINTS'
+        file = urllib.request.urlopen(urlp)
+        with open('KPOINTS','a') as poscar:
+            for line in file:
+                decoded_line = line.decode("utf-8")
+                poscar.write(decoded_line)
+
+    def write_incar(self):
+        urlp = url + self.label+'/INCAR'
+        file = urllib.request.urlopen(urlp)
+        with open('INCAR','a') as poscar:
+            for line in file:
+                decoded_line = line.decode("utf-8")
+                poscar.write(decoded_line)
 
     '''Machine Learning'''
     def get_soap(self, rcut=6, nmax=8, lmax=8):
 
         urlp = url + self.label+'/POSCAR'
         file = urllib.request.urlopen(urlp)
-        i = 0
         species = self.composition.element_list.split('_')[0:-1]
         print(species)
         with open('PoSCAR','a') as poscar:
@@ -1920,10 +1943,14 @@ class Calculation(models.Model):
             for line in fileo:
                 decoded_line = line.decode("utf-8")
                 oszicar.write(decoded_line)
+
         with open('XdATCAR','a') as xdatcar:
             for line in filex:
                 decoded_line = line.decode("utf-8")
                 xdatcar.write(decoded_line)
+
+        #os.remove('OsZICAR')
+        #os.remove('./XdATCAR')
 
 
         from pymatgen.io.vasp import Xdatcar

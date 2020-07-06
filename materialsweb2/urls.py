@@ -32,5 +32,6 @@ urlpatterns = [
     path('', include('api.urls')),
     path('gasp', views.gasp_view, name='gasp'),
     path('substrate', views.substrate_view, name='substrate'),
+    path('django_plotly_dash/', include('django_plotly_dash.urls')),
 
 ]
