@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from pages import views
+from electronic_visualization import simpleexample
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'reset_migrations',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    'channels',
+    'channels_redis',
+    'electronic_visualization',
 ]
 
 MIDDLEWARE = [
@@ -88,8 +91,8 @@ WSGI_APPLICATION = 'materialsweb2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '10.5.46.39',
-        'PORT': '',
+        #'HOST': '10.5.46.39',
+        #'PORT': '',
         'OPTIONS': {
             #'read_default_file': './my.cnf',
             'read_default_file': '/etc/mysql/my.cnf',
@@ -128,7 +131,36 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+'''Setting up visulization tool'''
+CRISPY_TEMPLATE_PACK = 'bootstap4'
 
+ASGI_APPLICATION = 'electronic_visualization.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379),],
+        }
+    }
+}
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_plotly_dash.finders.DashAssetFinder',
+    'django_plotly_dash.finders.DashComponentFinder'
+]
+
+PLOTLY_COMPONENTS = [
+
+    'dash_core_components',
+    'dash_html_components',
+    'dash_renderer',
+
+    'dpd_components'
+]
+'''End Setting up visulization tool'''
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
