@@ -256,7 +256,118 @@ from pymatgen.electronic_structure.bandstructure import BandStructureSymmLine
 from .gen_bandsfig import BandsFig
 from dash.dependencies import Input, Output, State
 import json
+import json
+import numpy as np
 
+from pymatgen import Structure
+from pymatgen.io.vasp.outputs import Vasprun
+from pymatgen.electronic_structure.dos import CompleteDos
+from pymatgen.electronic_structure.bandstructure import BandStructureSymmLine
+from pymatgen.core.periodic_table import Element
+# from pymatgen.ext.matproj import MPRester
+
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output, State
+
+from .gen_structfig import StructFig
+from .gen_bandsfig import BandsFig
+
+
+@app.callback(Output('dos_object', 'data'),
+              [Input('vasprun_dos', 'value')])
+def get_dos(vasprun_dos):
+    ## get CompleteDos object and "save" in hidden div in json format
+    dos = Vasprun(vasprun_dos).complete_dos
+    return json.dumps(dos.as_dict())
+
+
+
+@app.callback(Output('bs_object', 'data'),
+              [Input('dos_object', 'data'),
+               Input('vasprun_bands', 'value'),
+               Input('kpts_bands', 'value')])
+def get_bs(dos, vasprun_bands, kpts_bands):
+    ## get BandStructureSymmLine object and "save" in hidden div in json format
+    bands = Vasprun(vasprun_bands, parse_projected_eigen=True)
+    if dos:
+        dos = CompleteDos.from_dict(json.loads(dos))
+        bs = bands.get_band_structure(kpts_bands, line_mode=True, efermi=dos.efermi)
+    else:
+        bs = bands.get_band_structure(kpts_bands, line_mode=True)
+    return json.dumps(bs.as_dict(), cls=MyEncoder)
+
+
+@app.callback(Output('struct_object', 'data'),
+              [Input('vasprun_dos', 'value'),
+               Input('vasprun_bands', 'value')])
+def get_structure(vasprun_dos, vasprun_bands):
+    ## get structure object and "save" in hidden div in json format
+    if vasprun_dos:
+        structure = Vasprun(vasprun_dos).structures[-1]
+    elif vasprun_bands:
+        structure = Vasprun(vasprun_bands).structures[-1]
+    return json.dumps(structure.as_dict())
+
+
+@app.callback(Output('options', 'data'),
+              [Input('struct_object', 'data')])
+def get_options_all(struct):
+    ## determine full list of options and store in hidden div
+
+    ## de-serialize structure from json format to pymatgen object
+    structure = Structure.from_dict(json.loads(struct))
+
+    ## determine if sub-orbital projections exist. If so, set lm = True
+    #    orbs = [Orbital.__str__(orb) for atom_dos in vasprun.complete_dos.pdos.values()
+    #                                 for orb,pdos in atom_dos.items()]
+    #    lm = any(["x" in s for s in orbs])
+
+    ## determine the list of unique elements in the system
+    elems = [str(site.specie) for site in structure.sites]
+    ## remove duplicate entries
+    options = dict.fromkeys(elems)
+
+    ## generate the full list of options with sub-orbital projections
+    for elem in options:
+        options[elem] = {elem + ' Total': [elem + ' Total'],
+                         elem + ' s': [elem + ' s']}
+        if Element(elem).block == 'p' or Element(elem).block == 'd':
+            options[elem].update({elem + ' p': [elem + ' px', elem + ' py', elem + ' pz',
+                                                elem + ' p summed']})
+        if Element(elem).block == 'd':
+            options[elem].update({elem + ' d': [elem + ' dxz', elem + ' dyz', elem + ' dxy',
+                                                elem + ' dx2-y2', elem + ' dz2', elem + ' d summed']})
+    #    options.update({'Total':{'Total': None}})
+
+    return options
+
+
+@app.callback(Output('species_dropdown', 'options'),
+              [Input('options', 'data')])
+def set_elem_options(options):
+    return [{'label': i, 'value': i} for i in options]
+
+
+@app.callback(Output('orb_dropdown', 'options'),
+              [Input('options', 'data'),
+               Input('species_dropdown', 'value')])
+def set_orb_options(options, selected_species):
+    return [{'label': orb, 'value': orb}
+            for sp in selected_species
+            for orb in options[sp]]
+
+
+@app.callback(Output('suborb_dropdown', 'options'),
+              [Input('options', 'data'),
+               Input('species_dropdown', 'value'),
+               Input('orb_dropdown', 'value')])
+def set_suborb_options(options, selected_species, selected_orb):
+    return [{'label': suborb, 'value': suborb}
+            for orb in selected_orb
+            if orb.split()[0] in selected_species
+            for suborb in options[orb.split()[0]][orb]]
 
 @app.callback(Output('DOS_bands', 'figure'),
               [Input('submit_button', 'n_clicks'),
