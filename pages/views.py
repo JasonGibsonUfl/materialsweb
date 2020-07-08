@@ -34,7 +34,7 @@ def gasp_view(request, *args,**kwargs):
     return render(request, 'gasp.html', {})
 
 def electronic_visualization_view(request, *args,**kwargs):
-    return render(request, 'ectronic_visualization.html', {})
+    return render(request, 'electronic_visualization.html', {})
 
 
 def substrate_view(request, *args,**kwargs):
