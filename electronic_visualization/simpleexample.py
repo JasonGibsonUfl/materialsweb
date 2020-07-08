@@ -1,10 +1,10 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 
-
+from dash.dependencies import Input, Output, State
+import json
 import json
 import numpy as np
 
@@ -22,8 +22,6 @@ from dash.dependencies import Input, Output, State
 
 from .gen_structfig import StructFig
 from .gen_bandsfig import BandsFig
-
-
 
 class MyEncoder(json.JSONEncoder):
     ## convert numpy types to regular types for conversion to json
@@ -283,7 +281,10 @@ def display_value(value):
 
     )
     return {'data': [graph], 'layout': layout}
-''
+'''
+
+
+
 @app.callback(Output('dos_object', 'data'),
               [Input('vasprun_dos', 'value')])
 def get_dos(vasprun_dos):
