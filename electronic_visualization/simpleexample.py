@@ -379,6 +379,16 @@ def set_suborb_options(options, selected_species, selected_orb):
             if orb.split()[0] in selected_species
             for suborb in options[orb.split()[0]][orb]]
 
+
+@app.callback(Output('unitcell', 'figure'),
+              [Input('struct_object', 'data')])
+def update_structfig(struct):
+    ## de-serialize structure from json format to pymatgen object
+    structure = Structure.from_dict(json.loads(struct))
+    ## Generate our simple structure figure
+    structfig = StructFig().generate_fig(structure)
+    return {'data':[structfig]}
+
 @app.callback(Output('DOS_bands', 'figure'),
               [Input('submit_button', 'n_clicks'),
                Input('dos_object', 'data'),
@@ -398,17 +408,3 @@ def update_dosbandsfig(n_clicks, dos, bs, projlist):
     return {'data':[dosbandfig]}
 
 
-
-@app.callback(Output('unitcell', 'figure'),
-              [Input('struct_object', 'data')])
-def update_structfig(struct):
-    ## de-serialize structure from json format to pymatgen object
-    structure = Structure.from_dict(json.loads(struct))
-    ## Generate our simple structure figure
-    structfig = StructFig().generate_fig(structure)
-    return {'data':[structfig]}
-
-
-
-if __name__ == '__main__':
-    app.run_server(debug=False)
