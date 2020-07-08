@@ -33,6 +33,10 @@ def home_view(request, *args,**kwargs):
 def gasp_view(request, *args,**kwargs):
     return render(request, 'test.html', {})
 
+def electronic_visualization_view(request, *args,**kwargs):
+    return render(request, 'ectronic_visualization.html', {})
+
+
 def substrate_view(request, *args,**kwargs):
     return render(request, 'substrate.html', {})
 
