@@ -31,7 +31,7 @@ def home_view(request, *args,**kwargs):
     return render(request, 'home.html', context)
 
 def gasp_view(request, *args,**kwargs):
-    return render(request, 'test.html', {})
+    return render(request, 'gasp.html', {})
 
 def electronic_visualization_view(request, *args,**kwargs):
     return render(request, 'ectronic_visualization.html', {})
