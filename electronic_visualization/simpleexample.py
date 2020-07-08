@@ -5,6 +5,25 @@ import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 
 
+import json
+import numpy as np
+
+from pymatgen import Structure
+from pymatgen.io.vasp.outputs import Vasprun
+from pymatgen.electronic_structure.dos import CompleteDos
+from pymatgen.electronic_structure.bandstructure import BandStructureSymmLine
+from pymatgen.core.periodic_table import Element
+# from pymatgen.ext.matproj import MPRester
+
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output, State
+
+from .gen_structfig import StructFig
+from .gen_bandsfig import BandsFig
+
+
 
 class MyEncoder(json.JSONEncoder):
     ## convert numpy types to regular types for conversion to json
@@ -264,31 +283,7 @@ def display_value(value):
 
     )
     return {'data': [graph], 'layout': layout}
-'''
-from pymatgen.electronic_structure.dos import CompleteDos
-from pymatgen.electronic_structure.bandstructure import BandStructureSymmLine
-from .gen_bandsfig import BandsFig
-from dash.dependencies import Input, Output, State
-import json
-import json
-import numpy as np
-
-from pymatgen import Structure
-from pymatgen.io.vasp.outputs import Vasprun
-from pymatgen.electronic_structure.dos import CompleteDos
-from pymatgen.electronic_structure.bandstructure import BandStructureSymmLine
-from pymatgen.core.periodic_table import Element
-# from pymatgen.ext.matproj import MPRester
-
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output, State
-
-from .gen_structfig import StructFig
-from .gen_bandsfig import BandsFig
-
-
+''
 @app.callback(Output('dos_object', 'data'),
               [Input('vasprun_dos', 'value')])
 def get_dos(vasprun_dos):
