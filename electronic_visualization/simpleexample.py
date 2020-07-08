@@ -386,3 +386,19 @@ def update_dosbandsfig(n_clicks, dos, bs, projlist):
     ## update the band structure and dos figure
     dosbandfig = BandsFig().generate_fig(dos, bs, projlist)
     return {'data':[dosbandfig]}
+
+
+
+@app.callback(Output('unitcell', 'figure'),
+              [Input('struct_object', 'data')])
+def update_structfig(struct):
+    ## de-serialize structure from json format to pymatgen object
+    structure = Structure.from_dict(json.loads(struct))
+    ## Generate our simple structure figure
+    structfig = StructFig().generate_fig(structure)
+    return structfig
+
+
+
+if __name__ == '__main__':
+    app.run_server(debug=False)
