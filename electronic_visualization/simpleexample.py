@@ -254,9 +254,16 @@ def display_value(value):
 from pymatgen.electronic_structure.dos import CompleteDos
 from pymatgen.electronic_structure.bandstructure import BandStructureSymmLine
 from .gen_bandsfig import BandsFig
-
-from .dash_main import CompleteDos, BandStructureSymmLine, BandsFig
+from dash.dependencies import Input, Output, State
 import json
+
+
+@app.callback(Output('DOS_bands', 'figure'),
+              [Input('submit_button', 'n_clicks'),
+               Input('dos_object', 'data'),
+               Input('bs_object', 'data')],
+              #              [State('orb_dropdown', 'value')])
+              [State('suborb_dropdown', 'value')])
 def update_dosbandsfig(n_clicks, dos, bs, projlist):
     ## figure updates when the inputs change or the button is clicked
     ## figure does NOT update when elements or orbitals are selected

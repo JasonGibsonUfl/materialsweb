@@ -269,15 +269,6 @@ def get_bs(dos, vasprun_bands, kpts_bands):
     return json.dumps(bs.as_dict(), cls=MyEncoder)
 
 
-# @app.callback(Output('bs_object', 'children'),
-#              [Input('mpid', 'value')])
-# def get_bs_mp(mpid):
-#    ## get BandStructureSymmLine object and "save" in hidden div in json format
-#    mpr = MPRester("tnS76clmyw18JNre")
-#    bs = mpr.get_bandstructure_by_material_id(mpid)
-#    return json.dumps(bs.as_dict(), cls=MyEncoder)
-
-
 @app.callback(Output('struct_object', 'data'),
               [Input('vasprun_dos', 'value'),
                Input('vasprun_bands', 'value')])
