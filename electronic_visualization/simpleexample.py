@@ -8,6 +8,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = DjangoDash('SimpleExample', external_stylesheets=external_stylesheets)
 
+
 app.layout = html.Div([
 
     html.H3('Interactive Electronic Structure Visualization Tool',
@@ -37,6 +38,7 @@ app.layout = html.Div([
                      style={'display': 'block'
                             }
                      ),
+
             dcc.Input(id='vasprun_dos',
                       type='text',
                       #                      value='',
@@ -53,6 +55,7 @@ app.layout = html.Div([
 
             dcc.Input(id='vasprun_bands',
                       type='text',
+                      #                      value='',
                       placeholder='input path to vasprun.xml file from bands calc. + enter/tab',
                       debounce=True,
                       style={'display': 'block',
@@ -66,6 +69,7 @@ app.layout = html.Div([
 
             dcc.Input(id='kpts_bands',
                       type='text',
+                      #                      value='',
                       placeholder='input path to KPOINTS file from bands calc. + enter/tab',
                       debounce=True,
                       style={'display': 'block',
@@ -74,7 +78,15 @@ app.layout = html.Div([
                              'borderWidth': '1px',
                              'textAlign': 'center'
                              }
-                      )
+                      ),
+
+            ## dcc.Store components are used to store JSON data in the browser
+            ## (replace the "hidden Div" hack)
+            dcc.Store(id='dos_object'),  ## pymatgen dos object
+            dcc.Store(id='bs_object'),  ## pymatgen bs object
+            dcc.Store(id='struct_object'),  ## pymatgen structure object
+            dcc.Store(id='options'),  ## full dict of element/orbital options
+
         ],
             style={'display': 'inline-block',
                    'width': '30%',
@@ -156,16 +168,6 @@ app.layout = html.Div([
                }
     ),
 
-    ## hidden div used to store the full dict of options
-    html.Div(id='options',
-             style={'display': 'none'}),
-
-    ## hidden divs used to store dos and bs objects
-    html.Div(id='dos_object',
-             style={'display': 'none'}),
-
-    html.Div(id='bs_object',
-             style={'display': 'none'}),
 
     html.Div([
         ## our simple clickable structure figure!
@@ -191,9 +193,19 @@ app.layout = html.Div([
                }
     ),
 
+    ## this div tells which atom was selected (temporary)
+    #    html.Div(id='select_atom',
+    #            style={'display': 'inline-block',
+    #                   'float': 'left',
+    #                   'width': '30%',
+    #                   'marginLeft': '100'
+    #                   }
+    #        ),
+
 ],
     style={'backgroundColor': '#FFFFFF'}
 )
+
 
 '''
 app.layout = html.Div([
@@ -239,6 +251,10 @@ def display_value(value):
     )
     return {'data': [graph], 'layout': layout}
 '''
+from pymatgen.electronic_structure.dos import CompleteDos
+from pymatgen.electronic_structure.bandstructure import BandStructureSymmLine
+from .gen_bandsfig import BandsFig
+
 from .dash_main import CompleteDos, BandStructureSymmLine, BandsFig
 import json
 def update_dosbandsfig(n_clicks, dos, bs, projlist):

@@ -3,28 +3,12 @@ import numpy as np
 
 from . import suborb_utils as sub
 
-from pymatgen.ext.matproj import MPRester
-from pymatgen.io.vasp.outputs import Vasprun
-from pymatgen.core.periodic_table import Element
-from pymatgen.electronic_structure.core import Spin, Orbital, OrbitalType
-from pymatgen.electronic_structure.plotter import BSPlotter
-
-#import plotly as pltly             ## plotting functions    
-import chart_studio.tools as tls   ## plotly tools
-import plotly.graph_objs as go     ## plot and configuration tools : Scatter, Line, Layout
-from plotly.subplots import make_subplots
-import plotly.io as pio
-
 from django_plotly_dash import DjangoDash
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = DjangoDash('electronic_visualization', external_stylesheets=external_stylesheets)
 
-from mendeleev import element
-import numpy as np
 
-import suborb_utils as sub
 
 # from pymatgen.ext.matproj import MPRester
 from pymatgen.core.periodic_table import Element
