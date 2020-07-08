@@ -406,7 +406,7 @@ def update_structfig(struct):
     structure = Structure.from_dict(json.loads(struct))
     ## Generate our simple structure figure
     structfig = StructFig().generate_fig(structure)
-    return structfig
+    return {'data':[structfig]}
 
 
 
