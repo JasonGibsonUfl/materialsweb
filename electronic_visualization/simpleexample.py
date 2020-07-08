@@ -387,7 +387,7 @@ def update_structfig(struct):
     structure = Structure.from_dict(json.loads(struct))
     ## Generate our simple structure figure
     structfig = StructFig().generate_fig(structure)
-    return {'data':[structfig]}
+    return structfig
 
 @app.callback(Output('DOS_bands', 'figure'),
               [Input('submit_button', 'n_clicks'),
@@ -405,6 +405,6 @@ def update_dosbandsfig(n_clicks, dos, bs, projlist):
         bs = BandStructureSymmLine.from_dict(json.loads(bs))
     ## update the band structure and dos figure
     dosbandfig = BandsFig().generate_fig(dos, bs, projlist)
-    return {'data':[dosbandfig]}
+    return dosbandfig
 
 
