@@ -83,7 +83,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'materialsweb2.wsgi.application'
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 8242880
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
