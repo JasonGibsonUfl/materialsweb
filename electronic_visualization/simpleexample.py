@@ -342,26 +342,6 @@ def update_output(uploaded_filenames, uploaded_file_contents):
             uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
 
 
-@app.callback(
-    Output('vasprun_dos', 'value'),  # "file-list"),#, "children"),
-    [Input("upload-data-kpts", "filename"), Input("upload-data-kpts", "contents")],
-)
-def update_output(uploaded_filenames, uploaded_file_contents):
-    """Save uploaded files and regenerate the file list."""
-
-    if uploaded_filenames is not None and uploaded_file_contents is not None:
-        # for name, data in zip(uploaded_filenames, uploaded_file_contents):
-        print(uploaded_filenames)
-        save_file(str(uploaded_filenames), uploaded_file_contents)
-
-    files = uploaded_files()
-    if len(files) == 0:
-        return [html.Li("No files yet!")]
-    else:
-        return UPLOAD_DIRECTORY + '/' + str(
-            uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
-
-
 @app.callback(Output('dos_object', 'data'),
               [Input('vasprun_dos', 'value')])
 def get_dos(vasprun_dos):
