@@ -22,6 +22,13 @@ from dash.dependencies import Input, Output, State
 
 from .gen_structfig import StructFig
 from .gen_bandsfig import BandsFig
+import os
+import base64
+from urllib.parse import quote as urlquote
+UPLOAD_DIRECTORY = "/var/www/materialsweb/static"
+
+if not os.path.exists(UPLOAD_DIRECTORY):
+    os.makedirs(UPLOAD_DIRECTORY)
 
 class MyEncoder(json.JSONEncoder):
     ## convert numpy types to regular types for conversion to json
@@ -70,7 +77,7 @@ app.layout = html.Div([
                             }
                      ),
 
-            dcc.Upload(html.Button('Upload File'), id='vasprun_dos',
+            dcc.Upload(html.Button('Upload File'), id = "upload-data",#id='vasprun_dos',
                       
                       #type='text',
 
@@ -89,6 +96,8 @@ app.layout = html.Div([
                              'textAlign': 'center'
                              }
                       ),
+            html.H2("File List"),
+            html.Ul(id="file-list"),
 
             dcc.Input(id='vasprun_bands',
                       type='text',
@@ -247,7 +256,44 @@ app.layout = html.Div([
 )
 
 
+def save_file(name, content):
+    """Decode and store a file uploaded with Plotly Dash."""
+    data = content.encode("utf8").split(b";base64,")[1]
+    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
+        fp.write(base64.decodebytes(data))
 
+
+def uploaded_files():
+    """List the files in the upload directory."""
+    files = []
+    for filename in os.listdir(UPLOAD_DIRECTORY):
+        path = os.path.join(UPLOAD_DIRECTORY, filename)
+        if os.path.isfile(path):
+            files.append(filename)
+    return files
+
+def file_download_link(filename):
+    """Create a Plotly Dash 'A' element that downloads a file from the app."""
+    location = "/download/{}".format(urlquote(filename))
+    return html.A(filename, href=location)
+
+
+@app.callback(
+    Output("file-list", "children"),
+    [Input("upload-data", "filename"), Input("upload-data", "contents")],
+)
+def update_output(uploaded_filenames, uploaded_file_contents):
+    """Save uploaded files and regenerate the file list."""
+
+    if uploaded_filenames is not None and uploaded_file_contents is not None:
+        for name, data in zip(uploaded_filenames, uploaded_file_contents):
+            save_file(name, data)
+
+    files = uploaded_files()
+    if len(files) == 0:
+        return [html.Li("No files yet!")]
+    else:
+        return [html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(Output('dos_object', 'data'),
               [Input('vasprun_dos', 'value')])
