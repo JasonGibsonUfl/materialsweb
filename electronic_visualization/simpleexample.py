@@ -265,6 +265,8 @@ def save_file(name, content):
     parser = etree.XMLParser(recover=True)
     data = etree.fromstring(content, parser=parser)#.encode("utf8")#.split(b";base64,")[0]
     print(name)
+    print('DATA!!!!!!!')
+    print(data)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
         fp.write(data)
 
