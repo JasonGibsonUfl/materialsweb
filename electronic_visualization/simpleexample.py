@@ -262,7 +262,8 @@ app.layout = html.Div([
 import xml.etree.ElementTree as ET
 def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
-    root = ET.fromstring(content)
+    tree = ET.parse(content)
+    root = tree.getroot()
     data = ET.tostring(root)
     #data = content.encode("utf8").split(b";base64,")
     print((data))
