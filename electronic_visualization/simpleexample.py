@@ -98,9 +98,9 @@ app.layout = html.Div([
                              'textAlign': 'center'
                              }
                       ),
-            dcc.Input(id='vasprun_dos'),
-            html.H2("File List"),
-            html.Ul(id="file-list"),
+            dcc.Input(id='file-list'),
+            #html.H2("File List"),
+            #html.Ul(id="file-list"),
 
             dcc.Input(id='vasprun_bands',
                       type='text',
