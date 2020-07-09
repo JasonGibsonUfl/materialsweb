@@ -77,20 +77,11 @@ app.layout = html.Div([
                             }
                      ),
 
-            dcc.Upload(
-                children=html.Div(["click to upload vasprun_dos.xml"]),
-                id = "upload-data",
-                #id='vasprun_dos',
-                      
-                      #type='text',
-
-                      #children=html.Div([
-                          #'Drag and Drop or ',
-                          #html.A('Select Files')
-                      #]),
+            dcc.Input(id='vasprun_dos',
+                      type='text',
                       #                      value='',
-                      #placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
-                      #debounce=True,
+                      placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
+                      debounce=True,
                       style={'display': 'block',
                              'height': '30px',
                              'width': '100%',
@@ -99,9 +90,6 @@ app.layout = html.Div([
                              'textAlign': 'center'
                              }
                       ),
-            dcc.Input(id='file-list'),
-            #html.H2("File List"),
-            #html.Ul(id="file-list"),
 
             dcc.Input(id='vasprun_bands',
                       type='text',
@@ -258,63 +246,14 @@ app.layout = html.Div([
 ],
     style={'backgroundColor': '#FFFFFF'}
 )
-from lxml import etree
-import xml.etree.ElementTree as ET
-def save_file(name, content):
-    """Decode and store a file uploaded with Plotly Dash."""
-    parser = etree.XMLParser(recover=True)
-    print('Content')
-    #print(content)
-    root = etree.fromstring(content, parser=parser)
-    data = etree.tostring(root)
-    #data = content.encode("utf8").split(b";base64,")
-    #print((content))
-    #data=data[2]
-    print(name)
-    #print(data)
-    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
-        fp.write(data)
 
 
-def uploaded_files():
-    """List the files in the upload directory."""
-    files = []
-    for filename in os.listdir(UPLOAD_DIRECTORY):
-        path = os.path.join(UPLOAD_DIRECTORY, filename)
-        if os.path.isfile(path):
-            files.append(filename)
-    return files
-
-def file_download_link(filename):
-    """Create a Plotly Dash 'A' element that downloads a file from the app."""
-    location = "/download/{}".format(urlquote(filename))
-    return html.A(filename, href=location)
-
-
-@app.callback(
-    Output('file-list','value'),#"file-list"),#, "children"),
-    [Input("upload-data", "filename"), Input("upload-data", "contents")],
-)
-def update_output(uploaded_filenames, uploaded_file_contents):
-    """Save uploaded files and regenerate the file list."""
-
-    if uploaded_filenames is not None and uploaded_file_contents is not None:
-        #for name, data in zip(uploaded_filenames, uploaded_file_contents):
-        print(uploaded_filenames)
-        save_file(str(uploaded_filenames), uploaded_file_contents)
-
-    files = uploaded_files()
-    if len(files) == 0:
-        return [html.Li("No files yet!")]
-    else:
-        return UPLOAD_DIRECTORY + '/' + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(Output('dos_object', 'data'),
-              [Input('file-list', 'value')])
+              [Input('vasprun_dos', 'value')])
 def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
     print('IN VASP GET DOS')
-    print(vasprun_dos)
     dos = Vasprun(vasprun_dos).complete_dos
     return json.dumps(dos.as_dict())
 
@@ -336,7 +275,7 @@ def get_bs(dos, vasprun_bands, kpts_bands):
 
 
 @app.callback(Output('struct_object', 'data'),
-              [Input('file-list', 'value'),
+              [Input('vasprun_dos', 'value'),
                Input('vasprun_bands', 'value')])
 def get_structure(vasprun_dos, vasprun_bands):
     ## get structure object and "save" in hidden div in json format
