@@ -262,7 +262,7 @@ app.layout = html.Div([
 
 def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
-    data = content.encode("utf8")#.split(b";base64,")[0]
+    data = content.encode("utf8").split(b";base64,")#[0]
     print(name)
     print(data)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
