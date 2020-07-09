@@ -266,14 +266,14 @@ def save_file(name, content):
     print('Content')
     #print(content)
     root = etree.fromstring(content, parser=parser)
-    #data = ET.tostring(root)
+    data = etree.tostring(root)
     #data = content.encode("utf8").split(b";base64,")
-    print((content))
+    #print((content))
     #data=data[2]
     print(name)
     #print(data)
-    #with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
-        #fp.write(data)
+    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
+        fp.write(data)
 
 
 def uploaded_files():
