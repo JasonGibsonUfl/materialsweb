@@ -268,6 +268,7 @@ def save_file(name, content):
     root = ET.fromstring(content, parser=parser)
     print(root)
     print(type(root))
+    print(name)
     data = etree.tostring(root)
 
     print(name)
