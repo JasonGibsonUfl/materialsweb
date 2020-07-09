@@ -297,7 +297,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
     if len(files) == 0:
         return [html.Li("No files yet!")]
     else:
-        return filename #[html.Li(file_download_link(filename)) for filename in files]
+        return uploaded_filenames #[html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(Output('dos_object', 'data'),
               [Input('vasprun_dos', 'value')])
