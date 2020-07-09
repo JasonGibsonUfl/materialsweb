@@ -127,9 +127,9 @@ app.layout = html.Div([
             html.Div(id='output-data-upload'),
 
             dcc.Input(id='kpts_bands'),
-            dcc.Upload(id='upload-data-kpts',
+            dcc.Upload(
                 children=html.Div(["click to upload KPOINTS"]),
-
+                id='upload-data-kpts',
                        #type='text',
                       #                      value='',
                       #placeholder='input path to KPOINTS file from bands calc. + enter/tab',
@@ -325,6 +325,25 @@ def update_output(uploaded_filenames, uploaded_file_contents):
 @app.callback(
     Output('vasprun_bands', 'value'),  # "file-list"),#, "children"),
     [Input("upload-data-bands", "filename"), Input("upload-data-bands", "contents")],
+)
+def update_output(uploaded_filenames, uploaded_file_contents):
+    """Save uploaded files and regenerate the file list."""
+
+    if uploaded_filenames is not None and uploaded_file_contents is not None:
+        # for name, data in zip(uploaded_filenames, uploaded_file_contents):
+        print(uploaded_filenames)
+        save_file(str(uploaded_filenames), uploaded_file_contents)
+
+    files = uploaded_files()
+    if len(files) == 0:
+        return [html.Li("No files yet!")]
+    else:
+        return UPLOAD_DIRECTORY + '/' + str(
+            uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
+
+@app.callback(
+    Output('vasprun_bands', 'value'),  # "file-list"),#, "children"),
+    [Input("upload-data-kpts", "filename"), Input("upload-data-kpts", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
     """Save uploaded files and regenerate the file list."""
