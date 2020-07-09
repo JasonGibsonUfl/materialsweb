@@ -79,7 +79,8 @@ app.layout = html.Div([
 
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_dos.xml"]),
-                id = "upload-data",#id='vasprun_dos',
+                id = "upload-data",
+                type='text',#id='vasprun_dos',
                       
                       #type='text',
 
@@ -283,7 +284,7 @@ def file_download_link(filename):
 
 
 @app.callback(
-    Output('file-list','children'),#"file-list"),#, "children"),
+    Output('file-list','value'),#"file-list"),#, "children"),
     [Input("upload-data", "filename"), Input("upload-data", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
