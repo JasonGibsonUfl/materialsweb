@@ -79,7 +79,7 @@ app.layout = html.Div([
 
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_dos.xml"]),
-                id = "upload-data",
+                id = "upload-data-dos",
                 #id='vasprun_dos',
                       
                       #type='text',
@@ -103,11 +103,12 @@ app.layout = html.Div([
             #html.H2("File List"),
             #html.Ul(id="file-list"),
 
-            dcc.Input(id='vasprun_bands',
-                      type='text',
+            dcc.Input(id='vasprun_bands'),
+            dcc.Upload(id = 'upload-data-bands',
+                      #type='text',
                       #                      value='',
-                      placeholder='input path to vasprun.xml file from bands calc. + enter/tab',
-                      debounce=True,
+                      #placeholder='input path to vasprun.xml file from bands calc. + enter/tab',
+                      #debounce=True,
                       style={'display': 'block',
                              'height': '30px',
                              'width': '100%',
@@ -115,7 +116,7 @@ app.layout = html.Div([
                              'borderWidth': '1px',
                              'textAlign': 'center'
                              },
-                      multiple=True
+                      #multiple=True
 
                       ),
             html.Div(id='output-data-upload'),
@@ -294,7 +295,7 @@ def file_download_link(filename):
 
 @app.callback(
     Output('vasprun_dos','value'),#"file-list"),#, "children"),
-    [Input("upload-data", "filename"), Input("upload-data", "contents")],
+    [Input("upload-data-dos", "filename"), Input("upload-data-dos", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
     """Save uploaded files and regenerate the file list."""
@@ -309,6 +310,25 @@ def update_output(uploaded_filenames, uploaded_file_contents):
         return [html.Li("No files yet!")]
     else:
         return UPLOAD_DIRECTORY + '/' + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
+
+@app.callback(
+    Output('vasprun_bands','value'),#"file-list"),#, "children"),
+    [Input("upload-data-bands", "filename"), Input("upload-data-bands", "contents")],
+)
+def update_output(uploaded_filenames, uploaded_file_contents):
+    """Save uploaded files and regenerate the file list."""
+
+    if uploaded_filenames is not None and uploaded_file_contents is not None:
+        #for name, data in zip(uploaded_filenames, uploaded_file_contents):
+        print(uploaded_filenames)
+        save_file(str(uploaded_filenames), uploaded_file_contents)
+
+    files = uploaded_files()
+    if len(files) == 0:
+        return [html.Li("No files yet!")]
+    else:
+        return UPLOAD_DIRECTORY + '/' + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
+
 
 @app.callback(Output('dos_object', 'data'),
               [Input('vasprun_dos', 'value')])
