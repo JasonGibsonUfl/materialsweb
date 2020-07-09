@@ -107,11 +107,7 @@ app.layout = html.Div([
 
             dcc.Store(id='vasprun_bands'),
             dcc.Store(id='kpts_bands'),
-            dcc.Loading(
-                id="loading-1",
-                type="default",
-                children=html.Div(id="loading-output-1")
-            ),
+
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_bands.xml"]),
 
@@ -244,7 +240,11 @@ app.layout = html.Div([
                          'height': '100%'
                          }
                   ),
-
+        dcc.Loading(
+            id="loading-1",
+            type="default",
+            children=html.Div(id="loading-output-1")
+        ),
         ## our interactive bands+dos figure!
         dcc.Graph(id='DOS_bands',
                   figure={'data': []},
@@ -324,7 +324,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
 
 
 import time
-@app.callback(Output("loading-output-1", "children"), [Input("vasprun_bands", "value")])
+@app.callback(Output("loading-output-1", "children"), [Input("dos_object", "value")])
 def input_triggers_spinner(value):
     time.sleep(1)
     return value
