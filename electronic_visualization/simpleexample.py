@@ -25,10 +25,12 @@ from .gen_bandsfig import BandsFig
 import os
 import base64
 from urllib.parse import quote as urlquote
+
 UPLOAD_DIRECTORY = "/var/www/materialsweb/static/temp"
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
+
 
 class MyEncoder(json.JSONEncoder):
     ## convert numpy types to regular types for conversion to json
@@ -42,10 +44,10 @@ class MyEncoder(json.JSONEncoder):
         else:
             return super(MyEncoder, self).default(obj)
 
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = DjangoDash('SimpleExample', external_stylesheets=external_stylesheets)
-
 
 app.layout = html.Div([
 
@@ -79,46 +81,49 @@ app.layout = html.Div([
 
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_dos.xml"]),
-                id = "upload-data-dos",
-                #id='vasprun_dos',
-                      
-                      #type='text',
+                id="upload-data-dos",
+                # id='vasprun_dos',
 
-                      #children=html.Div([
-                          #'Drag and Drop or ',
-                          #html.A('Select Files')
-                      #]),
-                      #                      value='',
-                      #placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
-                      #debounce=True,
-                      style={'display': 'block',
-                             'height': '30px',
-                             'width': '100%',
-                             'marginBottom': '5px',
-                             'borderWidth': '1px',
-                             'textAlign': 'center'
-                             }
-                      ),
+                # type='text',
+
+                # children=html.Div([
+                # 'Drag and Drop or ',
+                # html.A('Select Files')
+                # ]),
+                #                      value='',
+                # placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
+                # debounce=True,
+                style={'display': 'block',
+                       'height': '30px',
+                       'width': '100%',
+                       'marginBottom': '5px',
+                       'borderWidth': '1px',
+                       'textAlign': 'center'
+                       }
+            ),
             dcc.Input(id='vasprun_dos'),
-            #html.H2("File List"),
-            #html.Ul(id="file-list"),
+            # html.H2("File List"),
+            # html.Ul(id="file-list"),
 
             dcc.Input(id='vasprun_bands'),
-            dcc.Upload(id = 'upload-data-bands',
-                      #type='text',
-                      #                      value='',
-                      #placeholder='input path to vasprun.xml file from bands calc. + enter/tab',
-                      #debounce=True,
-                      style={'display': 'block',
-                             'height': '30px',
-                             'width': '100%',
-                             'marginBottom': '5px',
-                             'borderWidth': '1px',
-                             'textAlign': 'center'
-                             },
-                      #multiple=True
+            dcc.Upload(
+                children=html.Div(["click to upload vasprun_bands.xml"]),
 
-                      ),
+                id='upload-data-bands',
+                       # type='text',
+                       #                      value='',
+                       # placeholder='input path to vasprun.xml file from bands calc. + enter/tab',
+                       # debounce=True,
+                       style={'display': 'block',
+                              'height': '30px',
+                              'width': '100%',
+                              'marginBottom': '5px',
+                              'borderWidth': '1px',
+                              'textAlign': 'center'
+                              },
+                       # multiple=True
+
+                       ),
             html.Div(id='output-data-upload'),
 
             dcc.Input(id='kpts_bands',
@@ -222,7 +227,6 @@ app.layout = html.Div([
                }
     ),
 
-
     html.Div([
         ## our simple clickable structure figure!
         dcc.Graph(id='unitcell',
@@ -261,15 +265,16 @@ app.layout = html.Div([
 )
 from lxml import etree
 import xml.etree.ElementTree as et
+
+
 def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
     content_type, content_string = content.split(',')
     # content_string is in base64, so decode it
     decoded = base64.b64decode(content_string)
-    #print(decoded)
+    # print(decoded)
     tree = et.ElementTree(et.fromstring(decoded))
-    #print(tree)
-
+    # print(tree)
 
     root = tree.getroot()
     for node in root:
@@ -287,6 +292,7 @@ def uploaded_files():
             files.append(filename)
     return files
 
+
 def file_download_link(filename):
     """Create a Plotly Dash 'A' element that downloads a file from the app."""
     location = "/download/{}".format(urlquote(filename))
@@ -294,14 +300,14 @@ def file_download_link(filename):
 
 
 @app.callback(
-    Output('vasprun_dos','value'),#"file-list"),#, "children"),
+    Output('vasprun_dos', 'value'),  # "file-list"),#, "children"),
     [Input("upload-data-dos", "filename"), Input("upload-data-dos", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
     """Save uploaded files and regenerate the file list."""
 
     if uploaded_filenames is not None and uploaded_file_contents is not None:
-        #for name, data in zip(uploaded_filenames, uploaded_file_contents):
+        # for name, data in zip(uploaded_filenames, uploaded_file_contents):
         print(uploaded_filenames)
         save_file(str(uploaded_filenames), uploaded_file_contents)
 
@@ -309,17 +315,19 @@ def update_output(uploaded_filenames, uploaded_file_contents):
     if len(files) == 0:
         return [html.Li("No files yet!")]
     else:
-        return UPLOAD_DIRECTORY + '/' + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
+        return UPLOAD_DIRECTORY + '/' + str(
+            uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
+
 
 @app.callback(
-    Output('vasprun_bands','value'),#"file-list"),#, "children"),
+    Output('vasprun_bands', 'value'),  # "file-list"),#, "children"),
     [Input("upload-data-bands", "filename"), Input("upload-data-bands", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
     """Save uploaded files and regenerate the file list."""
 
     if uploaded_filenames is not None and uploaded_file_contents is not None:
-        #for name, data in zip(uploaded_filenames, uploaded_file_contents):
+        # for name, data in zip(uploaded_filenames, uploaded_file_contents):
         print(uploaded_filenames)
         save_file(str(uploaded_filenames), uploaded_file_contents)
 
@@ -327,7 +335,8 @@ def update_output(uploaded_filenames, uploaded_file_contents):
     if len(files) == 0:
         return [html.Li("No files yet!")]
     else:
-        return UPLOAD_DIRECTORY + '/' + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
+        return UPLOAD_DIRECTORY + '/' + str(
+            uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
 
 
 @app.callback(Output('dos_object', 'data'),
@@ -338,7 +347,6 @@ def get_dos(vasprun_dos):
     print(vasprun_dos)
     dos = Vasprun(vasprun_dos).complete_dos
     return json.dumps(dos.as_dict())
-
 
 
 @app.callback(Output('bs_object', 'data'),
@@ -436,6 +444,7 @@ def update_structfig(struct):
     structfig = StructFig().generate_fig(structure)
     return structfig
 
+
 @app.callback(Output('DOS_bands', 'figure'),
               [Input('submit_button', 'n_clicks'),
                Input('dos_object', 'data'),
@@ -453,5 +462,3 @@ def update_dosbandsfig(n_clicks, dos, bs, projlist):
     ## update the band structure and dos figure
     dosbandfig = BandsFig().generate_fig(dos, bs, projlist)
     return dosbandfig
-
-
