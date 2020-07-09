@@ -99,7 +99,7 @@ app.layout = html.Div([
                              'textAlign': 'center'
                              }
                       ),
-            dcc.Input(id='file-list'),
+            dcc.Input(id='vasprun_dos'),
             #html.H2("File List"),
             #html.Ul(id="file-list"),
 
@@ -265,10 +265,10 @@ def save_file(name, content):
     content_type, content_string = content.split(',')
     # content_string is in base64, so decode it
     decoded = base64.b64decode(content_string)
-    print(decoded)
+    #print(decoded)
     tree = et.ElementTree(et.fromstring(decoded))
     #print(tree)
-    
+
 
     root = tree.getroot()
     for node in root:
@@ -293,7 +293,7 @@ def file_download_link(filename):
 
 
 @app.callback(
-    Output('file-list','value'),#"file-list"),#, "children"),
+    Output('vasprun_dos','value'),#"file-list"),#, "children"),
     [Input("upload-data", "filename"), Input("upload-data", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
@@ -311,7 +311,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
         return UPLOAD_DIRECTORY + '/' + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(Output('dos_object', 'data'),
-              [Input('file-list', 'value')])
+              [Input('vasprun_dos', 'value')])
 def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
     print('IN VASP GET DOS')
@@ -337,7 +337,7 @@ def get_bs(dos, vasprun_bands, kpts_bands):
 
 
 @app.callback(Output('struct_object', 'data'),
-              [Input('file-list', 'value'),
+              [Input('vasprun_dos', 'value'),
                Input('vasprun_bands', 'value')])
 def get_structure(vasprun_dos, vasprun_bands):
     ## get structure object and "save" in hidden div in json format
