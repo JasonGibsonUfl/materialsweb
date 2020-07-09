@@ -107,7 +107,11 @@ app.layout = html.Div([
 
             dcc.Store(id='vasprun_bands'),
             dcc.Store(id='kpts_bands'),
-
+            dcc.Loading(
+                id="loading-1",
+                type="default",
+                children=html.Div(id="loading-output-1")
+            ),
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_bands.xml"]),
 
@@ -318,6 +322,12 @@ def update_output(uploaded_filenames, uploaded_file_contents):
         return UPLOAD_DIRECTORY + '/' + str(
             uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
 
+
+import time
+@app.callback(Output("loading-output-1", "children"), [Input("vasprun_bands", "value")])
+def input_triggers_spinner(value):
+    time.sleep(1)
+    return value
 
 @app.callback(
     Output('vasprun_bands', 'value'),  # "file-list"),#, "children"),
