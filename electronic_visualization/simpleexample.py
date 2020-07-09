@@ -297,10 +297,10 @@ def update_output(uploaded_filenames, uploaded_file_contents):
     if len(files) == 0:
         return [html.Li("No files yet!")]
     else:
-        return uploaded_filenames #[html.Li(file_download_link(filename)) for filename in files]
+        return UPLOAD_DIRECTORY + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(Output('dos_object', 'data'),
-              [Input('vasprun_dos', 'value')])
+              [Input('file-list', 'value')])
 def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
     print('IN VASP GET DOS')
