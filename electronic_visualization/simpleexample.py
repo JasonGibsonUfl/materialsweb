@@ -106,6 +106,8 @@ app.layout = html.Div([
             # html.Ul(id="file-list"),
 
             dcc.Input(id='vasprun_bands'),
+            dcc.Input(id='kpts_bands'),
+
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_bands.xml"]),
 
@@ -126,7 +128,6 @@ app.layout = html.Div([
                        ),
             html.Div(id='output-data-upload'),
 
-            dcc.Input(id='kpts_bands'),
             dcc.Upload(
                 children=html.Div(["click to upload KPOINTS"]),
                 id='upload-data-kpts',
@@ -347,7 +348,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
             uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(
-    Output('kpts-bands', 'value'),  # "file-list"),#, "children"),
+    Output('kpts_bands', 'value'),  # "file-list"),#, "children"),
     [Input("upload-data-kpts", "filename"), Input("upload-data-kpts", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
