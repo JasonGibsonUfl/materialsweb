@@ -259,18 +259,11 @@ app.layout = html.Div([
     style={'backgroundColor': '#FFFFFF'}
 )
 
-#from lxml import etree
-import xml.etree.ElementTree as ET
+
 def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
-    decoded = base64.b64decode(content)
-    #parser = etree.XMLParser(recover=True)
-    data = ET.fromstring(decoded)
-    #tree = et.ElementTree(et.fromstring(decoded))
-    #data = etree.fromstring(content, parser=parser)#.encode("utf8")#.split(b";base64,")[0]
+    data = content.encode("utf8")#.split(b";base64,")[0]
     print(name)
-    print('DATA!!!!!!!')
-    print(data)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
         fp.write(data)
 
