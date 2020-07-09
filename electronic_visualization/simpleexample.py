@@ -70,8 +70,8 @@ app.layout = html.Div([
                             }
                      ),
 
-            dcc.Upload(id='vasprun_dos',
-                      html.Button('Upload File'),
+            dcc.Upload(html.Button('Upload File'), id='vasprun_dos',
+                      
                       #type='text',
 
                       #children=html.Div([
