@@ -283,7 +283,7 @@ def file_download_link(filename):
 
 
 @app.callback(
-    [Output('file-list','children'), Output('vasprun_dos','children')],#"file-list"),#, "children"),
+    Output('file-list','children'),#"file-list"),#, "children"),
     [Input("upload-data", "filename"), Input("upload-data", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
@@ -301,7 +301,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
         return UPLOAD_DIRECTORY + '/' + str(uploaded_filenames) #[html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(Output('dos_object', 'data'),
-              [Input('vasprun_dos', 'value')])
+              [Input('file-list', 'value')])
 def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
     print('IN VASP GET DOS')
