@@ -101,12 +101,12 @@ app.layout = html.Div([
                        'textAlign': 'center'
                        }
             ),
-            dcc.Input(id='vasprun_dos'),
+            dcc.Store(id='vasprun_dos'),
             # html.H2("File List"),
             # html.Ul(id="file-list"),
 
-            dcc.Input(id='vasprun_bands'),
-            dcc.Input(id='kpts_bands'),
+            dcc.Store(id='vasprun_bands'),
+            dcc.Store(id='kpts_bands'),
 
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_bands.xml"]),
@@ -254,15 +254,6 @@ app.layout = html.Div([
                'height': '600px'
                }
     ),
-
-    ## this div tells which atom was selected (temporary)
-    #    html.Div(id='select_atom',
-    #            style={'display': 'inline-block',
-    #                   'float': 'left',
-    #                   'width': '30%',
-    #                   'marginLeft': '100'
-    #                   }
-    #        ),
 
 ],
     style={'backgroundColor': '#FFFFFF'}
