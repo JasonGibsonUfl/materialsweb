@@ -265,8 +265,14 @@ def save_file(name, content):
     content_type, content_string = content.split(',')
     # content_string is in base64, so decode it
     decoded = base64.b64decode(content_string)
+    print(decoded)
     tree = et.ElementTree(et.fromstring(decoded))
     print(tree)
+    
+
+    root = tree.getroot()
+    for node in root:
+        print(node)
     #with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
         #fp.write(data)
 
