@@ -269,10 +269,10 @@ def save_file(name, content):
     #print((data))
 
     #data=data[2]
-    #print(name)
+    print(name)
     #print(data)
-    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
-        fp.write(data)
+    #with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
+        #fp.write(data)
 
 
 def uploaded_files():
@@ -299,9 +299,9 @@ def update_output(uploaded_filenames, uploaded_file_contents):
 
     if uploaded_filenames is not None and uploaded_file_contents is not None:
         #for name, data in zip(uploaded_filenames, uploaded_file_contents):
-        #print(uploaded_filenames)
+        print(uploaded_filenames)
         save_file(str(uploaded_filenames), uploaded_file_contents)
-    print(uploaded_filenames)
+
     files = uploaded_files()
     if len(files) == 0:
         return [html.Li("No files yet!")]
@@ -314,9 +314,6 @@ def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
     print('IN VASP GET DOS')
     print(vasprun_dos)
-    #vasprun_dos=ET.fromstring(vasprun_dos)
-    #print(vasprun_dos)
-    #print(vasprun_dos)
     dos = Vasprun(vasprun_dos).complete_dos
     return json.dumps(dos.as_dict())
 
