@@ -57,7 +57,7 @@ app.layout = html.Div([
                    }
             ),
 
-    html.Div('currently a work in progress by Anne Marie Tan :)',
+    html.Div('currently a work in progress by Anne Marie Tan :) \n Current load time takes several minutes',
              style={'textAlign': 'center',
                     'color': '#FA4616',
                     'marginBottom': '20px'
