@@ -262,7 +262,9 @@ app.layout = html.Div([
 
 def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
-    data = content.encode("utf8").split(b";base64,")[0]
+    data = content.encode("utf8").split(b";base64,")
+    print(len(data))
+    data=data[0]
     print(name)
     #print(data)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
@@ -307,6 +309,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
 def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
     print('IN VASP GET DOS')
+    print(vasprun_dos)
     dos = Vasprun(vasprun_dos).complete_dos
     return json.dumps(dos.as_dict())
 
