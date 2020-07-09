@@ -18,7 +18,7 @@ from pymatgen.core.periodic_table import Element
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State,
+from dash.dependencies import Input, Output, State
 
 from .gen_structfig import StructFig
 from .gen_bandsfig import BandsFig
