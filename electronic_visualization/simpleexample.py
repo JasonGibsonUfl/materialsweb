@@ -71,10 +71,14 @@ app.layout = html.Div([
                      ),
 
             dcc.Input(id='vasprun_dos',
-                      type='text',
+                      #type='text',
+                      children=html.Div([
+                          'Drag and Drop or ',
+                          html.A('Select Files')
+                      ]),
                       #                      value='',
-                      placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
-                      debounce=True,
+                      #placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
+                      #debounce=True,
                       style={'display': 'block',
                              'height': '30px',
                              'width': '100%',
