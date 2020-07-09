@@ -265,7 +265,7 @@ def save_file(name, content):
 
     data = content.encode("utf8").split(b";base64,")
     print(len(data))
-    data=data[1]
+    data=data[2]
     print(name)
     #print(data)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
