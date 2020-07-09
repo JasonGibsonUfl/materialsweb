@@ -262,7 +262,7 @@ from lxml import etree
 import xml.etree.ElementTree as ET
 def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
-    parser = ET.XMLParser(recover=True)
+    parser = ET.XMLParser(encoding='utf8')
     print('Content')
     #print(content)
     root = ET.fromstring(content, parser=parser)
