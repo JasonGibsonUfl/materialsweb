@@ -269,7 +269,7 @@ def save_file(name, content):
     #print((data))
 
     #data=data[2]
-    print(name)
+    #print(name)
     #print(data)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
         fp.write(data)
