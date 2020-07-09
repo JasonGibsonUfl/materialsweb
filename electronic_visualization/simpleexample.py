@@ -78,7 +78,7 @@ app.layout = html.Div([
                      ),
 
             dcc.Upload(
-                children=html.Div(["Drag and drop or click to select a file to upload."]),
+                children=html.Div(["click to upload vasprun_dos.xml"]),
                 id = "upload-data",#id='vasprun_dos',
                       
                       #type='text',
@@ -281,7 +281,7 @@ def file_download_link(filename):
 
 
 @app.callback(
-    Output("file-list", "children"),
+    Output('vasprun_dos'),#"file-list"),#, "children"),
     [Input("upload-data", "filename"), Input("upload-data", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
@@ -296,7 +296,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
     if len(files) == 0:
         return [html.Li("No files yet!")]
     else:
-        return [html.Li(file_download_link(filename)) for filename in files]
+        return #[html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(Output('dos_object', 'data'),
               [Input('vasprun_dos', 'value')])
