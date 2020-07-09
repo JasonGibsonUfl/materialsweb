@@ -93,7 +93,7 @@ app.layout = html.Div([
 
             dcc.Input(id='vasprun_bands',
                       type='text',
-                      #                      value='',
+                                            value='/var/www/materialsweb/static/MoS2/vasprun_bands.xml',
                       placeholder='input path to vasprun.xml file from bands calc. + enter/tab',
                       debounce=True,
                       style={'display': 'block',
@@ -110,7 +110,7 @@ app.layout = html.Div([
 
             dcc.Input(id='kpts_bands',
                       type='text',
-                      #                      value='',
+                                            value='/var/www/materialsweb/static/MoS2/KPOINTS',
                       placeholder='input path to KPOINTS file from bands calc. + enter/tab',
                       debounce=True,
                       style={'display': 'block',
