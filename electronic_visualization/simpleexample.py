@@ -79,7 +79,7 @@ app.layout = html.Div([
 
             dcc.Input(id='vasprun_dos',
                       type='text',
-                      #                      value='',
+                                            value='/var/www/materialsweb/static/MoS2/vasprun_dos.xml',
                       placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
                       debounce=True,
                       style={'display': 'block',
