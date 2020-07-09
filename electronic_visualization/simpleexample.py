@@ -80,7 +80,7 @@ app.layout = html.Div([
             dcc.Upload(
                 children=html.Div(["click to upload vasprun_dos.xml"]),
                 id = "upload-data",
-                type='text',#id='vasprun_dos',
+                #id='vasprun_dos',
                       
                       #type='text',
 
