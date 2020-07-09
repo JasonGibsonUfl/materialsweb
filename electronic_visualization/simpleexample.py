@@ -25,7 +25,7 @@ from .gen_bandsfig import BandsFig
 import os
 import base64
 from urllib.parse import quote as urlquote
-UPLOAD_DIRECTORY = "/var/www/materialsweb/static"
+UPLOAD_DIRECTORY = "/var/www/materialsweb/static/temp"
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
@@ -77,7 +77,9 @@ app.layout = html.Div([
                             }
                      ),
 
-            dcc.Upload(html.Button('Upload File'), id = "upload-data",#id='vasprun_dos',
+            dcc.Upload(
+                children=html.Div(["Drag and drop or click to select a file to upload."]),
+                id = "upload-data",#id='vasprun_dos',
                       
                       #type='text',
 
