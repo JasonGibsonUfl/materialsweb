@@ -264,7 +264,7 @@ def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
 
     data = content.encode("utf8").split(b";base64,")
-    print(len(data))
+    print(type(data))
     data=data[2]
     print(name)
     #print(data)
