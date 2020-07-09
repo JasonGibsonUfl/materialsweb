@@ -264,13 +264,12 @@ def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
     parser = ET.XMLParser(encoding='utf8')
     print('Content')
-    #print(content)
-    root = ET.fromstring(content, parser=parser)
-    print(root)
-    print(type(root))
+    print(content)
+    #root = ET.fromstring(content, parser=parser)
+    #print(root)
+    #print(type(root))
     print(name)
-    data = etree.tostring(root)
-
+    #data = etree.tostring(root)
     print(name)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
         fp.write(data)
