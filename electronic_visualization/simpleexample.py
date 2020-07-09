@@ -342,7 +342,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
             uploaded_filenames)  # [html.Li(file_download_link(filename)) for filename in files]
 
 @app.callback(
-    Output('vasprun_bands', 'value'),  # "file-list"),#, "children"),
+    Output('kpts-bands', 'value'),  # "file-list"),#, "children"),
     [Input("upload-data-kpts", "filename"), Input("upload-data-kpts", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
