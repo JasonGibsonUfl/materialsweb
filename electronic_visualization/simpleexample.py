@@ -267,14 +267,14 @@ def save_file(name, content):
     decoded = base64.b64decode(content_string)
     print(decoded)
     tree = et.ElementTree(et.fromstring(decoded))
-    print(tree)
+    #print(tree)
     
 
     root = tree.getroot()
     for node in root:
         print(node)
-    #with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
-        #fp.write(data)
+    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
+        fp.write(tree)
 
 
 def uploaded_files():
