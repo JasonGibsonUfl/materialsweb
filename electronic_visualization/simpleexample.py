@@ -324,7 +324,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
 
 
 import time
-@app.callback(Output("loading-output-1", "children"), [Input("dos_object", "value")])
+@app.callback(Output("loading-output-1", "children"), [Input("dos_object", "data")])
 def input_triggers_spinner(value):
     time.sleep(1)
     return value
