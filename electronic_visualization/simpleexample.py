@@ -71,11 +71,13 @@ app.layout = html.Div([
                      ),
 
             dcc.Upload(id='vasprun_dos',
+                      html.Button('Upload File'),
                       #type='text',
-                      children=html.Div([
-                          'Drag and Drop or ',
-                          html.A('Select Files')
-                      ]),
+
+                      #children=html.Div([
+                          #'Drag and Drop or ',
+                          #html.A('Select Files')
+                      #]),
                       #                      value='',
                       #placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
                       #debounce=True,
