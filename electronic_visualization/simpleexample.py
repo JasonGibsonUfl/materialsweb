@@ -18,7 +18,7 @@ from pymatgen.core.periodic_table import Element
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output, State,
 
 from .gen_structfig import StructFig
 from .gen_bandsfig import BandsFig
@@ -70,7 +70,7 @@ app.layout = html.Div([
                             }
                      ),
 
-            dcc.Input(id='vasprun_dos',
+            dcc.Upload(id='vasprun_dos',
                       #type='text',
                       children=html.Div([
                           'Drag and Drop or ',
@@ -99,8 +99,11 @@ app.layout = html.Div([
                              'marginBottom': '5px',
                              'borderWidth': '1px',
                              'textAlign': 'center'
-                             }
+                             },
+                      multiple=True
+
                       ),
+            html.Div(id='output-data-upload'),
 
             dcc.Input(id='kpts_bands',
                       type='text',
