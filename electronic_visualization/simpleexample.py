@@ -253,6 +253,7 @@ app.layout = html.Div([
               [Input('vasprun_dos', 'value')])
 def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
+    print('IN VASP GET DOS')
     dos = Vasprun(vasprun_dos).complete_dos
     return json.dumps(dos.as_dict())
 
