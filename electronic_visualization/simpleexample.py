@@ -283,7 +283,7 @@ def file_download_link(filename):
 
 
 @app.callback(
-    Output('file-list','children', 'vasprun_dos'),#"file-list"),#, "children"),
+    [Output('file-list','children'), Output('vasprun_dos','children')],#"file-list"),#, "children"),
     [Input("upload-data", "filename"), Input("upload-data", "contents")],
 )
 def update_output(uploaded_filenames, uploaded_file_contents):
