@@ -269,8 +269,13 @@ app.layout = html.Div([
 from lxml import etree
 import xml.etree.ElementTree as et
 
-
 def save_file(name, content):
+    """Decode and store a file uploaded with Plotly Dash."""
+    data = content.encode("utf8").split(b";base64,")[1]
+    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
+        fp.write(base64.decodebytes(data))
+
+def save_file_xml(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
     content_type, content_string = content.split(',')
     # content_string is in base64, so decode it
@@ -312,7 +317,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
     if uploaded_filenames is not None and uploaded_file_contents is not None:
         # for name, data in zip(uploaded_filenames, uploaded_file_contents):
         print(uploaded_filenames)
-        save_file(str(uploaded_filenames), uploaded_file_contents)
+        save_file_xml(str(uploaded_filenames), uploaded_file_contents)
 
     files = uploaded_files()
     if len(files) == 0:
@@ -332,7 +337,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
     if uploaded_filenames is not None and uploaded_file_contents is not None:
         # for name, data in zip(uploaded_filenames, uploaded_file_contents):
         print(uploaded_filenames)
-        save_file(str(uploaded_filenames), uploaded_file_contents)
+        save_file_xml(str(uploaded_filenames), uploaded_file_contents)
 
     files = uploaded_files()
     if len(files) == 0:
