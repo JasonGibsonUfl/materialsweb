@@ -299,7 +299,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
 
     if uploaded_filenames is not None and uploaded_file_contents is not None:
         #for name, data in zip(uploaded_filenames, uploaded_file_contents):
-        print(uploaded_filenames)
+        #print(uploaded_filenames)
         save_file(str(uploaded_filenames), uploaded_file_contents)
 
     files = uploaded_files()
@@ -314,7 +314,7 @@ def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
     print('IN VASP GET DOS')
     vasprun_dos=ET.fromstring(vasprun_dos)
-    print(vasprun_dos)
+    #print(vasprun_dos)
     dos = Vasprun(vasprun_dos).complete_dos
     return json.dumps(dos.as_dict())
 
