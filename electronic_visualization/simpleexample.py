@@ -274,7 +274,7 @@ def save_file(name, content):
     for node in root:
         print(node)
     with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
-        fp.write(tree)
+        fp.write(decoded)
 
 
 def uploaded_files():
