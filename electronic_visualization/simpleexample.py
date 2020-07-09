@@ -326,7 +326,7 @@ def get_bs(dos, vasprun_bands, kpts_bands):
 
 
 @app.callback(Output('struct_object', 'data'),
-              [Input('vasprun_dos', 'value'),
+              [Input('file-list', 'value'),
                Input('vasprun_bands', 'value')])
 def get_structure(vasprun_dos, vasprun_bands):
     ## get structure object and "save" in hidden div in json format
