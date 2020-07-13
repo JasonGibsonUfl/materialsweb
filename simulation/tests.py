@@ -12,9 +12,24 @@ class TestSimulation(TestCase):
         run_e()
         run_s()
         run_w()
-        self.calculation1 = Calculation().read(path)
-        self.calculation1.create_all(path)
+        self.calculation2D = Calculation().read(path)
+        self.calculation2D.create_all(path)
+
+    def test_dimenstion(self):
+        self.assertEquals(self.calculation2D.dimension, 2)
+
+    def test_natoms(self):
+        self.assertEquals(self.calculation2D.natoms,16)
+
+    def test_energy(self):
+        self.assertEquals(self.calculation2D.energy,-102.1843278)
+
+    def test_energy_pa(self):
+        self.assertEquals((self.calculation2D.energy_pa, -6.3865204875))
+
+    def test_magmom(self):
+        self.assertEquals(self.calculation2D.magmom, 11.9998855)
 
     def test_bandgap(self):
-        print(self.calculation1.band_gap)
-        self.assertEquals(self.calculation1.band_gap, 1.0072)
+        self.assertEquals(self.calculation2D.band_gap, 1.0072)
+
