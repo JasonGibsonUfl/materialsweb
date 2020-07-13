@@ -7,7 +7,8 @@ class TestSimulation(TestCase):
 
     def setUp(self):
         path = '/var/www/materialsweb/static/database/mp-691133'
-        self.calculation1 = Calculation().read(path)
+        self.calculation1 = Calculation()
+        self.calculation1.read(path)
         self.calculation1.create_all(path)
 
     def test_bandgap(self):
