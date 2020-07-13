@@ -1682,42 +1682,6 @@ class Calculation(models.Model):
         else:
             subprocess.check_call(['cp', source, self.path])
 
-    def set_chgcar(self, source):
-        """
-        Copy the CHGCAR specified by `source` to this calculation.
-
-        Arguments:
-            source: can be another :mod:`~simulation.Calculation` instance or a
-            string containing a path to a CHGCAR. If it is a path, it should
-            be a absolute, i.e. begin with "/", and can either end with the
-            CHGCAR or simply point to the path that contains it. For
-            example, if you want to take the CHGCAR from a previous
-            calculation you can do any of::
-
-            >>> c1 # old calculation
-            >>> c2 # new calculation
-            >>> c2.set_chgcar(c1)
-            >>> c2.set_chgcar(c1.path)
-            >>> c2.set_chgcar(c1.path+'/CHGCAR')
-
-        """
-        if isinstance(source, Calculation):
-            source = source.path
-
-        source = os.path.abspath(source)
-        if not os.path.exists(source):
-            raise VaspError('CHGCAR does not exist at %s', source)
-
-        if not 'CHGCAR' in source:
-            files = os.listdir(source)
-            for f in files:
-                if 'CHGCAR' in f:
-                    new_path = '%s/%s' % (source, f)
-                    self.set_chgcar(new_path)
-        else:
-            logger.debug('copying %s to %s', source, self.path)
-            subprocess.check_call(['cp', source, self.path])
-
     @property
     def volume(self):
         if self.output:
