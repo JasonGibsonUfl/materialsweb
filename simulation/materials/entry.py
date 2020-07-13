@@ -435,10 +435,11 @@ class Entry(models.Model):
         If the structure has been relaxed, returns the formation energy of the
         final relaxed structure. Otherwise, returns None.
         """
-        if self._energy is None:
-            fes = self.formationenergy_set.filter(fit='standard').order_by('delta_e')
-            if fes.exists():
-                self._energy = fes[0].delta_e
+        return None
+        #if self._energy is None:
+            #fes = self.formationenergy_set.filter(fit='standard').order_by('delta_e')
+            #if fes.exists():
+                #self._energy = fes[0].delta_e
             # if 'static' in self.calculations:
             #    if self.calculations['static'].converged:
             #        de = self.calculations['static'].formation_energy()
@@ -447,7 +448,7 @@ class Entry(models.Model):
             #    if self.calculations['standard'].converged:
             #        de = self.calculations['standard'].formation_energy()
             #        self._energy = de
-        return self._energy
+        #return self._energy
 
     @property
     def stable(self):

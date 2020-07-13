@@ -602,7 +602,7 @@ class Calculation(models.Model):
         if not self.outcar is None:
             return self.outcar
         if not exists(self.path):
-            return '2'
+            return
         elif exists(self.path + '/OUTCAR'):
             self.outcar = open(self.path + '/OUTCAR').read().splitlines()
         elif exists(self.path + '/OUTCAR.gz'):
@@ -1328,6 +1328,215 @@ class Calculation(models.Model):
             calc.output.set_label(calc.label)
         return calc
 
+    @staticmethod
+    def read_tree(path):
+        path = os.path.abspath(path)
+        contents = os.listdir(path)
+        prev_calcs = [f for f in contents if
+                      os.path.isdir('%s/%s' % (path, f))]
+        prev_calcs = sorted(prev_calcs, key=lambda x: -int(x.split('_')[0]))
+
+        calcs = [Calculation.read(path)]
+        for i, calc in enumerate(prev_calcs):
+            c = Calculation.read('%s/%s' % (path, calc))
+            c.set_label('%s_%s' % (calcs[0].label, calc.split('_')[0]))
+            calcs[-1].input = c.output
+            calcs.append(c)
+        return calcs
+
+    def address_errors(self):
+        """
+        Attempts to fix any encountered errors.
+        """
+        errors = self.errors
+        if not errors or errors == ['found no errors']:
+            logger.info('Calculation {}: Found no errors'.format(self.id))
+            return self
+
+        new_calc = self.copy()
+        new_calc.set_label(self.label)
+        self.set_label(self.label + '_%d' % self.attempt)
+        new_calc.attempt += 1
+
+        # if the only error is ionic/basis convergence, try a few more times
+        # than for other errors
+        max_attempts = 5
+        if set(new_calc.errors).issubset(set(['convergence'])):
+            max_attempts = 10
+
+        if new_calc.attempt > max_attempts:
+            new_calc.add_error('attempts')
+
+        for err in errors:
+            if err in ['duplicate', 'partial', 'failed to read']:
+                continue
+            elif err == 'convergence':
+                if not self.output is None:
+                    new_calc.remove_error('convergence')
+                    new_calc.input = self.output
+                    new_calc.input.set_label(self.label)
+            elif err == 'electronic_convergence':
+                new_calc.fix_electronic_convergence()
+            elif err == 'doscar_exc':
+                new_calc.fix_bands()
+            elif err == 'bands':
+                new_calc.fix_bands()
+            elif err == 'edddav':
+                new_calc.fix_dav()
+            elif err == 'errrmm':
+                new_calc.fix_rmm()
+            elif err == 'brions':
+                new_calc.fix_brions()
+            elif err == 'brmix':
+                new_calc.fix_brmix()
+            elif err in ['zpotrf', 'fexcp', 'fexcf']:
+                new_calc.reduce_potim()
+            elif err in ['pricel', 'invgrp', 'sgrcon']:
+                new_calc.increase_symprec()
+            elif err == 'hermitian':
+                new_calc.fix_hermitian()
+            else:
+                raise VaspError("Unknown VASP error code: %s", err)
+        return new_calc
+
+    def compress(self, files=['OUTCAR', 'CHGCAR', 'CHG',
+                              'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']):
+        """
+        gzip every file in `files`
+
+        Keyword arguments:
+            files: List of files to zip up.
+
+        Return: None
+        """
+        for file in os.listdir(self.path):
+            if file in ['OUTCAR', 'CHGCAR', 'CHG', 'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']:
+                os.system('gzip -f %s' % self.path + '/' + file)
+
+    def copy(self):
+        """
+        Create a deep copy of the Calculation.
+
+        Return: None
+        """
+        new = copy.deepcopy(self)
+        new.id = None
+        new.label = None
+        new.input = self.input
+        new.output = self.output
+        new.dos = self.dos
+        return new
+
+    def move(self, path):
+        path = os.path.abspath(path)
+        os.system('mkdir %s 2> /dev/null' % path)
+        os.system('cp %s/* %s 2> /dev/null' % (self.path, path))
+        os.system('rm %s/* 2> /dev/null' % self.path)
+        self.path = path
+        if self.id:
+            Calculation.objects.filter(id=self.id).update(path=path)
+
+    def backup(self, path=None):
+        """
+        Create a copy of the calculation folder in a subdirectory of the
+        current Calculation.
+
+        Keyword arguments:
+            path: If None, the backup folder is generated based on the
+            Calculation.attempt and Calculation.errors.
+
+        Return: None
+        """
+        if path is None:
+            new_dir = '%s_' % self.attempt
+            new_dir += '_'.join(self.errors)
+            new_dir = new_dir.replace(' ', '')
+        else:
+            new_dir = path
+        logger.info('backing up %s to %s' %
+                    (self.path.replace(self.entry.path + '/', ''), new_dir))
+        self.move(self.path + '/' + new_dir)
+
+    def clean_start(self):
+        depth = self.path.count('/') - self.path.count('..')
+        if depth < 6:
+            raise ValueError('Too short path supplied to clean_start: %s' % self.path)
+        else:
+            os.system('rm -rf %s &> /dev/null' % self.path)
+
+    # = Error correcting =#
+
+    def fix_zhegev(self):
+        raise NotImplementedError
+
+    def fix_brmix(self):
+        self.settings.update({'symprec': 1e-7,
+                              'algo': 'normal'})
+        self.remove_error('brmix')
+
+    def fix_electronic_convergence(self):
+        if not self.settings.get('algo') == 'normal':
+            self.settings['algo'] = 'normal'
+            self.remove_error('electronic_convergence')
+
+    def increase_symprec(self):
+        self.settings['symprec'] = 1e-7
+        self.remove_error('invgrp')
+        self.remove_error('pricel')
+        self.remove_error('sgrcon')
+        self.remove_error('failed to read')
+        self.remove_error('convergence')
+
+    def fix_brions(self):
+        self.settings['potim'] *= 2
+        self.remove_error('brions')
+
+    def reduce_potim(self):
+        self.settings.update({'algo': 'normal',
+                              'potim': 0.1})
+        self.remove_error('zpotrf')
+        self.remove_error('fexcp')
+        self.remove_error('fexcf')
+        self.remove_error('failed to read')
+        self.remove_error('convergence')
+
+    def fix_bands(self):
+        nbands = self.read_nbands_from_outcar()
+        if nbands is None:
+            logger.info('Failed to read NBANDS from OUTCAR.'
+                        ' Calculation ID: {}'.format(self.id))
+            return
+        # add 20% or 4 more bands, whichever is higher
+        add_bands = max([int(np.ceil(nbands * 0.2)), 4])
+        self.settings.update({'nbands': nbands + add_bands})
+        self.remove_error('bands')
+
+    def fix_dav(self):
+        if self.settings['algo'] == 'fast':
+            self.settings['algo'] = 'normal'
+        elif self.settings['algo'] == 'normal':
+            self.settings['algo'] = 'fast'
+        else:
+            return
+        self.remove_error('edddav')
+        self.remove_error('electronic_convergence')
+
+    def fix_rmm(self):
+        if self.settings['algo'] == 'fast':
+            self.settings['algo'] = 'normal'
+        elif self.settings['algo'] == 'very_fast':
+            self.settings['algo'] = 'normal'
+        else:
+            return
+        self.remove_error('errrmm')
+        self.remove_error('electronic_convergence')
+
+    def fix_hermitian(self):
+        if self.settings['algo'] == 'very_fast':
+            return
+        self.settings['algo'] = 'very_fast'
+        self.remove_error('hermitian')
+        self.remove_error('electronic_convergence')
 
     #### calculation management
 
@@ -1336,24 +1545,178 @@ class Calculation(models.Model):
         Write calculation to disk
         '''
         os.system('mkdir %s 2> /dev/null' % self.path)
-        self.write_incar()
-        self.write_poscar()
-        self.write_kpoints()
+        poscar = open(self.path + '/POSCAR', 'w')
+        potcar = open(self.path + '/POTCAR', 'w')
+        incar = open(self.path + '/INCAR', 'w')
+        kpoints = open(self.path + '/KPOINTS', 'w')
+        poscar.write(self.POSCAR)
+        potcar.write(self.POTCAR)
+        incar.write(self.INCAR)
+        kpoints.write(self.KPOINTS)
+        poscar.close()
+        potcar.close()
+        incar.close()
+        kpoints.close()
 
     @property
     def estimate(self):
         return 72 * 8 * 3600
 
+    _instruction = {}
+
+    @property
+    def instructions(self):
+        if self.converged:
+            return {}
+
+        if not self._instruction:
+            self._instruction = {
+                'path': self.path,
+                'walltime': self.estimate,
+                'header': '\n'.join(['gunzip -f CHGCAR.gz &> /dev/null',
+                                     'date +%s',
+                                     'ulimit -s unlimited']),
+                'mpi': 'mpirun -machinefile $PBS_NODEFILE -np $NPROCS',
+                'binary': 'vasp_53',
+                'pipes': ' > stdout.txt 2> stderr.txt',
+                'footer': '\n'.join(['gzip -f CHGCAR OUTCAR PROCAR DOSCAR EIGENVAL LOCPOT ELFCAR vasprun.xml',
+                                     'rm -f WAVECAR CHG',
+                                     'date +%s'])}
+
+            if self.input.natoms <= 4:
+                self._instruction.update({'mpi': '', 'binary': 'vasp_53_serial',
+                                          'serial': True})
+        return self._instruction
+
     def set_label(self, label):
         self.label = label
         if not self.entry is None:
             self.entry.calculations[label] = self
+        # if self.id:
+        #    Calculation.objects.filter(id=self.id).update(label=label)
+
+    def set_hubbards(self, convention='wang'):
+        hubs = HUBBARDS.get(convention, {})
+        elts = set(k[0] for k in hubs.keys())
+        ligs = set(k[1] for k in hubs.keys())
+
+        # How many ligand elements are in the struture?
+        lig_int = ligs & set(self.input.comp.keys())
+
+        if not lig_int:
+            return
+        elif len(lig_int) > 1:
+            raise Exception('More than 1 ligand matches. No convention\
+            established for this case!')
+
+        if not elts & set(self.input.comp.keys()):
+            return
+
+        for atom in self.input:
+            for hub in hubs:
+                if (atom.element_id == hub[0] and
+                        hub[2] in [None, atom.ox]):
+                    self.hubbards.append(pot.Hubbard.get(
+                        hub[0], lig=hub[1], ox=hub[2],
+                        u=hubs[hub]['U'], l=hubs[hub]['L']))
+                    break
+            else:
+                self.hubbards.append(pot.Hubbard.get(atom.element_id))
+        self.hubbards = list(set(self.hubbards))
+
+    def set_potentials(self, choice='vasp_rec', distinct_by_ox=False):
+        if isinstance(choice, list):
+            if len(self.potentials) == len(choice):
+                return
+        pot_set = POTENTIALS[choice]
+        potentials = pot.Potential.objects.filter(xc=pot_set['xc'],
+                                                  gw=pot_set['gw'],
+                                                  us=pot_set['us'],
+                                                  paw=pot_set['paw'])
+
+        for e in self.elements:
+            if not e.symbol in pot_set['elements']:
+                raise VaspError('Structure contains %s, which does not have'
+                                'a potential in VASP' % e.symbol)
+
+        pnames = [pot_set['elements'][e.symbol] for e in self.elements]
+        self.potentials = list(potentials.filter(name__in=pnames))
 
     def set_magmoms(self, ordering='ferro'):
         self.input.set_magnetism(ordering)
         if any(self.input.magmoms):
             self.settings.update({'ispin': 2})
 
+    def set_wavecar(self, source):
+        """
+        Copy the WAVECAR specified by `source` to this calculation.
+
+        Arguments:
+            source: can be another :mod:`~simulation.Calculation` instance or a
+            string containing a path to a WAVECAR. If it is a path, it should
+            be a absolute, i.e. begin with "/", and can either end with the
+            WAVECAR or simply point to the path that contains it. For
+            example, if you want to take the WAVECAR from a previous
+            calculation you can do any of::
+
+            >>> c1 # old calculation
+            >>> c2 # new calculation
+            >>> c2.set_wavecar(c1)
+            >>> c2.set_wavecar(c1.path)
+            >>> c2.set_wavecar(c1.path+'/WAVECAR')
+
+        """
+        if isinstance(source, Calculation):
+            source = calculation.path
+
+        source = os.path.abspath(source)
+        if not os.path.exists(source):
+            raise VaspError('WAVECAR does not exist at %s', source)
+
+        if not 'WAVECAR' in source:
+            files = os.listdir(source)
+            for f in files:
+                if 'WAVECAR' in f:
+                    new_path = '%s/%s' % (source, f)
+                    self.set_wavecar(new_path)
+        else:
+            subprocess.check_call(['cp', source, self.path])
+
+    def set_chgcar(self, source):
+        """
+        Copy the CHGCAR specified by `source` to this calculation.
+
+        Arguments:
+            source: can be another :mod:`~simulation.Calculation` instance or a
+            string containing a path to a CHGCAR. If it is a path, it should
+            be a absolute, i.e. begin with "/", and can either end with the
+            CHGCAR or simply point to the path that contains it. For
+            example, if you want to take the CHGCAR from a previous
+            calculation you can do any of::
+
+            >>> c1 # old calculation
+            >>> c2 # new calculation
+            >>> c2.set_chgcar(c1)
+            >>> c2.set_chgcar(c1.path)
+            >>> c2.set_chgcar(c1.path+'/CHGCAR')
+
+        """
+        if isinstance(source, Calculation):
+            source = source.path
+
+        source = os.path.abspath(source)
+        if not os.path.exists(source):
+            raise VaspError('CHGCAR does not exist at %s', source)
+
+        if not 'CHGCAR' in source:
+            files = os.listdir(source)
+            for f in files:
+                if 'CHGCAR' in f:
+                    new_path = '%s/%s' % (source, f)
+                    self.set_chgcar(new_path)
+        else:
+            logger.debug('copying %s to %s', source, self.path)
+            subprocess.check_call(['cp', source, self.path])
 
     @property
     def volume(self):
@@ -1368,6 +1731,158 @@ class Calculation(models.Model):
             return
         return self.volume / len(self.output)
 
+
+
+    @staticmethod
+    def setup(structure, configuration='static', path=None, entry=None,
+              hubbard='wang', potentials='vasp_rec', settings={},
+              chgcar=None, wavecar=None,
+              **kwargs):
+        """
+        Method for creating a new VASP calculation.
+
+        Arguments:
+            structure: :mod:`~simulation.Structure` instance, or string indicating an
+            input structure file.
+
+        Keyword Arguments:
+            configuration:
+                String indicating the type of calculation to
+                perform. Options can be found with simulation.VASP_SETTINGS.keys().
+                Create your own configuration options by adding a new file to
+                configuration/vasp_settings/inputs/ using the files already in
+                that directory as a guide. Default="static"
+
+            settings:
+                Dictionary of VASP settings to be applied to the calculation.
+                Is applied after the settings which are provided by the
+                `configuration` choice.
+
+            path:
+                Location at which to perform the calculation. If the
+                calculation takes repeated iterations to finish successfully,
+                all steps will be nested in the `path` directory.
+
+            entry:
+                If the full simulation data structure is being used, you can specify
+                an entry to associate with the calculation.
+
+            hubbard:
+                String indicating the hubbard correctionconvention. Options
+                found with simulation.HUBBARDS.keys(), and can be added to or
+                altered by editing configuration/vasp_settings/hubbards.yml.
+                Default="wang".
+
+            potentials:
+                String indicating the vasp potentials to use. Options can be
+                found with simulation.POTENTIALS.keys(), and can be added to or
+                altered by editing configuration/vasp_settings/potentials/yml.
+                Default="vasp_rec".
+
+            chgcar/wavecar:
+                Calculation, or path, indicating where to obtain an initial
+                CHGCAR/WAVECAR file for the calculation.
+        """
+
+        if isinstance(structure, str):
+            structure = os.path.abspath(structure)
+            if path is None:
+                path = os.path.dirname(structure)
+            structure = io.read(structure, **kwargs)
+
+        # Where to do the calculation
+        if path is None:
+            if entry is None:
+                path = os.path.abspath('.')
+            else:
+                if entry.path is None:
+                    path = os.path.abspath('.')
+                else:
+                    path = os.path.abspath(entry.path)
+        else:
+            path = os.path.abspath(path)
+
+        # Has the specified calculation already been created?
+        if Calculation.objects.filter(path=path).exists():
+            calc = Calculation.objects.get(path=path)
+        else:
+            if not os.path.exists(path):
+                os.mkdir(path)
+            calc = Calculation()
+            calc.path = path
+            calc.configuration = configuration
+            if chgcar:
+                calc.set_chgcar(chgcar)
+            if wavecar:
+                calc.set_wavecar(wavecar)
+            calc.input = structure
+            calc.kwargs = kwargs
+            calc.entry = entry
+
+        # What settings to use?
+        if configuration not in VASP_SETTINGS:
+            raise ValueError('%s configuration does not exist!' % configuration)
+
+        # Convert input to primitive cell, symmetrize it
+        calc.input.make_primitive()
+        #        calc.input.refine()
+        calc.input.symmetrize()
+
+        vasp_settings = {}
+        if calc.input.natoms > 20:
+            vasp_settings['lreal'] = 'auto'
+        vasp_settings.update(VASP_SETTINGS[configuration])
+        vasp_settings.update(settings)
+
+        calc.set_potentials(vasp_settings.get('potentials', 'vasp_rec'))
+        calc.set_hubbards(vasp_settings.get('hubbards', hubbard))
+        calc.set_magmoms(vasp_settings.get('magnetism', 'ferro'))
+
+        if 'scale_encut' in vasp_settings:
+            enmax = max(pot.enmax for pot in calc.potentials)
+            calc.encut = int(vasp_settings['scale_encut'] * enmax)
+
+        # aug 18, 2016. i think the following line is the ENCUT culprit
+        calc.settings = vasp_settings
+        if calc.input.natoms >= 10:
+            calc.settings.update({
+                'ncore': 4,
+                'lscalu': False,
+                'lplane': True})
+
+        # Has the calculation been run?
+        try:
+            calc.get_outcar()
+        except VaspError:
+            calc.write()
+            return calc
+
+        # Read all outputs
+        calc.read_stdout()
+        calc.read_outcar()
+        calc.read_doscar()
+
+        # Did the calculation finish without errors?
+        if calc.converged:
+            calc.calculate_stability()
+            return calc
+        elif not calc.errors:
+            calc.write()
+            return calc
+
+        # Could the errors be fixed?
+        fixed_calc = calc.address_errors()
+        if fixed_calc.errors:
+            raise VaspError('Unable to fix errors: %s' % fixed_calc.errors)
+        calc.backup()
+        calc.save()
+
+        fixed_calc.set_magmoms(calc.settings.get('magnetism', 'ferro'))
+        fixed_calc.clear_results()
+        fixed_calc.clear_outputs()
+        fixed_calc.set_chgcar(calc)
+        fixed_calc.write()
+        return fixed_calc
     '''Get Files'''
     def write_poscar(self):
         urlp = url + self.label+'/POSCAR'
@@ -1434,6 +1949,8 @@ class Calculation(models.Model):
                 decoded_line = line.decode("utf-8")
                 xdatcar.write(decoded_line)
 
+        #os.remove('OsZICAR')
+        #os.remove('./XdATCAR')
 
 
         from pymatgen.io.vasp import Xdatcar
