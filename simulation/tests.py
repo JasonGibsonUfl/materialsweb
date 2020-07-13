@@ -9,6 +9,9 @@ run_e()
 run_s()
 run_w()
 class TestSimulation(TestCase):
+    run_e()
+    run_s()
+    run_w()
 
     def setUp(self):
         path = '/var/www/materialsweb/static/database/mp-691133'
