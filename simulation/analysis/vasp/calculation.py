@@ -1647,40 +1647,6 @@ class Calculation(models.Model):
         if any(self.input.magmoms):
             self.settings.update({'ispin': 2})
 
-    def set_wavecar(self, source):
-        """
-        Copy the WAVECAR specified by `source` to this calculation.
-
-        Arguments:
-            source: can be another :mod:`~simulation.Calculation` instance or a
-            string containing a path to a WAVECAR. If it is a path, it should
-            be a absolute, i.e. begin with "/", and can either end with the
-            WAVECAR or simply point to the path that contains it. For
-            example, if you want to take the WAVECAR from a previous
-            calculation you can do any of::
-
-            >>> c1 # old calculation
-            >>> c2 # new calculation
-            >>> c2.set_wavecar(c1)
-            >>> c2.set_wavecar(c1.path)
-            >>> c2.set_wavecar(c1.path+'/WAVECAR')
-
-        """
-        if isinstance(source, Calculation):
-            source = calculation.path
-
-        source = os.path.abspath(source)
-        if not os.path.exists(source):
-            raise VaspError('WAVECAR does not exist at %s', source)
-
-        if not 'WAVECAR' in source:
-            files = os.listdir(source)
-            for f in files:
-                if 'WAVECAR' in f:
-                    new_path = '%s/%s' % (source, f)
-                    self.set_wavecar(new_path)
-        else:
-            subprocess.check_call(['cp', source, self.path])
 
     @property
     def volume(self):
