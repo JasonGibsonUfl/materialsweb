@@ -30,13 +30,13 @@ class TestSimulation(TestCase):
         self.assertEquals(self.calculation2D.formation_energy, 179)
 
 
-'''
+
     def test_dimenstion(self):
         self.assertEquals(self.calculation2D.dimension, 2)
 
     def test_natoms(self):
         self.assertEquals(self.calculation2D.natoms,16)
-
+'''
     def test_energy(self):
         self.assertEquals(self.calculation2D.energy,-102.1843278)
 
