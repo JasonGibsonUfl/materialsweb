@@ -17,4 +17,4 @@ class TestSimulation(TestCase):
 
     def test_bandgap(self):
         print(self.calculation1.band_gap)
-        self.assertEquals(1,1)#self.calculation1.band_gap, 1.0072)
+        self.assertEquals(self.calculation1.band_gap, 1.0072)
