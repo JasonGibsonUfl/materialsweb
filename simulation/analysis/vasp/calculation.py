@@ -1592,55 +1592,6 @@ class Calculation(models.Model):
         self.label = label
         if not self.entry is None:
             self.entry.calculations[label] = self
-        # if self.id:
-        #    Calculation.objects.filter(id=self.id).update(label=label)
-
-    def set_hubbards(self, convention='wang'):
-        hubs = HUBBARDS.get(convention, {})
-        elts = set(k[0] for k in hubs.keys())
-        ligs = set(k[1] for k in hubs.keys())
-
-        # How many ligand elements are in the struture?
-        lig_int = ligs & set(self.input.comp.keys())
-
-        if not lig_int:
-            return
-        elif len(lig_int) > 1:
-            raise Exception('More than 1 ligand matches. No convention\
-            established for this case!')
-
-        if not elts & set(self.input.comp.keys()):
-            return
-
-        for atom in self.input:
-            for hub in hubs:
-                if (atom.element_id == hub[0] and
-                        hub[2] in [None, atom.ox]):
-                    self.hubbards.append(pot.Hubbard.get(
-                        hub[0], lig=hub[1], ox=hub[2],
-                        u=hubs[hub]['U'], l=hubs[hub]['L']))
-                    break
-            else:
-                self.hubbards.append(pot.Hubbard.get(atom.element_id))
-        self.hubbards = list(set(self.hubbards))
-
-    def set_potentials(self, choice='vasp_rec', distinct_by_ox=False):
-        if isinstance(choice, list):
-            if len(self.potentials) == len(choice):
-                return
-        pot_set = POTENTIALS[choice]
-        potentials = pot.Potential.objects.filter(xc=pot_set['xc'],
-                                                  gw=pot_set['gw'],
-                                                  us=pot_set['us'],
-                                                  paw=pot_set['paw'])
-
-        for e in self.elements:
-            if not e.symbol in pot_set['elements']:
-                raise VaspError('Structure contains %s, which does not have'
-                                'a potential in VASP' % e.symbol)
-
-        pnames = [pot_set['elements'][e.symbol] for e in self.elements]
-        self.potentials = list(potentials.filter(name__in=pnames))
 
     def set_magmoms(self, ordering='ferro'):
         self.input.set_magnetism(ordering)
