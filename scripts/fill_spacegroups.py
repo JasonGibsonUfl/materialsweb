@@ -5,7 +5,7 @@ from simulation.analysis.symmetry.spacegroup import Spacegroup
 def run():
     with open("simulation/data/spacegroups.yml", 'r') as stream:
         try:
-            print(stream)
+            #print(stream)
             data = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
@@ -13,7 +13,7 @@ def run():
     elements =[]
     for key, v in data.items():
         elements.append(key)
-    print(elements)
+    #print(elements)
     for el in elements:
         element = data[el]
         number = element['number']
@@ -24,5 +24,5 @@ def run():
         s1= Spacegroup(number=number, hm=hm, hall=hall, schoenflies=schoenflies, lattice_system=lattice_system)
         s1.save()
         #e1 = Element()
-        print(lattice_system)
+        #print(lattice_system)
         #e1.save()

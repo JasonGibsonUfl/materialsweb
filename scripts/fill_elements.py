@@ -4,22 +4,22 @@ from simulation.materials.element import Element
 def run():
 	with open("simulation/data/elements/data.yaml", 'r') as stream:
 	    try:
-		    print(stream)
+		    #print(stream)
 		    data = yaml.safe_load(stream)
 	    except yaml.YAMLError as exc:
 		    print(exc)
 
 	with open("simulation/data/elements/chemical_potentials.yml", 'r') as stream:
 	    try:
-		    print(stream)
+		    #print(stream)
 		    data2 = yaml.safe_load(stream)
 	    except yaml.YAMLError as exc:
-		    print(exc)
+		    #print(exc)
 
 	elements =[]
 	for key, v in data.items():
 	    elements.append(key)
-	print(elements)
+	#print(elements)
 	for el in elements:
 	    element = data[el]
 	    z = element['z']
@@ -73,5 +73,5 @@ def run():
 	                 specific_heat=specific_heat, electronegativity=electronegativity,
 	                 first_ionization_energy=first_ionization_energy, s_elec=s_elec,
 	                 p_elec=p_elec, d_elec=d_elec, f_elec=f_elec, HHI_P=HHI_P, HHI_R=HHI_R, production=production)
-	    print(e1)
+	    #print(e1)
 	    e1.save()

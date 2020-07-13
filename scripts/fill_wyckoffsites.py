@@ -4,7 +4,7 @@ from simulation.analysis.symmetry.spacegroup import WyckoffSite, Spacegroup
 def run():
     with open("simulation/data/spacegroups.yml", 'r') as stream:
         try:
-            print(stream)
+            #print(stream)
             data = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
@@ -18,7 +18,7 @@ def run():
         spacegroup = Spacegroup.get(sgn)
         ws = sg['wyckoff_sites']
 
-        print(len(ws))
+        #print(len(ws))
         for ss in ws:
             string = (str(ws[ss]['coordinate'])).split()
             x = string[0]
