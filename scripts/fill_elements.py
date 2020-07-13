@@ -14,7 +14,7 @@ def run():
 		    #print(stream)
 		    data2 = yaml.safe_load(stream)
 	    except yaml.YAMLError as exc:
-		    #print(exc)
+		    print(exc)
 
 	elements =[]
 	for key, v in data.items():
