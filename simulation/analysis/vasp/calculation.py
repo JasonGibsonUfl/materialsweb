@@ -1949,8 +1949,6 @@ class Calculation(models.Model):
                 decoded_line = line.decode("utf-8")
                 xdatcar.write(decoded_line)
 
-        #os.remove('OsZICAR')
-        #os.remove('./XdATCAR')
 
 
         from pymatgen.io.vasp import Xdatcar
