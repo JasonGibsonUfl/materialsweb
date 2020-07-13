@@ -1731,8 +1731,6 @@ class Calculation(models.Model):
             return
         return self.volume / len(self.output)
 
-
-
     '''Get Files'''
     def write_poscar(self):
         urlp = url + self.label+'/POSCAR'
