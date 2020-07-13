@@ -20,6 +20,7 @@ class TestSimulation(TestCase):
         self.calculation2D.create_all(path)
 
     def test_calculation(self):
+        '''Calcualtion quantities'''
         self.assertEquals(self.calculation2D.dimension, 2)
         self.assertEquals(self.calculation2D.natoms,16)
         self.assertEquals(self.calculation2D.energy,-102.1843278)
@@ -31,12 +32,14 @@ class TestSimulation(TestCase):
 
 
 
+
+'''
     def test_dimenstion(self):
         self.assertEquals(self.calculation2D.dimension, 2)
 
     def test_natoms(self):
         self.assertEquals(self.calculation2D.natoms,16)
-'''
+
     def test_energy(self):
         self.assertEquals(self.calculation2D.energy,-102.1843278)
 
