@@ -602,7 +602,7 @@ class Calculation(models.Model):
         if not self.outcar is None:
             return self.outcar
         if not exists(self.path):
-            return
+            return '2'
         elif exists(self.path + '/OUTCAR'):
             self.outcar = open(self.path + '/OUTCAR').read().splitlines()
         elif exists(self.path + '/OUTCAR.gz'):
@@ -1328,215 +1328,6 @@ class Calculation(models.Model):
             calc.output.set_label(calc.label)
         return calc
 
-    @staticmethod
-    def read_tree(path):
-        path = os.path.abspath(path)
-        contents = os.listdir(path)
-        prev_calcs = [f for f in contents if
-                      os.path.isdir('%s/%s' % (path, f))]
-        prev_calcs = sorted(prev_calcs, key=lambda x: -int(x.split('_')[0]))
-
-        calcs = [Calculation.read(path)]
-        for i, calc in enumerate(prev_calcs):
-            c = Calculation.read('%s/%s' % (path, calc))
-            c.set_label('%s_%s' % (calcs[0].label, calc.split('_')[0]))
-            calcs[-1].input = c.output
-            calcs.append(c)
-        return calcs
-
-    def address_errors(self):
-        """
-        Attempts to fix any encountered errors.
-        """
-        errors = self.errors
-        if not errors or errors == ['found no errors']:
-            logger.info('Calculation {}: Found no errors'.format(self.id))
-            return self
-
-        new_calc = self.copy()
-        new_calc.set_label(self.label)
-        self.set_label(self.label + '_%d' % self.attempt)
-        new_calc.attempt += 1
-
-        # if the only error is ionic/basis convergence, try a few more times
-        # than for other errors
-        max_attempts = 5
-        if set(new_calc.errors).issubset(set(['convergence'])):
-            max_attempts = 10
-
-        if new_calc.attempt > max_attempts:
-            new_calc.add_error('attempts')
-
-        for err in errors:
-            if err in ['duplicate', 'partial', 'failed to read']:
-                continue
-            elif err == 'convergence':
-                if not self.output is None:
-                    new_calc.remove_error('convergence')
-                    new_calc.input = self.output
-                    new_calc.input.set_label(self.label)
-            elif err == 'electronic_convergence':
-                new_calc.fix_electronic_convergence()
-            elif err == 'doscar_exc':
-                new_calc.fix_bands()
-            elif err == 'bands':
-                new_calc.fix_bands()
-            elif err == 'edddav':
-                new_calc.fix_dav()
-            elif err == 'errrmm':
-                new_calc.fix_rmm()
-            elif err == 'brions':
-                new_calc.fix_brions()
-            elif err == 'brmix':
-                new_calc.fix_brmix()
-            elif err in ['zpotrf', 'fexcp', 'fexcf']:
-                new_calc.reduce_potim()
-            elif err in ['pricel', 'invgrp', 'sgrcon']:
-                new_calc.increase_symprec()
-            elif err == 'hermitian':
-                new_calc.fix_hermitian()
-            else:
-                raise VaspError("Unknown VASP error code: %s", err)
-        return new_calc
-
-    def compress(self, files=['OUTCAR', 'CHGCAR', 'CHG',
-                              'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']):
-        """
-        gzip every file in `files`
-
-        Keyword arguments:
-            files: List of files to zip up.
-
-        Return: None
-        """
-        for file in os.listdir(self.path):
-            if file in ['OUTCAR', 'CHGCAR', 'CHG', 'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']:
-                os.system('gzip -f %s' % self.path + '/' + file)
-
-    def copy(self):
-        """
-        Create a deep copy of the Calculation.
-
-        Return: None
-        """
-        new = copy.deepcopy(self)
-        new.id = None
-        new.label = None
-        new.input = self.input
-        new.output = self.output
-        new.dos = self.dos
-        return new
-
-    def move(self, path):
-        path = os.path.abspath(path)
-        os.system('mkdir %s 2> /dev/null' % path)
-        os.system('cp %s/* %s 2> /dev/null' % (self.path, path))
-        os.system('rm %s/* 2> /dev/null' % self.path)
-        self.path = path
-        if self.id:
-            Calculation.objects.filter(id=self.id).update(path=path)
-
-    def backup(self, path=None):
-        """
-        Create a copy of the calculation folder in a subdirectory of the
-        current Calculation.
-
-        Keyword arguments:
-            path: If None, the backup folder is generated based on the
-            Calculation.attempt and Calculation.errors.
-
-        Return: None
-        """
-        if path is None:
-            new_dir = '%s_' % self.attempt
-            new_dir += '_'.join(self.errors)
-            new_dir = new_dir.replace(' ', '')
-        else:
-            new_dir = path
-        logger.info('backing up %s to %s' %
-                    (self.path.replace(self.entry.path + '/', ''), new_dir))
-        self.move(self.path + '/' + new_dir)
-
-    def clean_start(self):
-        depth = self.path.count('/') - self.path.count('..')
-        if depth < 6:
-            raise ValueError('Too short path supplied to clean_start: %s' % self.path)
-        else:
-            os.system('rm -rf %s &> /dev/null' % self.path)
-
-    # = Error correcting =#
-
-    def fix_zhegev(self):
-        raise NotImplementedError
-
-    def fix_brmix(self):
-        self.settings.update({'symprec': 1e-7,
-                              'algo': 'normal'})
-        self.remove_error('brmix')
-
-    def fix_electronic_convergence(self):
-        if not self.settings.get('algo') == 'normal':
-            self.settings['algo'] = 'normal'
-            self.remove_error('electronic_convergence')
-
-    def increase_symprec(self):
-        self.settings['symprec'] = 1e-7
-        self.remove_error('invgrp')
-        self.remove_error('pricel')
-        self.remove_error('sgrcon')
-        self.remove_error('failed to read')
-        self.remove_error('convergence')
-
-    def fix_brions(self):
-        self.settings['potim'] *= 2
-        self.remove_error('brions')
-
-    def reduce_potim(self):
-        self.settings.update({'algo': 'normal',
-                              'potim': 0.1})
-        self.remove_error('zpotrf')
-        self.remove_error('fexcp')
-        self.remove_error('fexcf')
-        self.remove_error('failed to read')
-        self.remove_error('convergence')
-
-    def fix_bands(self):
-        nbands = self.read_nbands_from_outcar()
-        if nbands is None:
-            logger.info('Failed to read NBANDS from OUTCAR.'
-                        ' Calculation ID: {}'.format(self.id))
-            return
-        # add 20% or 4 more bands, whichever is higher
-        add_bands = max([int(np.ceil(nbands * 0.2)), 4])
-        self.settings.update({'nbands': nbands + add_bands})
-        self.remove_error('bands')
-
-    def fix_dav(self):
-        if self.settings['algo'] == 'fast':
-            self.settings['algo'] = 'normal'
-        elif self.settings['algo'] == 'normal':
-            self.settings['algo'] = 'fast'
-        else:
-            return
-        self.remove_error('edddav')
-        self.remove_error('electronic_convergence')
-
-    def fix_rmm(self):
-        if self.settings['algo'] == 'fast':
-            self.settings['algo'] = 'normal'
-        elif self.settings['algo'] == 'very_fast':
-            self.settings['algo'] = 'normal'
-        else:
-            return
-        self.remove_error('errrmm')
-        self.remove_error('electronic_convergence')
-
-    def fix_hermitian(self):
-        if self.settings['algo'] == 'very_fast':
-            return
-        self.settings['algo'] = 'very_fast'
-        self.remove_error('hermitian')
-        self.remove_error('electronic_convergence')
 
     #### calculation management
 
@@ -1545,48 +1336,13 @@ class Calculation(models.Model):
         Write calculation to disk
         '''
         os.system('mkdir %s 2> /dev/null' % self.path)
-        poscar = open(self.path + '/POSCAR', 'w')
-        potcar = open(self.path + '/POTCAR', 'w')
-        incar = open(self.path + '/INCAR', 'w')
-        kpoints = open(self.path + '/KPOINTS', 'w')
-        poscar.write(self.POSCAR)
-        potcar.write(self.POTCAR)
-        incar.write(self.INCAR)
-        kpoints.write(self.KPOINTS)
-        poscar.close()
-        potcar.close()
-        incar.close()
-        kpoints.close()
+        self.write_incar()
+        self.write_poscar()
+        self.write_kpoints()
 
     @property
     def estimate(self):
         return 72 * 8 * 3600
-
-    _instruction = {}
-
-    @property
-    def instructions(self):
-        if self.converged:
-            return {}
-
-        if not self._instruction:
-            self._instruction = {
-                'path': self.path,
-                'walltime': self.estimate,
-                'header': '\n'.join(['gunzip -f CHGCAR.gz &> /dev/null',
-                                     'date +%s',
-                                     'ulimit -s unlimited']),
-                'mpi': 'mpirun -machinefile $PBS_NODEFILE -np $NPROCS',
-                'binary': 'vasp_53',
-                'pipes': ' > stdout.txt 2> stderr.txt',
-                'footer': '\n'.join(['gzip -f CHGCAR OUTCAR PROCAR DOSCAR EIGENVAL LOCPOT ELFCAR vasprun.xml',
-                                     'rm -f WAVECAR CHG',
-                                     'date +%s'])}
-
-            if self.input.natoms <= 4:
-                self._instruction.update({'mpi': '', 'binary': 'vasp_53_serial',
-                                          'serial': True})
-        return self._instruction
 
     def set_label(self, label):
         self.label = label

@@ -91,8 +91,8 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 8242880
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        #'HOST': '10.5.46.39',
-        #'PORT': '',
+        'HOST': '10.5.46.39',
+        'PORT': '',
         'OPTIONS': {
             #'read_default_file': './my.cnf',
             'read_default_file': '/etc/mysql/my.cnf',
