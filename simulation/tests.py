@@ -18,6 +18,8 @@ class TestSimulation(TestCase):
 
         self.calculation2D = Calculation().read(path)
         self.calculation2D.create_all(path)
+        self.entry2D = self.calculation2D.entry
+        self.composition2D = self.entry2D.composition
 
     def test_calculation(self):
         '''Calcualtion quantities'''
@@ -29,6 +31,10 @@ class TestSimulation(TestCase):
         self.assertEquals(self.calculation2D.magmom_pa, 0.74999284375)
         self.assertEquals(self.calculation2D.band_gap, 1.0072)
         self.assertEquals(self.calculation2D.formation_energy, 179)
+        '''Entry Quantities'''
+        self.assertEquals(self.entry2D.natoms, 16)
+        '''Compostion quantities'''
+        self.assertEquals(self.composition2D.mass, 21.250710427785002)
 
 
 
