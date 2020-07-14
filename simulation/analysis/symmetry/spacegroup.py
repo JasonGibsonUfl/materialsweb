@@ -345,8 +345,7 @@ class Spacegroup(models.Model):
 
     @staticmethod
     def get(number):
-        print(Spacegroup.objects.get(number=number))
-        return Spacegroup.objects.get(number=number).distinct()
+        return Spacegroup.objects.get(number=number)
 
     @property
     def sym_ops(self):
