@@ -11,9 +11,9 @@ run_w()
 class TestSimulation(TestCase):
 
     def setUp(self):
-        run_e()
-        run_s()
-        run_w()
+        #run_e()
+        #run_s()
+        #run_w()
         path = '/var/www/materialsweb/static/database/mp-691133'
 
         self.calculation2D = Calculation().read(path)

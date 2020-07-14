@@ -5,5 +5,8 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 class TestMaterialswebHome(StaticLiveServerTestCase):
 
+    def setUp(self):
+        self.browser = webdriver.Chrome('./chromedriver')
+
     def test_foo(self):
         self.assertEquals(0,1)
