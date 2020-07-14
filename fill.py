@@ -13,9 +13,9 @@ for b in a:
            path = b[0]
            try:
                print(path)
-               #calc = Calculation().read(path)
-               #calc.create_all(path)
-               #calc.save()
+               calc = Calculation().read(path)
+               calc.create_all(path)
+               calc.save()
            except:
                print(path)
 '''
