@@ -292,7 +292,7 @@ class WyckoffSite(models.Model):
     @classmethod
     def get(cls, symbol, spacegroup):
         site, new = cls.objects.get_or_create(spacegroup=spacegroup,
-                symbol=symbol).distinct()
+                symbol=symbol)
         if new:
             site.save()
         return site
@@ -345,7 +345,7 @@ class Spacegroup(models.Model):
 
     @staticmethod
     def get(number):
-        return Spacegroup.objects.get(number=number)
+        return Spacegroup.objects.get(number=number).distinct()
 
     @property
     def sym_ops(self):
