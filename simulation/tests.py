@@ -58,3 +58,6 @@ class TestSimulation(TestCase):
         self.assertEquals(self.composition3D.formula, 'Al3 Cr1')
         self.assertEquals(self.composition3D.generic, 'AB3')
         self.assertEquals(self.composition3D.element_list, 'Al_Cr_')
+        
+        ml_list =[3.8536327377042804e-05, 3.853628381808742e-05, 3.853628381808746e-05, 3.853632737704282e-05, 3.953138878697092e-05, 3.9531390956468254e-05, 3.953138878697098e-05, 3.953139095646848e-05, 3.5848701044293688e-06, 4.451154568298833e-05, 3.584870104429372e-06, 3.5848789431573475e-06, 4.4511563103682824e-05, 4.451154568298852e-05, 3.5848789431573623e-06, 4.4511563103683095e-05]
+        self.assertEquals(self.calculation2D.get_symmetry_functions_g2(), ml_list)
