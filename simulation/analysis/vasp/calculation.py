@@ -1678,7 +1678,7 @@ class Calculation(models.Model):
         return self.volume / len(self.output)
 
 
-
+    '''
     @staticmethod
     def setup(structure, configuration='static', path=None, entry=None,
               hubbard='wang', potentials='vasp_rec', settings={},
@@ -1829,6 +1829,7 @@ class Calculation(models.Model):
         fixed_calc.set_chgcar(calc)
         fixed_calc.write()
         return fixed_calc
+    '''
     '''Get Files'''
     def write_poscar(self):
         urlp = url + self.label+'/POSCAR'
