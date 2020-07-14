@@ -18,4 +18,4 @@ class TestMaterialswebHome(StaticLiveServerTestCase):
 
     def test_no_projects_alerts_is_displated(self):
         self.browser.get(self.live_server_url)
-        time.sleep(20)
+        time.sleep(50)
