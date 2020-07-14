@@ -31,7 +31,7 @@ class Composition(models.Model):
     element_list = models.CharField(max_length=255, blank=True, null=True)
     meta_data = models.ManyToManyField('MetaData')
 
-    element_set = models.ManyToManyField('Element', null=True)
+    element_set = models.ManyToManyField('Element')
     ntypes = models.IntegerField(null=True)
 
     # other stuff
