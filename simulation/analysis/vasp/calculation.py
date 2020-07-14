@@ -1425,64 +1425,7 @@ class Calculation(models.Model):
             self.settings['algo'] = 'normal'
             self.remove_error('electronic_convergence')
     '''
-    def increase_symprec(self):
-        self.settings['symprec'] = 1e-7
-        self.remove_error('invgrp')
-        self.remove_error('pricel')
-        self.remove_error('sgrcon')
-        self.remove_error('failed to read')
-        self.remove_error('convergence')
 
-    def fix_brions(self):
-        self.settings['potim'] *= 2
-        self.remove_error('brions')
-
-    def reduce_potim(self):
-        self.settings.update({'algo': 'normal',
-                              'potim': 0.1})
-        self.remove_error('zpotrf')
-        self.remove_error('fexcp')
-        self.remove_error('fexcf')
-        self.remove_error('failed to read')
-        self.remove_error('convergence')
-
-    def fix_bands(self):
-        nbands = self.read_nbands_from_outcar()
-        if nbands is None:
-            logger.info('Failed to read NBANDS from OUTCAR.'
-                        ' Calculation ID: {}'.format(self.id))
-            return
-        # add 20% or 4 more bands, whichever is higher
-        add_bands = max([int(np.ceil(nbands * 0.2)), 4])
-        self.settings.update({'nbands': nbands + add_bands})
-        self.remove_error('bands')
-
-    def fix_dav(self):
-        if self.settings['algo'] == 'fast':
-            self.settings['algo'] = 'normal'
-        elif self.settings['algo'] == 'normal':
-            self.settings['algo'] = 'fast'
-        else:
-            return
-        self.remove_error('edddav')
-        self.remove_error('electronic_convergence')
-
-    def fix_rmm(self):
-        if self.settings['algo'] == 'fast':
-            self.settings['algo'] = 'normal'
-        elif self.settings['algo'] == 'very_fast':
-            self.settings['algo'] = 'normal'
-        else:
-            return
-        self.remove_error('errrmm')
-        self.remove_error('electronic_convergence')
-
-    def fix_hermitian(self):
-        if self.settings['algo'] == 'very_fast':
-            return
-        self.settings['algo'] = 'very_fast'
-        self.remove_error('hermitian')
-        self.remove_error('electronic_convergence')
 
     #### calculation management
 
@@ -1504,9 +1447,6 @@ class Calculation(models.Model):
         incar.close()
         kpoints.close()
 
-    @property
-    def estimate(self):
-        return 72 * 8 * 3600
 
 
 
