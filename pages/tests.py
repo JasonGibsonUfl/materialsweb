@@ -9,7 +9,7 @@ import time
 class TestMaterialswebHome(StaticLiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Firefox('/var/www/materialsweb/pages/drivers', executable_path= '/var/www/materialsweb/pages/firefox.sh')
+        self.browser = webdriver.Firefox('/var/www/materialsweb/pages/drivers', executable_path= '/var/www/materialsweb/pages/drivers/firefox.sh')
 
     def tearDown(self):
         self.browser.close()
