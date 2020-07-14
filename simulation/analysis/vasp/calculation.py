@@ -189,7 +189,7 @@ class Calculation(models.Model):
         try:
             self.read_chgcar()
         except:
-            print("CHGCAR does not exist")
+            pass
         self.dimension = self.get_dimension()
         self.save()
 
