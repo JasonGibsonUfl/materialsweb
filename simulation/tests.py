@@ -18,7 +18,7 @@ class TestSimulation(TestCase):
         self.entry2D = self.calculation2D.entry
         self.composition2D = self.entry2D.composition
 
-        path3D = '/var/www/materialsweb/static/database/MAX_phases/all_competitors/mp-20717'
+        path3D = '/var/www/materialsweb/static/database/MAX_phases/all_competitors/mp-867780'
 
         self.calculation3D = Calculation().read(path3D)
         self.calculation3D.create_all(path3D)
@@ -42,3 +42,19 @@ class TestSimulation(TestCase):
         self.assertEquals(self.composition2D.formula, 'Cr1 H1 O2')
         self.assertEquals(self.composition2D.generic, 'ABC2')
         self.assertEquals(self.composition2D.element_list, 'Cr_H_O_')
+
+        '''Calcualtion quantities'''
+        self.assertEquals(self.calculation3D.dimension, 3)
+        self.assertEquals(self.calculation3D.natoms,4)
+        self.assertEquals(self.calculation3D.energy,-21.42383041)
+        self.assertEquals(self.calculation3D.energy_pa, -5.3559576025)
+        self.assertEquals(self.calculation3D.magmom, 1.1246361)
+        self.assertEquals(self.calculation3D.magmom_pa, 0.281159025)
+        self.assertEquals(self.calculation3D.band_gap, 0)
+        '''Entry Quantities'''
+        self.assertEquals(self.entry3D.natoms, 4)
+        '''Compostion quantities'''
+        self.assertEquals(self.composition3D.mass, 33.23515081405)
+        self.assertEquals(self.composition3D.formula, 'Al3 Cr1')
+        self.assertEquals(self.composition3D.generic, 'AB3')
+        self.assertEquals(self.composition3D.element_list, 'Al_Cr_')

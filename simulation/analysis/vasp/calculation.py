@@ -1344,61 +1344,6 @@ class Calculation(models.Model):
             calcs.append(c)
         return calcs
 
-    def address_errors(self):
-        """
-        Attempts to fix any encountered errors.
-        """
-        errors = self.errors
-        if not errors or errors == ['found no errors']:
-            logger.info('Calculation {}: Found no errors'.format(self.id))
-            return self
-
-        new_calc = self.copy()
-        new_calc.set_label(self.label)
-        self.set_label(self.label + '_%d' % self.attempt)
-        new_calc.attempt += 1
-
-        # if the only error is ionic/basis convergence, try a few more times
-        # than for other errors
-        max_attempts = 5
-        if set(new_calc.errors).issubset(set(['convergence'])):
-            max_attempts = 10
-
-        if new_calc.attempt > max_attempts:
-            new_calc.add_error('attempts')
-
-        for err in errors:
-            if err in ['duplicate', 'partial', 'failed to read']:
-                continue
-            elif err == 'convergence':
-                if not self.output is None:
-                    new_calc.remove_error('convergence')
-                    new_calc.input = self.output
-                    new_calc.input.set_label(self.label)
-            elif err == 'electronic_convergence':
-                new_calc.fix_electronic_convergence()
-            elif err == 'doscar_exc':
-                new_calc.fix_bands()
-            elif err == 'bands':
-                new_calc.fix_bands()
-            elif err == 'edddav':
-                new_calc.fix_dav()
-            elif err == 'errrmm':
-                new_calc.fix_rmm()
-            elif err == 'brions':
-                new_calc.fix_brions()
-            elif err == 'brmix':
-                new_calc.fix_brmix()
-            elif err in ['zpotrf', 'fexcp', 'fexcf']:
-                new_calc.reduce_potim()
-            elif err in ['pricel', 'invgrp', 'sgrcon']:
-                new_calc.increase_symprec()
-            elif err == 'hermitian':
-                new_calc.fix_hermitian()
-            else:
-                raise VaspError("Unknown VASP error code: %s", err)
-        return new_calc
-
     def compress(self, files=['OUTCAR', 'CHGCAR', 'CHG',
                               'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']):
         """
