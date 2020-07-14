@@ -21,27 +21,20 @@ from lxml import etree
 from django.db import models
 from django.db import transaction
 
-import simulation.io
-import simulation.materials.composition as comp
 import simulation.materials.structure as strx
 import simulation.io.poscar as poscar
 from . import potential as pot
-import simulation.utils as utils
 import simulation.custom as cdb
 import simulation.analysis.thermodynamics as thermo
 import simulation.analysis.griddata as grid
 from . import dos
-#from simulation.data import chem_pots
 from simulation.materials.atom import Atom, Site
-from simulation.utils import *
 from simulation.utils.strings import *
 from simulation.data.meta_data import MetaData, add_meta_data
 from simulation.materials.element import Element
 from simulation.custom import DictField, NumpyArrayField
-from simulation.configuration.vasp_settings import *
 from simulation.materials.entry import Entry
 from simulation.analysis.vasp.dos import DOS
-from simulation.analysis.thermodynamics.equilibrium import Equilibrium
 from simulation.analysis.vasp.potential import Potential
 logger = logging.getLogger(__name__)
 from ase.io import vasp
@@ -235,16 +228,12 @@ class Calculation(models.Model):
             self.output.save()
             self.output = self.output
             self.composition = self.output.composition
-            print("Outpiuut")
-            print(self.composition)
         if self.input is not None:
             if self.entry:
                 self.input.entry = self.entry
             self.input.save()
             self.input = self.input
             self.composition = self.input.composition
-            print('Input')
-            print(self.composition)
 
         if self.dos is not None:
             self.dos.entry = self.entry
@@ -360,10 +349,6 @@ class Calculation(models.Model):
         p.id = self.id
         return p
 
-    def calculate_stability(self, fit='standard'):
-        from simulation.analysis.thermodynamics import PhaseSpace
-        ps = PhaseSpace(self.input.comp)
-        ps.compute_stabilities()
 
     def get_incar(self):
         s = dict((k.lower(), v) for k, v in self.settings.items() if not k in
@@ -426,19 +411,14 @@ class Calculation(models.Model):
                 if k in s:
                     incar += ' %s\n' % vasp_format(k, s.pop(k))
 
-        # incar += '\n#= Uncategorized/OQMD codes  =#\n'
-        # for k, v in s.items():
-        #    incar += ' %s\n' % (vasp_format(k, v))
         return incar
 
     @INCAR.setter
     def INCAR(self, incar):
         settings = {}
-        custom = ''
         magmoms = []
         ldauus = []
         ldauls = []
-        ldaujs = []
         for line in open(incar):
             line = line.lower()
             line = line.split('=')
@@ -501,54 +481,6 @@ class Calculation(models.Model):
     def POSCAR(self, poscar):
         self.input = poscar.read(poscar)
 
-    xmlroot = None
-
-    def read_vasprun_xml(self):
-        tree = etree.parse(gzip.open(self.path + '/vasprun.xml.gz', 'rb'))
-        self.xmlroot = tree.getroot()
-
-        # read settings
-        settings = {}
-        for s in self.xmlroot.findall('parameters/separator/*'):
-            t = s.get('type', 'float')
-            if not s.text:
-                continue
-            if s.tag == 'i':
-                if t == 'int':
-                    settings[s.get('name').lower()] = int(s.text.strip())
-                elif t == 'float':
-                    settings[s.get('name').lower()] = float(s.text.strip())
-                elif t == 'string':
-                    settings[s.get('name').lower()] = s.text.strip()
-            elif s.tag == 'v':
-                settings[s.get('name').lower()] = map(float, s.text.split())
-        self.settings = settings
-
-        # read other things
-        lattices = []
-        for b in self.xmlroot.findall("structure/crystal/*[@name='basis']"):
-            cell = []
-            for v in b:
-                cell.append(map(float, v.strip().split()))
-            lattices.append(np.vstack(cell))
-
-        # coords
-        positions = []
-        for c in self.xmlroot.findall("structure/varray[@name='positions']"):
-            coords = []
-            for v in c:
-                coords.append(map(float, v.strip().split()))
-            positions.append(np.vstack(coords))
-
-        raise NotImplementedError
-        # energies
-        energies = []
-
-        # forces
-        forces = []
-
-        # stresses
-        stresses = []
 
     def get_outcar(self):
         """
