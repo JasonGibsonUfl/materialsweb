@@ -26,7 +26,7 @@ from .element import Element, Species
 from simulation.materials.atom import Atom, Site
 from .composition import Composition
 from simulation.utils.strings import format_comp, parse_comp, reduce_comp
-from simulation.utils.math import *
+from simulation.utils.math_tool import *
 from simulation.utils.folder_management import change_directory
 from simulation.data.meta_data import *
 from simulation.analysis.symmetry.routines import get_symmetry_dataset
