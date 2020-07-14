@@ -1627,7 +1627,7 @@ class Calculation(models.Model):
                     self.set_wavecar(new_path)
         else:
             subprocess.check_call(['cp', source, self.path])
-
+    '''
     def set_chgcar(self, source):
         """
         Copy the CHGCAR specified by `source` to this calculation.
@@ -1663,7 +1663,7 @@ class Calculation(models.Model):
         else:
             logger.debug('copying %s to %s', source, self.path)
             subprocess.check_call(['cp', source, self.path])
-
+    '''
     @property
     def volume(self):
         if self.output:
@@ -1678,158 +1678,6 @@ class Calculation(models.Model):
         return self.volume / len(self.output)
 
 
-    '''
-    @staticmethod
-    def setup(structure, configuration='static', path=None, entry=None,
-              hubbard='wang', potentials='vasp_rec', settings={},
-              chgcar=None, wavecar=None,
-              **kwargs):
-        """
-        Method for creating a new VASP calculation.
-
-        Arguments:
-            structure: :mod:`~simulation.Structure` instance, or string indicating an
-            input structure file.
-
-        Keyword Arguments:
-            configuration:
-                String indicating the type of calculation to
-                perform. Options can be found with simulation.VASP_SETTINGS.keys().
-                Create your own configuration options by adding a new file to
-                configuration/vasp_settings/inputs/ using the files already in
-                that directory as a guide. Default="static"
-
-            settings:
-                Dictionary of VASP settings to be applied to the calculation.
-                Is applied after the settings which are provided by the
-                `configuration` choice.
-
-            path:
-                Location at which to perform the calculation. If the
-                calculation takes repeated iterations to finish successfully,
-                all steps will be nested in the `path` directory.
-
-            entry:
-                If the full simulation data structure is being used, you can specify
-                an entry to associate with the calculation.
-
-            hubbard:
-                String indicating the hubbard correctionconvention. Options
-                found with simulation.HUBBARDS.keys(), and can be added to or
-                altered by editing configuration/vasp_settings/hubbards.yml.
-                Default="wang".
-
-            potentials:
-                String indicating the vasp potentials to use. Options can be
-                found with simulation.POTENTIALS.keys(), and can be added to or
-                altered by editing configuration/vasp_settings/potentials/yml.
-                Default="vasp_rec".
-
-            chgcar/wavecar:
-                Calculation, or path, indicating where to obtain an initial
-                CHGCAR/WAVECAR file for the calculation.
-        """
-
-        if isinstance(structure, str):
-            structure = os.path.abspath(structure)
-            if path is None:
-                path = os.path.dirname(structure)
-            structure = io.read(structure, **kwargs)
-
-        # Where to do the calculation
-        if path is None:
-            if entry is None:
-                path = os.path.abspath('.')
-            else:
-                if entry.path is None:
-                    path = os.path.abspath('.')
-                else:
-                    path = os.path.abspath(entry.path)
-        else:
-            path = os.path.abspath(path)
-
-        # Has the specified calculation already been created?
-        if Calculation.objects.filter(path=path).exists():
-            calc = Calculation.objects.get(path=path)
-        else:
-            if not os.path.exists(path):
-                os.mkdir(path)
-            calc = Calculation()
-            calc.path = path
-            calc.configuration = configuration
-            if chgcar:
-                calc.set_chgcar(chgcar)
-            if wavecar:
-                calc.set_wavecar(wavecar)
-            calc.input = structure
-            calc.kwargs = kwargs
-            calc.entry = entry
-
-        # What settings to use?
-        if configuration not in VASP_SETTINGS:
-            raise ValueError('%s configuration does not exist!' % configuration)
-
-        # Convert input to primitive cell, symmetrize it
-        calc.input.make_primitive()
-        #        calc.input.refine()
-        calc.input.symmetrize()
-
-        vasp_settings = {}
-        if calc.input.natoms > 20:
-            vasp_settings['lreal'] = 'auto'
-        vasp_settings.update(VASP_SETTINGS[configuration])
-        vasp_settings.update(settings)
-
-        calc.set_potentials(vasp_settings.get('potentials', 'vasp_rec'))
-        calc.set_hubbards(vasp_settings.get('hubbards', hubbard))
-        calc.set_magmoms(vasp_settings.get('magnetism', 'ferro'))
-
-        if 'scale_encut' in vasp_settings:
-            enmax = max(pot.enmax for pot in calc.potentials)
-            calc.encut = int(vasp_settings['scale_encut'] * enmax)
-
-        # aug 18, 2016. i think the following line is the ENCUT culprit
-        calc.settings = vasp_settings
-        if calc.input.natoms >= 10:
-            calc.settings.update({
-                'ncore': 4,
-                'lscalu': False,
-                'lplane': True})
-
-        # Has the calculation been run?
-        try:
-            calc.get_outcar()
-        except VaspError:
-            calc.write()
-            return calc
-
-        # Read all outputs
-        calc.read_stdout()
-        calc.read_outcar()
-        calc.read_doscar()
-
-        # Did the calculation finish without errors?
-        if calc.converged:
-            calc.calculate_stability()
-            return calc
-        elif not calc.errors:
-            calc.write()
-            return calc
-
-        # Could the errors be fixed?
-        fixed_calc = calc.address_errors()
-        if fixed_calc.errors:
-            raise VaspError('Unable to fix errors: %s' % fixed_calc.errors)
-        calc.backup()
-        calc.save()
-
-        fixed_calc.set_magmoms(calc.settings.get('magnetism', 'ferro'))
-        fixed_calc.clear_results()
-        fixed_calc.clear_outputs()
-        fixed_calc.set_chgcar(calc)
-        fixed_calc.write()
-        return fixed_calc
-    '''
     '''Get Files'''
     def write_poscar(self):
         urlp = url + self.label+'/POSCAR'
