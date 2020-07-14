@@ -1225,36 +1225,6 @@ class Calculation(models.Model):
             calc.output.set_label(calc.label)
         return calc
 
-    @staticmethod
-    def read_tree(path):
-        path = os.path.abspath(path)
-        contents = os.listdir(path)
-        prev_calcs = [f for f in contents if
-                      os.path.isdir('%s/%s' % (path, f))]
-        prev_calcs = sorted(prev_calcs, key=lambda x: -int(x.split('_')[0]))
-
-        calcs = [Calculation.read(path)]
-        for i, calc in enumerate(prev_calcs):
-            c = Calculation.read('%s/%s' % (path, calc))
-            c.set_label('%s_%s' % (calcs[0].label, calc.split('_')[0]))
-            calcs[-1].input = c.output
-            calcs.append(c)
-        return calcs
-
-    def compress(self, files=['OUTCAR', 'CHGCAR', 'CHG',
-                              'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']):
-        """
-        gzip every file in `files`
-
-        Keyword arguments:
-            files: List of files to zip up.
-
-        Return: None
-        """
-        for file in os.listdir(self.path):
-            if file in ['OUTCAR', 'CHGCAR', 'CHG', 'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']:
-                os.system('gzip -f %s' % self.path + '/' + file)
-
 
 
     #### calculation management
@@ -1278,51 +1248,10 @@ class Calculation(models.Model):
         kpoints.close()
 
 
-
-
     def set_label(self, label):
         self.label = label
         if not self.entry is None:
             self.entry.calculations[label] = self
-        # if self.id:
-        #    Calculation.objects.filter(id=self.id).update(label=label)
-
-
-
-    def set_wavecar(self, source):
-        """
-        Copy the WAVECAR specified by `source` to this calculation.
-
-        Arguments:
-            source: can be another :mod:`~simulation.Calculation` instance or a
-            string containing a path to a WAVECAR. If it is a path, it should
-            be a absolute, i.e. begin with "/", and can either end with the
-            WAVECAR or simply point to the path that contains it. For
-            example, if you want to take the WAVECAR from a previous
-            calculation you can do any of::
-
-            >>> c1 # old calculation
-            >>> c2 # new calculation
-            >>> c2.set_wavecar(c1)
-            >>> c2.set_wavecar(c1.path)
-            >>> c2.set_wavecar(c1.path+'/WAVECAR')
-
-        """
-        if isinstance(source, Calculation):
-            source = calculation.path
-
-        source = os.path.abspath(source)
-        if not os.path.exists(source):
-            raise VaspError('WAVECAR does not exist at %s', source)
-
-        if not 'WAVECAR' in source:
-            files = os.listdir(source)
-            for f in files:
-                if 'WAVECAR' in f:
-                    new_path = '%s/%s' % (source, f)
-                    self.set_wavecar(new_path)
-        else:
-            subprocess.check_call(['cp', source, self.path])
 
     @property
     def volume(self):
