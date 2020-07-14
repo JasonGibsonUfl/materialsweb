@@ -7,14 +7,15 @@ django.setup()
 from simulation import *
 from simulation.analysis.vasp.calculation import Calculation    
 import os
-a=os.walk('/var/www/materialsweb/static/database/MAX_phases/all_competitors')
+a=os.walk('/var/www/materialsweb/static/database/MAX_phases/')
 for b in a:
         if len(b[1])==0:
            path = b[0]
            try:
-               calc = Calculation().read(path)
-               calc.create_all(path)
-               calc.save()
+               print(path)
+               #calc = Calculation().read(path)
+               #calc.create_all(path)
+               #calc.save()
            except:
                print(path)
 '''
