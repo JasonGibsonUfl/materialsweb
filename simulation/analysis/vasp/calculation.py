@@ -309,29 +309,6 @@ class Calculation(models.Model):
     def comp(self):
         return self.output.comp
 
-    @property
-    def hub_comp(self):
-        hcomp = defaultdict(int)
-        for h in self.hubbards:
-            if not h:
-                continue
-            for a in self.output:
-                if (h.element == a.element and
-                        h.ox in [None, a.ox]):
-                    hcomp[h] += 1
-        return dict(hcomp.items())
-
-    @property
-    def true_comp(self):
-        comp = defaultdict(int)
-        for c, v in self.comp.items():
-            if self.hubbard_set.filter(element=c).exists():
-                h = self.hubbard_set.get(element=c)
-                if h:
-                    comp['%s_%s' % (c, h.u)] += v
-                    continue
-            comp[c] += v
-        return dict(comp)
 
     @property
     def unit_comp(self):
