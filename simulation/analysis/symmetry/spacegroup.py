@@ -407,6 +407,8 @@ class Spacegroup(models.Model):
         """Gets WyckoffSite by symbol."""
         print((self.site_set))
         symbol = symbol.strip('0123456789')
-        print(self.site_set.filter(symbol=symbol).distinct())
+        a=(self.site_set.filter(symbol=symbol))
+        for b in a:
+            print(b)
         return self.site_set.filter(symbol=symbol).distinct()
 
