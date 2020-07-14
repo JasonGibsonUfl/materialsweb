@@ -408,7 +408,8 @@ class Spacegroup(models.Model):
         print((self.site_set))
         symbol = symbol.strip('0123456789')
         a=(self.site_set.filter(symbol=symbol))
+        print(a.first())
         for b in a:
             print(b.spacegroup_id)
-        return self.site_set.filter(symbol=symbol).distinct()
+        return a.first()
 
