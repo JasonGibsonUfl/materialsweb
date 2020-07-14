@@ -16,7 +16,7 @@ from django.db import models
 from django.db import transaction
 
 import simulation
-from simulation.utils.math import *
+from simulation.utils.math_tool import *
 from simulation.utils import *
 from simulation.utils.strings import format_species
 from simulation.analysis.symmetry.spacegroup import WyckoffSite
