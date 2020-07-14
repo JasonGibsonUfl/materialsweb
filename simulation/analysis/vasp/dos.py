@@ -50,7 +50,6 @@ class DOS(models.Model):
         if Path(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml' ).is_file():
             try:
                 band_structure = Vasprun(doscar[0:(len(doscar)-7)]+'/pbe_bands/vasprun.xml').get_band_structure()
-                print(band_structure.get_band_gap())
                 dos = DOS(file=doscar)
                 dos._efermi = 0.0
                 dos.read_doscar(dos.file)
@@ -64,7 +63,6 @@ class DOS(models.Model):
         elif Path(doscar[0:(len(doscar)-7)]+'/hse_bands/vasprun.xml' ).is_file():
             try:
                 band_structure = Vasprun(doscar[0:(len(doscar)-7)]+'/hse_bands/vasprun.xml').get_band_structure()
-                print(band_structure.get_band_gap())
                 dos = DOS(file=doscar)
                 dos._efermi = 0.0
                 dos.read_doscar(dos.file)
@@ -78,7 +76,6 @@ class DOS(models.Model):
         else:
             try:
                 band_structure = Vasprun(doscar[0:(len(doscar) - 7)] + '/vasprun.xml').get_band_structure()
-                print(band_structure.get_band_gap())
                 dos = DOS(file=doscar)
                 dos._efermi = 0.0
                 dos.read_doscar(dos.file)
