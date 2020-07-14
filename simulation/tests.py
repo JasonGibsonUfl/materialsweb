@@ -11,9 +11,9 @@ run_w()
 class TestSimulation(TestCase):
 
     def setUp(self):
-        #run_e()
-        #run_s()
-        #run_w()
+        run_e()
+        run_s()
+        run_w()
         path = '/var/www/materialsweb/static/database/mp-691133'
 
         self.calculation2D = Calculation().read(path)
@@ -35,6 +35,9 @@ class TestSimulation(TestCase):
         self.assertEquals(self.entry2D.natoms, 16)
         '''Compostion quantities'''
         self.assertEquals(self.composition2D.mass, 21.250710427785002)
+        self.assertEquals(self.composition2D.formula, 'Cr1 H1 O2')
+        self.assertEquals(self.composition2D.generic, 'ABC2')
+        self.assertEquals(self.composition2D.element_list, 'Cr_H_O_')
 
 
 
