@@ -7,7 +7,7 @@ import time
 class TestMaterialswebHome(StaticLiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome('./chromedriver')
+        self.browser = webdriver.Chrome('chromedriver')
 
     def tearDown(self):
         self.browser.close()
