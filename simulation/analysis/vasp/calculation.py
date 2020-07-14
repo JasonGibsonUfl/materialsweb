@@ -1401,7 +1401,7 @@ class Calculation(models.Model):
         logger.info('backing up %s to %s' %
                     (self.path.replace(self.entry.path + '/', ''), new_dir))
         self.move(self.path + '/' + new_dir)
-'''
+    '''
     def clean_start(self):
         depth = self.path.count('/') - self.path.count('..')
         if depth < 6:
@@ -1423,7 +1423,7 @@ class Calculation(models.Model):
         if not self.settings.get('algo') == 'normal':
             self.settings['algo'] = 'normal'
             self.remove_error('electronic_convergence')
-'''
+    '''
     def increase_symprec(self):
         self.settings['symprec'] = 1e-7
         self.remove_error('invgrp')
