@@ -1970,7 +1970,7 @@ class Calculation(models.Model):
 
     def get_symmetry_functions_g1(self, R_c=6, R_s=3, eta=1, weighted=False):
         g_1 = []
-        structure = Structure.from_file(self.path)
+        structure = Structure.from_file(self.path+'/POSCAR')
         atom_sphere_list = []
         for a in structure.get_primitive_structure():
             coord = (a.coords)
@@ -1993,7 +1993,7 @@ class Calculation(models.Model):
 
     def get_symmetry_functions_g2(self, path, R_c=6, epsi=1, lamda=1, eta=1, weighted=False):
         g_2 = []
-        structure = Structure.from_file(self.path)
+        structure = Structure.from_file(self.path+'/POSCAR')
         atom_sphere_list = []
         for a in structure.get_primitive_structure():
             coord = (a.coords)
