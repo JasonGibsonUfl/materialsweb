@@ -406,6 +406,6 @@ class Spacegroup(models.Model):
         """Gets WyckoffSite by symbol."""
         print(symbol)
         symbol = symbol.strip('0123456789')
-        print(self.site_set.get(symbol__exact=symbol))
+        print(self.site_set.get(symbol__exact=symbol, spacegroup_id__exact=self.id))
         return self.site_set.get(symbol__exact=symbol)
 
