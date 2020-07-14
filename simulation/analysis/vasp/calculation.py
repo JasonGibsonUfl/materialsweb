@@ -494,18 +494,6 @@ class Calculation(models.Model):
                         Atom.objects.filter(id=atom.id).update(magmom=mom)
         self.settings = settings
 
-    def get_kpoints(self):
-        ## Mohan
-        # get_kpoint_mesh_by_increment() will be deprecated. However, for existing calculation
-        # data, we will keep using this function to display KPOINTS.
-        kpts = self.input.get_kpoint_mesh_by_increment(self.settings.get('kppra', 8000))
-        if self.settings.get('gamma', True):
-            kpoints = 'KPOINTS \n0 \nGamma\n'
-        else:
-            kpoints = 'KPOINTS \n0 \nMonkhorst-Pack\n'
-        kpoints += ' '.join(str(int(k)) for k in kpts) + '\n'
-        kpoints += '0 0 0'
-        return kpoints
 
     @KPOINTS.setter
     def KPOINTS(self, kpoints):
@@ -866,7 +854,6 @@ class Calculation(models.Model):
                     break
         self.kpoints = kpts
         self.kpt_weights = weights
-
 
     def read_occupations(self):
         self.get_outcar()
@@ -1359,72 +1346,6 @@ class Calculation(models.Model):
             if file in ['OUTCAR', 'CHGCAR', 'CHG', 'PROCAR', 'DOSCAR', 'EIGENVAL', 'LOCPOT', 'ELFCAR', 'vasprun.xml']:
                 os.system('gzip -f %s' % self.path + '/' + file)
 
-    def copy(self):
-        """
-        Create a deep copy of the Calculation.
-
-        Return: None
-        """
-        new = copy.deepcopy(self)
-        new.id = None
-        new.label = None
-        new.input = self.input
-        new.output = self.output
-        new.dos = self.dos
-        return new
-
-    def move(self, path):
-        path = os.path.abspath(path)
-        os.system('mkdir %s 2> /dev/null' % path)
-        os.system('cp %s/* %s 2> /dev/null' % (self.path, path))
-        os.system('rm %s/* 2> /dev/null' % self.path)
-        self.path = path
-        if self.id:
-            Calculation.objects.filter(id=self.id).update(path=path)
-
-    def backup(self, path=None):
-        """
-        Create a copy of the calculation folder in a subdirectory of the
-        current Calculation.
-
-        Keyword arguments:
-            path: If None, the backup folder is generated based on the
-            Calculation.attempt and Calculation.errors.
-
-        Return: None
-        """
-        if path is None:
-            new_dir = '%s_' % self.attempt
-            new_dir += '_'.join(self.errors)
-            new_dir = new_dir.replace(' ', '')
-        else:
-            new_dir = path
-        logger.info('backing up %s to %s' %
-                    (self.path.replace(self.entry.path + '/', ''), new_dir))
-        self.move(self.path + '/' + new_dir)
-    '''
-    def clean_start(self):
-        depth = self.path.count('/') - self.path.count('..')
-        if depth < 6:
-            raise ValueError('Too short path supplied to clean_start: %s' % self.path)
-        else:
-            os.system('rm -rf %s &> /dev/null' % self.path)
-
-    # = Error correcting =#
-
-    def fix_zhegev(self):
-        raise NotImplementedError
-
-    def fix_brmix(self):
-        self.settings.update({'symprec': 1e-7,
-                              'algo': 'normal'})
-        self.remove_error('brmix')
-
-    def fix_electronic_convergence(self):
-        if not self.settings.get('algo') == 'normal':
-            self.settings['algo'] = 'normal'
-            self.remove_error('electronic_convergence')
-    '''
 
 
     #### calculation management
