@@ -5,21 +5,25 @@ from scripts.fill_elements import run as run_e
 from scripts.fill_spacegroups import run as run_s
 from scripts.fill_wyckoffsites import run as run_w
 
-run_e()
-run_s()
-run_w()
 class TestSimulation(TestCase):
 
     def setUp(self):
         run_e()
         run_s()
         run_w()
-        path = '/var/www/materialsweb/static/database/mp-691133'
+        path2D = '/var/www/materialsweb/static/database/mp-691133'
 
-        self.calculation2D = Calculation().read(path)
-        self.calculation2D.create_all(path)
+        self.calculation2D = Calculation().read(path2D)
+        self.calculation2D.create_all(path2D)
         self.entry2D = self.calculation2D.entry
         self.composition2D = self.entry2D.composition
+
+        path3D = '/var/www/materialsweb/static/database/MAX_phases/all_competitors/mp-20717'
+
+        self.calculation3D = Calculation().read(path3D)
+        self.calculation3D.create_all(path3D)
+        self.entry3D = self.calculation3D.entry
+        self.composition3D = self.entry3D.composition
 
     def test_calculation(self):
         '''Calcualtion quantities'''
