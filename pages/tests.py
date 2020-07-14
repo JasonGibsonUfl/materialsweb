@@ -9,7 +9,7 @@ import time
 class TestMaterialswebHome(StaticLiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Firefox('geckodriver')
+        self.browser = webdriver.Firefox('/var/www/materialsweb/pages/drivers')
 
     def tearDown(self):
         self.browser.close()
