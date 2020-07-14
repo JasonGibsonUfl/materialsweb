@@ -292,7 +292,7 @@ class WyckoffSite(models.Model):
     @classmethod
     def get(cls, symbol, spacegroup):
         site, new = cls.objects.get_or_create(spacegroup=spacegroup,
-                symbol=symbol)
+                symbol=symbol).distinct()
         if new:
             site.save()
         return site
