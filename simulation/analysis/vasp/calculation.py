@@ -1508,31 +1508,7 @@ class Calculation(models.Model):
     def estimate(self):
         return 72 * 8 * 3600
 
-    _instruction = {}
 
-    @property
-    def instructions(self):
-        if self.converged:
-            return {}
-
-        if not self._instruction:
-            self._instruction = {
-                'path': self.path,
-                'walltime': self.estimate,
-                'header': '\n'.join(['gunzip -f CHGCAR.gz &> /dev/null',
-                                     'date +%s',
-                                     'ulimit -s unlimited']),
-                'mpi': 'mpirun -machinefile $PBS_NODEFILE -np $NPROCS',
-                'binary': 'vasp_53',
-                'pipes': ' > stdout.txt 2> stderr.txt',
-                'footer': '\n'.join(['gzip -f CHGCAR OUTCAR PROCAR DOSCAR EIGENVAL LOCPOT ELFCAR vasprun.xml',
-                                     'rm -f WAVECAR CHG',
-                                     'date +%s'])}
-
-            if self.input.natoms <= 4:
-                self._instruction.update({'mpi': '', 'binary': 'vasp_53_serial',
-                                          'serial': True})
-        return self._instruction
 
     def set_label(self, label):
         self.label = label
@@ -1541,57 +1517,7 @@ class Calculation(models.Model):
         # if self.id:
         #    Calculation.objects.filter(id=self.id).update(label=label)
 
-    def set_hubbards(self, convention='wang'):
-        hubs = HUBBARDS.get(convention, {})
-        elts = set(k[0] for k in hubs.keys())
-        ligs = set(k[1] for k in hubs.keys())
 
-        # How many ligand elements are in the struture?
-        lig_int = ligs & set(self.input.comp.keys())
-
-        if not lig_int:
-            return
-        elif len(lig_int) > 1:
-            raise Exception('More than 1 ligand matches. No convention\
-            established for this case!')
-
-        if not elts & set(self.input.comp.keys()):
-            return
-
-        for atom in self.input:
-            for hub in hubs:
-                if (atom.element_id == hub[0] and
-                        hub[2] in [None, atom.ox]):
-                    self.hubbards.append(pot.Hubbard.get(
-                        hub[0], lig=hub[1], ox=hub[2],
-                        u=hubs[hub]['U'], l=hubs[hub]['L']))
-                    break
-            else:
-                self.hubbards.append(pot.Hubbard.get(atom.element_id))
-        self.hubbards = list(set(self.hubbards))
-
-    def set_potentials(self, choice='vasp_rec', distinct_by_ox=False):
-        if isinstance(choice, list):
-            if len(self.potentials) == len(choice):
-                return
-        pot_set = POTENTIALS[choice]
-        potentials = pot.Potential.objects.filter(xc=pot_set['xc'],
-                                                  gw=pot_set['gw'],
-                                                  us=pot_set['us'],
-                                                  paw=pot_set['paw'])
-
-        for e in self.elements:
-            if not e.symbol in pot_set['elements']:
-                raise VaspError('Structure contains %s, which does not have'
-                                'a potential in VASP' % e.symbol)
-
-        pnames = [pot_set['elements'][e.symbol] for e in self.elements]
-        self.potentials = list(potentials.filter(name__in=pnames))
-
-    def set_magmoms(self, ordering='ferro'):
-        self.input.set_magnetism(ordering)
-        if any(self.input.magmoms):
-            self.settings.update({'ispin': 2})
 
     def set_wavecar(self, source):
         """
@@ -1627,43 +1553,7 @@ class Calculation(models.Model):
                     self.set_wavecar(new_path)
         else:
             subprocess.check_call(['cp', source, self.path])
-    '''
-    def set_chgcar(self, source):
-        """
-        Copy the CHGCAR specified by `source` to this calculation.
 
-        Arguments:
-            source: can be another :mod:`~simulation.Calculation` instance or a
-            string containing a path to a CHGCAR. If it is a path, it should
-            be a absolute, i.e. begin with "/", and can either end with the
-            CHGCAR or simply point to the path that contains it. For
-            example, if you want to take the CHGCAR from a previous
-            calculation you can do any of::
-
-            >>> c1 # old calculation
-            >>> c2 # new calculation
-            >>> c2.set_chgcar(c1)
-            >>> c2.set_chgcar(c1.path)
-            >>> c2.set_chgcar(c1.path+'/CHGCAR')
-
-        """
-        if isinstance(source, Calculation):
-            source = source.path
-
-        source = os.path.abspath(source)
-        if not os.path.exists(source):
-            raise VaspError('CHGCAR does not exist at %s', source)
-
-        if not 'CHGCAR' in source:
-            files = os.listdir(source)
-            for f in files:
-                if 'CHGCAR' in f:
-                    new_path = '%s/%s' % (source, f)
-                    self.set_chgcar(new_path)
-        else:
-            logger.debug('copying %s to %s', source, self.path)
-            subprocess.check_call(['cp', source, self.path])
-    '''
     @property
     def volume(self):
         if self.output:
