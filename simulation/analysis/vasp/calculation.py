@@ -15,7 +15,7 @@ import subprocess
 from collections import defaultdict
 import urllib
 from os.path import exists, isfile, isdir
-from math import cos, exp, pi
+import math
 from lxml import etree
 
 from django.db import models
