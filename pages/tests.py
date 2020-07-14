@@ -9,7 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 class TestMaterialswebHome(StaticLiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome(ChromeDriverManager().install())
+        self.browser = webdriver.Chrome('/home/cobra_commander/.wdm/drivers/chromedriver/linux64/83.0.4103.39/chromedriver')
 
         #self.browser = webdriver.Chrome('./chromedriver')
 
