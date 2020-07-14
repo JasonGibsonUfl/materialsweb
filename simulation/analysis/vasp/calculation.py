@@ -1,5 +1,6 @@
 
 # simulation/analysis/vasp/calculation.py
+from pymatgen.core.structure import Structure
 
 import os
 import copy
@@ -1939,7 +1940,7 @@ class Calculation(models.Model):
                 f.write(str(e_list[idx]))
 
 
-    def cut_off_function(r, R_c):
+    def cut_off_function(self, r, R_c):
         if r <= R_c:
             f_c = (math.cos(math.pi * r / R_c) + 1) * .5
         else:
@@ -1947,29 +1948,29 @@ class Calculation(models.Model):
         return f_c
 
 
-    def radial_symmetry_function(eta, R_s, r, R_c, species=None):
+    def radial_symmetry_function(self,eta, R_s, r, R_c, species=None):
         summ = 0
         minr = min(r)
         if species == None:
             for r_ij in r:
                 if r_ij > minr:
-                    summ = summ + math.exp(-eta * ((r_ij - R_s) ** 2)) * cut_off_function(r_ij, R_c)
+                    summ = summ + math.exp(-eta * ((r_ij - R_s) ** 2)) * self.cut_off_function(r_ij, R_c)
         else:
             for r_ij, z in zip(r, species):
                 if r_ij > minr:
-                    summ = summ + math.exp(-eta * ((r_ij - R_s) ** 2)) * cut_off_function(r_ij, R_c) * z
+                    summ = summ + math.exp(-eta * ((r_ij - R_s) ** 2)) * self.cut_off_function(r_ij, R_c) * z
         return summ
 
 
-    def angular_symmetry_function_ps(epsi, lamda, theta, eta, R_c, r_ij, r_ik, r_jk, ):
+    def angular_symmetry_function_ps(self,epsi, lamda, theta, eta, R_c, r_ij, r_ik, r_jk, ):
         g_2 = ((1 + lamda * math.cos(theta)) ** epsi) * math.exp(-eta * (r_ij ** 2 + r_ik ** 2 + r_jk ** 2)) \
-              * cut_off_function(r_ij, R_c) * cut_off_function(r_ik, R_c) * cut_off_function(r_jk, R_c)
+              * self.cut_off_function(r_ij, R_c) * self.cut_off_function(r_ik, R_c) * self.cut_off_function(r_jk, R_c)
         return g_2
 
 
-    def get_symmetry_functions_g1(path, R_c=6, R_s=3, eta=1, weighted=False):
+    def get_symmetry_functions_g1(self, R_c=6, R_s=3, eta=1, weighted=False):
         g_1 = []
-        structure = Structure.from_file(path)
+        structure = Structure.from_file(self.path)
         atom_sphere_list = []
         for a in structure.get_primitive_structure():
             coord = (a.coords)
@@ -1982,7 +1983,7 @@ class Calculation(models.Model):
             if weighted is True:
                 species_list = (np.array(atom_sphere)[:, 0])
                 species = [sp.species.elements[0].Z for sp in species_list]
-                g_1.append(radial_symmetry_function(eta, R_s, r_list, R_c, species=species))
+                g_1.append(self.radial_symmetry_function(eta, R_s, r_list, R_c, species=species))
             else:
 
                 g_1.append(radial_symmetry_function(eta, R_s, r_list, R_c))
@@ -1990,9 +1991,9 @@ class Calculation(models.Model):
         return g_1
 
 
-    def get_symmetry_functions_g2(path, R_c=6, epsi=1, lamda=1, eta=1, weighted=False):
+    def get_symmetry_functions_g2(self, path, R_c=6, epsi=1, lamda=1, eta=1, weighted=False):
         g_2 = []
-        structure = Structure.from_file(path)
+        structure = Structure.from_file(self.path)
         atom_sphere_list = []
         for a in structure.get_primitive_structure():
             coord = (a.coords)
@@ -2018,11 +2019,11 @@ class Calculation(models.Model):
                             rjkn = np.linalg.norm(rjk)
                             theta = np.dot(rij, rik) / (rikn * rijn)
                             if weighted is False:
-                                summ = summ + angular_symmetry_function_ps(epsi, lamda, theta, \
+                                summ = summ + self.angular_symmetry_function_ps(epsi, lamda, theta, \
                                                                            eta, R_c, rijn, rikn, rjkn, )
                             else:
                                 zk = atom_sphere[k, 0].species.elements[0].Z
-                                summ = summ + angular_symmetry_function_ps(epsi, lamda, theta, \
+                                summ = summ + self.angular_symmetry_function_ps(epsi, lamda, theta, \
                                                                            eta, R_c, rijn, rikn, rjkn, ) * zj * zk
             g_2.append(summ)
 
