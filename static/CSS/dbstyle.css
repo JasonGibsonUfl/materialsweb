@@ -214,7 +214,6 @@ a {
     position: absolute;
     display: inline-block;
     text-align: center;
-    padding: 10px 0;
     background-color: #454343;
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
