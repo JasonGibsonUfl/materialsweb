@@ -33,7 +33,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 have it. Modern browsers don’t honor X-XSS-Protection HTTP header anymore. Although the setting offers little practical 
 benefit, you may still want to set the header if you support older browsers.'''
 
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 # Application definition
 
