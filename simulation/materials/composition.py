@@ -23,8 +23,7 @@ class Composition(models.Model):
         |   e.g. Fe2O3, LiFeO2
         | generic: Genericized composition string. e.g. A2B3, ABC2.
         | mass: Mass per atom in AMUs
-        | meidema: Meidema model energy for the composition
-        | ntypes: Number of elements. 
+        | ntypes: Number of elements.
     """
     formula = models.CharField(primary_key=True, max_length=255)
     generic = models.CharField(max_length=255, blank=True, null=True)
