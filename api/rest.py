@@ -57,6 +57,8 @@ class QueryEngine():
             else:
                 all_results = Calculation.objects.filter(entry__structure__spacegroup__lattice_system__in=crystal_system)
 
+        if len(all_results) == 0 :
+            all_results = Calculation.objects.all()
         all_results = all_results.distinct()
 
         return all_results
