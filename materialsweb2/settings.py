@@ -28,18 +28,10 @@ SECRET_KEY = '$!1k)%r9#tyk!k!c-t7asxv3-l-6=^u)9(wm=ckna$o-zn(6no'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 
 # Application definition
-X_FRAME_OPTIONS = 'SAMEORIGIN'
-
-SECURE_BROWSER_XSS_FILTER = True
-'''If True, the SecurityMiddleware sets the X-XSS-Protection: 1; mode=block header on all responses that do not already 
-have it. Modern browsers don’t honor X-XSS-Protection HTTP header anymore. Although the setting offers little practical 
-benefit, you may still want to set the header if you support older browsers.'''
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
