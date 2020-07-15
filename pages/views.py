@@ -166,10 +166,11 @@ def result_view(request, *args, **kwargs):
     path = str(path.split('/')[-1])
     label = path
     formation_energy = calculation.formation_energy
-    a = structure.lattice.a
-    b = structure.lattice.b
+    a = round(structure.lattice.a, 3)
+    b = round(structure.lattice.b, 3)
+    formula = structure.composition.reduced_formula()
     structure = calculation.entry.structure
-    print(calculation)
+
     if calculation.dimension == 2:
         print('Two Dimensional')
         data=structure.get_jmol2()
@@ -187,6 +188,7 @@ def result_view(request, *args, **kwargs):
         'formation_energy': formation_energy,
         'band_gap': band_gap,
         'direct': direct,
+        'formula': formula,
 
     }
 
