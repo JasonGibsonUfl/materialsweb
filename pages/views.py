@@ -163,9 +163,8 @@ def result_view(request, *args, **kwargs):
     formation_energy = calculation.formation_energy
     a = round(structure.lattice.a, 3)
     b = round(structure.lattice.b, 3)
-    formula = structure.composition.reduced_formula
-    print(formula)
     structure = calculation.entry.structure
+    formula = structure.composition.name
 
     if calculation.dimension == 2:
         print('Two Dimensional')
