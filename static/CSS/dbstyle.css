@@ -212,7 +212,7 @@ a {
 .live_element {
     font-size: 24px;
     position: absolute;
-    display: inline-block;
+    display: inline;
     text-align: center;
     background-color: #454343;
     -webkit-transition: background 0.5s;
