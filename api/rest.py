@@ -21,9 +21,7 @@ class QueryEngine():
         #all_results = Entry.objects.filter(calculation__band_gap__range=band_gap_range,
         #                                   calculation__formation_energy__range=formation_energy_range)
         all_results = []
-        print('len all '+str(len(all_results)))
         if len(elements) >0:
-            print("ELEMENTS")
             all_results = Calculation.objects.filter(element_set=elements.pop(0))
             for e in elements:
                 all_results = all_results.filter(element_set=e)
