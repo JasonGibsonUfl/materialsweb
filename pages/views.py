@@ -169,6 +169,7 @@ def result_view(request, *args, **kwargs):
     a = round(structure.lattice.a, 3)
     b = round(structure.lattice.b, 3)
     formula = structure.composition.reduced_formula
+    print(formula)
     structure = calculation.entry.structure
 
     if calculation.dimension == 2:
