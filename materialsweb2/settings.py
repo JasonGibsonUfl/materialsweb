@@ -14,8 +14,6 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INSTALL_PATH = os.path.dirname(os.path.abspath(__file__))
-INSTALL_PATH = os.path.split(INSTALL_PATH)[0]
 INSTALL_PATH = os.path.split(INSTALL_PATH)[0]
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +28,13 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
+SECURE_BROWSER_XSS_FILTER = True
+'''If True, the SecurityMiddleware sets the X-XSS-Protection: 1; mode=block header on all responses that do not already 
+have it. Modern browsers don’t honor X-XSS-Protection HTTP header anymore. Although the setting offers little practical 
+benefit, you may still want to set the header if you support older browsers.'''
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
 # Application definition
 
 INSTALLED_APPS = [
