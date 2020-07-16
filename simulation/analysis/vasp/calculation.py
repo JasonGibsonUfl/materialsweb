@@ -1424,14 +1424,22 @@ class Calculation(models.Model):
                 g_1.append(self.radial_symmetry_function(eta, R_s, r_list, R_c, species=species))
             else:
 
-                g_1.append(radial_symmetry_function(eta, R_s, r_list, R_c))
+                g_1.append(self.radial_symmetry_function(eta, R_s, r_list, R_c))
 
         return g_1
 
 
     def get_symmetry_functions_g2(self, R_c=6, epsi=1, lamda=1, eta=1, weighted=False):
         g_2 = []
-        structure = Structure.from_file(self.path+'/POSCAR')
+        urlp = url + self.label+'/POSCAR'
+        file = urllib.request.urlopen(urlp)
+        with open('POSCAR','a') as poscar:
+            for line in file:
+                decoded_line = line.decode("utf-8")
+                poscar.write(decoded_line)
+        structure = Structure.from_file('./POSCAR')
+        os.remove('./POSCAR')
+
         atom_sphere_list = []
         for a in structure.get_primitive_structure():
             coord = (a.coords)

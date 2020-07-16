@@ -22,9 +22,9 @@ INSTALL_PATH = os.path.split(INSTALL_PATH)[0]
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = '$!1k)%r9#tyk!k!c-t7asxv3-l-6=^u)9(wm=ckna$o-zn(6no'
-ENV_VARS = loadfn('/home/cobra_commander/jasongibson/materialsweb_envvars.yaml')
-SECRET_KEY = ENV_VARS['SECRET_KEY']
+SECRET_KEY = '$!1k)%r9#tyk!k!c-t7asxv3-l-6=^u)9(wm=ckna$o-zn(6no'
+#ENV_VARS = loadfn('/home/cobra_commander/jasongibson/materialsweb_envvars.yaml')
+#SECRET_KEY = '$!1k)%r9#tyk!k!c-t7asxv3-l-6=^u)9(wm=ckna$o-zn(6no'#ENV_VARS['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
