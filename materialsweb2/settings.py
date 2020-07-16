@@ -26,7 +26,7 @@ INSTALL_PATH = os.path.split(INSTALL_PATH)[0]
 ENV_VARS = loadfn('/home/cobra_commander/jasongibson/materialsweb_envvars.yaml')
 SECRET_KEY = ENV_VARS['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 X_FRAME_OPTIONS = 'SAMEORIGIN'
