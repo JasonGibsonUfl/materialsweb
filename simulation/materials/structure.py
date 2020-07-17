@@ -609,6 +609,65 @@ class Structure(models.Model, object):
         """
         return np.unique(self.species_types, return_inverse=True)[-1]
 
+    def symmetrize(self, tol=1e-3, angle_tol=-1):
+        """
+        Analyze the symmetry of the structure. Uses spglib to find the
+        symmetry.
+
+        symmetrize sets:
+         * spacegroup -> Spacegroup
+         * uniq_sites -> list of unique Sites
+         * orbits -> lists of equivalent Atoms
+         * rotations -> List of rotation operations
+         * translations -> List of translation operations
+         * operatiosn -> List of (rotation,translation) pairs
+         * for each atom: atom.wyckoff -> WyckoffSite
+         * for each site: site.multiplicity -> int
+
+        """
+        self.get_sites()
+        dataset = get_symmetry_dataset(self, symprec=tol)
+        if not dataset:
+            return
+        self.spacegroup = Spacegroup.objects.get(pk=dataset['number'])
+        for i, site in enumerate(self.sites):
+            site.wyckoff = self.spacegroup.get_site(dataset['wyckoffs'][i])
+            site.structure = self
+        counts = defaultdict(int)
+        orbits = defaultdict(list)
+        origins = {}
+        for i, e in enumerate(dataset['equivalent_atoms']):
+            counts[e] += 1
+            origins[i] = e
+            orbits[e].append(self.sites[i])
+        self.origins = origins
+        self.operations = zip(dataset['rotations'], dataset['translations'])
+        rots = []
+        for r in dataset['rotations']:
+            if not any([np.allclose(r, x) for x in rots]):
+                rots.append(r)
+        self.rotations = rots
+        trans = []
+        for t in dataset['translations']:
+            if not any([np.allclose(t, x) for x in trans]):
+                trans.append(t)
+        self.translations = trans
+        self.orbits = orbits.values()
+        ##self.duplicates = dict((self.sites[e], v) for e, v in orbits.items())
+        ## See comment about hashes and Dictionary keys
+        self.duplicates = dict((e, v) for e, v in orbits.items())
+        self._uniq_sites = []
+        self._uniq_atoms = []
+        for ind, mult in counts.items():
+            site = self.sites[ind]
+            for site2 in self.duplicates[ind]:
+                site2.multiplicity = mult
+            site.index = ind
+            site.multiplicity = mult
+            self._uniq_sites.append(site)
+            for a in site:
+                self._uniq_atoms.append(a)
+
     _uniq_atoms = None
 
     @property
@@ -1002,7 +1061,6 @@ class Structure(models.Model, object):
         new.composition = self.composition
         return new
 
-
     @property
     def similar(self):
         return Structure.objects.filter(natoms=self.natoms,
@@ -1073,50 +1131,6 @@ class Structure(models.Model, object):
         eq = get_symmetry_dataset(self)['equivalent_atoms']
         resort = np.argsort(eq)
         self._atoms = list(np.array(self._atoms)[resort])
-
-    def is_buerger_cell(self, tol=1e-5):
-        """
-        Tests whether or not the structure is a Buerger cell.
-        """
-        G = self.metrical_matrix
-        if G[0, 0] < G[1, 1] - tol or G[1, 1] < G[2, 2] - tol:
-            return False
-        if abs(G[0, 0] - G[1, 1]) < tol:
-            if abs(G[1, 2]) > abs(G[0, 2]) - tol:
-                return False
-        if abs(G[1, 1] - G[2, 2]) < tol:
-            if abs(G[0, 2]) > abs(G[0, 1]) - tol:
-                return False
-
-    def is_niggli_cell(self, tol=1e-3):
-        """
-        Tests whether or not the structure is a Niggli cell.
-        """
-        if not self.is_grueber_cell():
-            return False
-        (a, b, c), (d, e, f) = self.niggli_form
-        if abs(d - b) < tol:
-            if f > 2 * e - tol:
-                return False
-        if abs(e - a) < tol:
-            if f > 2 * d - tol:
-                return False
-        if abs(f - a) < tol:
-            if e > 2 * d - tol:
-                return False
-        if abs(d + b) < tol:
-            if abs(f) > tol:
-                return False
-        if abs(e + a) < tol:
-            if abs(f) > tol:
-                return False
-        if abs(f + a) < tol:
-            if abs(f) > tol:
-                return False
-        if abs(d + e + f + a + b) < tol:
-            if 2 * a + 2 * e + f > -tol:
-                return False
-        return True
 
     _neighbor_dict = None
 
