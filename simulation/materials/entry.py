@@ -223,7 +223,6 @@ class Entry(models.Model):
     def species(self, species):
         self._species = [Species.get(e) for e in species]
 
-    _projects = None
 
     _structures = None
 
