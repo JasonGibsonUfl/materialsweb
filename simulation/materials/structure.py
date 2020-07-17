@@ -829,52 +829,6 @@ class Structure(models.Model, object):
             self.composition = Composition.get(self.comp)
         return self.composition
 
-    def set_magnetism(self, order, elements=None, scheme='primitive'):
-        """
-        Assigns magnetic moments to all atoms in accordance with the specified
-        magnetism scheme.
-
-        Schemes:
-
-        +---------+-------------------------------------+
-        | Keyword | Description                         |
-        +=========+=====================================+
-        |  None   | all magnetic moments = None         |
-        +---------+-------------------------------------+
-        | "ferro" | atoms with partially filled d and   |
-        |         | f shells are assigned a magnetic    |
-        |         | moment of 5 mu_b and 7 mu_b         |
-        |         | respectively                        |
-        +---------+-------------------------------------+
-        | "anti"  | finds a highly ordererd arrangement |
-        |         | arrangement of up and down spins.   |
-        |         | If only 1 magnetic atom is found    |
-        |         | a ferromagnetic arrangment is used. |
-        |         | raises NotImplementedError          |
-        +---------+-------------------------------------+
-
-        """
-        if order == 'none':
-            for atom in self.atoms:
-                atom.magmom = 0
-                if atom.id is not None:
-                    atom.save()
-        if order == 'ferro':
-            for atom in self.atoms:
-                if atom.element.d_elec > 0 and atom.element.d_elec < 10:
-                    atom.magmom = 5
-                elif atom.element.f_elec > 0 and atom.element.f_elec < 14:
-                    atom.magmom = 7
-                else:
-                    atom.magmom = 0
-                if atom.id is not None:
-                    atom.save()
-        elif order == 'anti-ferro':
-            if not elements:
-                raise NotImplementedError
-            ln = self.get_lattice_network(elements)
-
-        self.spacegroup = None
 
     @property
     def comp(self):
@@ -898,15 +852,6 @@ class Structure(models.Model, object):
     def name(self):
         """Unformatted name."""
         return format_comp(self.comp)
-
-    @property
-    def html(self):
-        return html_comp(self.comp)
-
-    @property
-    def unit_comp(self):
-        """Composition dict, where sum(self.unit_comp.values()) == 1"""
-        return unit_comp(self.comp)
 
     @property
     def coords(self):
@@ -990,26 +935,6 @@ class Structure(models.Model, object):
             self._inv = la.inv(self.cell)
         return self._inv
 
-    @property
-    def relative_rec_lat(self):
-        rec_lat = self.reciprocal_lattice
-        rec_mags = map(la.norm, rec_lat)
-        r0 = min(rec_mags)
-        return np.array([np.round(r / r0, 4) for r in rec_mags])
-
-    def copy(self):
-        """
-        Create a complete copy of the structure, with any primary keys
-        removed, so it is not associated with the original.
-
-        """
-        new = Structure()
-        new.cell = self.cell
-        new.sites = []
-        new.atoms = [atom.copy() for atom in self.atoms]
-        new.entry = self.entry
-        new.composition = self.composition
-        return new
 
     @property
     def similar(self):
@@ -1082,44 +1007,7 @@ class Structure(models.Model, object):
         resort = np.argsort(eq)
         self._atoms = list(np.array(self._atoms)[resort])
 
-    _neighbor_dict = None
 
-    @property
-    def nearest_neighbor_dict(self):
-        """
-        Dict of Atom:[list of Atom] pairs.
-        """
-        if self._neighbor_dict is None:
-            self.find_nearest_neighbors()
-        return self._neighbor_dict
-
-    '''
-    def get_xrd(self, **kwargs):
-        xrd = XRD(self)
-        xrd.get_peaks()
-        xrd.get_intensities()
-        return xrd
-    
-    def get_pdf(self, **kwargs):
-        self.pdf = PDF(self, **kwargs)
-        self.pdf.get_pair_distances()
-        return self.pdf
-
-    _cart_rots = None
-    '''
-    def get_cartesian_rotations(self):
-        if self._cart_rots is None:
-            self.symmetrize()
-            p = self.cell.T
-            q = la.inv(self.cell.T)
-            cr = []
-            for rot in self.rotations:
-                c1 = p.dot(rot).dot(q)
-                if any([np.allclose(c1, c2) for c2 in cr]):
-                    continue
-                cr.append(c1)
-            self._cart_rots = cr
-        return self._cart_rots
 
     @property
     def is_perfect(self):

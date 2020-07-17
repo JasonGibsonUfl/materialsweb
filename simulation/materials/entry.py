@@ -13,17 +13,20 @@ from simulation.materials.composition import *
 from simulation.materials.element import Element, Species
 from simulation.materials.structure import Structure, StructureError
 from simulation.utils import *
-#from simulation.computing.resources import Project
+# from simulation.computing.resources import Project
 from simulation.data.meta_data import *
 import simulation.io as io
-#import simulation.computing.scripts as scripts
+# import simulation.computing.scripts as scripts
 import simulation.analysis.vasp as vasp
 import simulation
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 k_desc = 'Descriptive keyword for looking up entries'
 h_desc = 'A note indicating a reason the entry should not be calculated'
+
+
 @add_meta_data('keyword', description=k_desc)
 @add_meta_data('hold', description=h_desc)
 class Entry(models.Model):
@@ -59,14 +62,14 @@ class Entry(models.Model):
 
     ### record keeping
     duplicate_of = models.ForeignKey('Entry', related_name='duplicates',
-            null=True, on_delete=models.CASCADE,)
+                                     null=True, on_delete=models.CASCADE, )
     ntypes = models.IntegerField(blank=True, null=True)
     natoms = models.IntegerField(blank=True, null=True)
 
     ### links
     element_set = models.ManyToManyField('Element')
     species_set = models.ManyToManyField('Species')
-    composition = models.ForeignKey('Composition', blank=True, null=True, on_delete=models.CASCADE,)
+    composition = models.ForeignKey('Composition', blank=True, null=True, on_delete=models.CASCADE, )
 
     class Meta:
         app_label = 'simulation'
@@ -74,7 +77,6 @@ class Entry(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.id, self.name)
-
 
     @transaction.atomic
     def save(self, *args, **kwargs):
@@ -99,12 +101,9 @@ class Entry(models.Model):
             self.element_set.set(self.elements)
         if self._species:
             self.species_set.set(self.species)
-        if self._projects:
-            self.project_set.set( self.projects)
         if self._keywords or self._holds:
             self.meta_data = self.hold_objects + self.keyword_objects
         self.label = 'hold'
-
 
     @staticmethod
     def create(source, keywords=[], **kwargs):
@@ -189,7 +188,6 @@ class Entry(models.Model):
     def get(structure, tol=1e-1):
         if isinstance(structure, Structure):
             return Entry.search_by_structure(structure, tol=tol)
-
 
     _elements = None
 
@@ -367,17 +365,9 @@ class Entry(models.Model):
         """
         return set([e.symbol for e in self.elements])
 
-
     @property
     def spacegroup(self):
         return self.structure.spacegroup
-
-    @property
-    def mass(self):
-        """Return the mass of the entry, normalized to per atom."""
-
-        return sum(Element.objects.get(symbol=elt).mass * self.unit_comp[elt] for
-                   elt in self.unit_comp)
 
     def visualize(self, structure='source'):
         """Attempts to open the input structure for visualization using VESTA"""
