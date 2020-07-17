@@ -796,7 +796,7 @@ class Structure(models.Model, object):
         else:
             return False
         return _dist < tol
-
+    '''
     def add_atom(self, atom, tol=0.01):
         """
         Adds `atom` to the structure if it isn't already contained.
@@ -820,7 +820,7 @@ class Structure(models.Model, object):
                 if not site in self._sites:
                     self._sites.append(site)
         self.spacegroup = None
-
+    '''
     def sort(self):
         self.atoms = sorted(self.atoms)
 
