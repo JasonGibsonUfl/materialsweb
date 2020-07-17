@@ -419,24 +419,6 @@ class Entry(models.Model):
     _energy = None
 
     @property
-    def energy(self):
-        """
-        If the structure has been relaxed, returns the formation energy of the
-        final relaxed structure. Otherwise, returns None.
-        """
-        return None
-
-    @property
-    def stable(self):
-        forms = self.formationenergy_set.filter(fit='standard')
-        forms = forms.exclude(stability=None)
-        if not forms.exists():
-            return None
-        return any([f.stability <= 1E-3 for f in forms])
-
-    _history = None
-
-    @property
     def spacegroup(self):
         return self.structure.spacegroup
 
@@ -446,33 +428,6 @@ class Entry(models.Model):
 
         return sum(Element.objects.get(symbol=elt).mass * self.unit_comp[elt] for
                    elt in self.unit_comp)
-
-    @property
-    def volume(self):
-        """
-        If the entry has gone through relaxation, returns the relaxed
-        volume. Otherwise, returns the input volume.
-
-        """
-        if not self.relaxed is None:
-            return self.relaxed.volume / self.natoms
-        else:
-            return self.input.volume / self.natoms
-
-    @property
-    def chg(self):
-        """
-        Attempts to load the charge density of the final calculation, if it is
-        done. If not, returns False.
-
-        """
-        if not hasattr(self, '_chg'):
-            if not self.done:
-                self._chg = False
-            else:
-                self._chg = Grid.load_xdensity(self.path + '/standard/CHGCAR.gz')
-        return self._chg
-
 
     def visualize(self, structure='source'):
         """Attempts to open the input structure for visualization using VESTA"""
