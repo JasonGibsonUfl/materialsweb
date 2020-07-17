@@ -189,6 +189,14 @@ class Entry(models.Model):
         if isinstance(structure, Structure):
             return Entry.search_by_structure(structure, tol=tol)
 
+
+    @staticmethod
+    def search_by_structure(structure, tol=1e-2):
+        c = Composition.get(structure.comp)
+        for e in c.entries:
+            if e.structure.compare(structure, tol=tol):
+                return e
+        return None
     _elements = None
 
     @property
