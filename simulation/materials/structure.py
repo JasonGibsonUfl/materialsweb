@@ -609,65 +609,6 @@ class Structure(models.Model, object):
         """
         return np.unique(self.species_types, return_inverse=True)[-1]
 
-    def symmetrize(self, tol=1e-3, angle_tol=-1):
-        """
-        Analyze the symmetry of the structure. Uses spglib to find the
-        symmetry.
-
-        symmetrize sets:
-         * spacegroup -> Spacegroup
-         * uniq_sites -> list of unique Sites
-         * orbits -> lists of equivalent Atoms
-         * rotations -> List of rotation operations
-         * translations -> List of translation operations
-         * operatiosn -> List of (rotation,translation) pairs
-         * for each atom: atom.wyckoff -> WyckoffSite
-         * for each site: site.multiplicity -> int
-
-        """
-        self.get_sites()
-        dataset = get_symmetry_dataset(self, symprec=tol)
-        if not dataset:
-            return
-        self.spacegroup = Spacegroup.objects.get(pk=dataset['number'])
-        for i, site in enumerate(self.sites):
-            site.wyckoff = self.spacegroup.get_site(dataset['wyckoffs'][i])
-            site.structure = self
-        counts = defaultdict(int)
-        orbits = defaultdict(list)
-        origins = {}
-        for i, e in enumerate(dataset['equivalent_atoms']):
-            counts[e] += 1
-            origins[i] = e
-            orbits[e].append(self.sites[i])
-        self.origins = origins
-        self.operations = zip(dataset['rotations'], dataset['translations'])
-        rots = []
-        for r in dataset['rotations']:
-            if not any([np.allclose(r, x) for x in rots]):
-                rots.append(r)
-        self.rotations = rots
-        trans = []
-        for t in dataset['translations']:
-            if not any([np.allclose(t, x) for x in trans]):
-                trans.append(t)
-        self.translations = trans
-        self.orbits = orbits.values()
-        ##self.duplicates = dict((self.sites[e], v) for e, v in orbits.items())
-        ## See comment about hashes and Dictionary keys
-        self.duplicates = dict((e, v) for e, v in orbits.items())
-        self._uniq_sites = []
-        self._uniq_atoms = []
-        for ind, mult in counts.items():
-            site = self.sites[ind]
-            for site2 in self.duplicates[ind]:
-                site2.multiplicity = mult
-            site.index = ind
-            site.multiplicity = mult
-            self._uniq_sites.append(site)
-            for a in site:
-                self._uniq_atoms.append(a)
-
     _uniq_atoms = None
 
     @property
@@ -683,24 +624,6 @@ class Structure(models.Model, object):
         if self._uniq_sites is None:
             self.symmetrize()
         return self._uniq_sites
-
-    def pdf_compare(self, other, tol=1e-2):
-        """
-        Compute the PDF for each structure and evaluate the overlap integral
-        for all pairs of species.
-        """
-
-        elts = list(set([a.element_id for a in self]))
-        dists = PDF.get_pair_distances(self)
-        odists = PDF.get_pair_distances(other)
-        for e1, e2 in itertools.combinations(elts, 2):
-            d1 = dists[frozenset([e1, e2])]
-            d2 = odists[frozenset([e1, e2])]
-            for x, y in zip(d1, d2):
-                if abs(x - y) > tol:
-                    return False
-        return True
-
 
 
     def get_coord(self, vec, wrap=True):
@@ -1038,12 +961,7 @@ class Structure(models.Model, object):
         with open(TM_KPOINTS, 'r') as fr:
             return fr.read()
 
-    def get_kpoint_mesh_with_sympy(self, kppra):
-        """
-        Generate the k-point mesh for a given KPPRA; requires sympy to be installed
-        """
-        raise NotImplementedError
-
+    '''
     def get_kpoint_mesh_by_increment(self, kppra):
         """
         DEPRECATED: Sometimes results in k-point meshes incommensurate with
@@ -1069,7 +987,7 @@ class Structure(models.Model, object):
         if upper < lower:
             kpts = prev_kpts.copy()
         return kpts
-
+    '''
     def copy(self):
         """
         Create a complete copy of the structure, with any primary keys
@@ -1244,122 +1162,3 @@ class Structure(models.Model, object):
         if any([s.partial for s in self.sites]):
             return False
         return True
-
-    def create_slab(self, indices, vacuum=10.0, surface=None, in_place=True):
-        if not in_place:
-            new = self.copy()
-            return new.create_slab(indices, vacuum=vacuum, surface=surface)
-
-    def create_vacuum(self, direction, amount, in_place=True):
-        """
-        Add vacuum along a lattice direction.
-
-        Arguments:
-            direction: direction to add the vacuum along. (0=x, 1=y, 2=z)
-            amount: amount of vacuum in Angstroms.
-
-        Keyword Arguments:
-            in_place: apply change to current structure, or return a new one.
-
-        Examples::
-
-            >>> s = io.read(INSTALL_PATH+'/io/files/POSCAR_FCC')
-            >>> s.create_vacuum(2, 5)
-        """
-        if not in_place:
-            new = self.copy()
-            return new.create_vacuum(direction, amount)
-
-        cart_coords = self.cartesian_coords
-        new_cell = self.lat_params
-        new_cell[direction] += float(amount)
-        self.lat_params = new_cell
-        self.cartesian_coords = cart_coords
-        return self
-
-    def make_perfect(self, in_place=True, tol=1e-1):
-        """
-        Constructs options for a 'perfect' lattice from the structure.
-
-        If a site is not fully occupied, but has only one atom type on it, it
-        will be filled the rest of the way.
-        If a site has two or more atom types on it, the higher fraction element
-        will fill the site.
-
-        Keyword Arguments:
-            in_place: If False returns a new :mod:`~simulation.Structure`, otherwise
-            returns None
-
-            tol: maximum defect concentration.
-
-        Examples::
-
-            >>> s = io.read(INSTALL_PATH+'/io/files/partial_vac.cif')
-            >>> s
-            <Structure: Mn3.356Si4O16>
-            >>> s.make_perfect()
-            >>> s
-            <Structure: MnSiO4>
-            >>> s = io.read(INSTALL_PATH+'/io/files/partial_mix.cif')
-            >>> s
-            <Structure: Mn4.264Co3.736Si4O16>
-            >>> s2 = s.make_perfect(in_place=False)
-            >>> s2
-            <Structure: MnCoSiO4>
-
-        """
-        if not in_place:
-            new = self.copy()
-            return new.make_perfect(True, tol=tol)
-
-        init_atoms = [a.copy() for a in self.atoms]
-        init_comp = dict(self.comp)
-        n = sum(init_comp.values())
-        atom_tol = tol * n
-        hopeless = False
-
-        for s1, s2 in itertools.combinations(self.sites, r=2):
-            d = self.get_distance(s1, s2, limit=1, wrap_self=True)
-            if d is None:
-                continue
-            if d < 0.8:
-                return self
-
-        atoms = []
-        for atom in self.atoms:
-            if abs(1 - atom.occupancy) < 0.5:
-                # first, fill any nearly full sites
-                new = atom.copy()
-                new.occupancy = 1.0
-                new.site = None
-                atoms.append(new)
-            elif abs(atom.occupancy) <= 0.5:
-                # then, empty any nearly empty sites
-                continue
-            elif atom.occupancy >= 2:
-                raise StructureError('Site occupied by a molecule')
-
-        self._sites = []
-        self.atoms = atoms
-        self.get_sites()
-
-        if self.is_perfect:
-            # total
-            if abs(sum(self.comp.values()) - n) > tol:
-                hopeless = True
-
-            for k in init_comp.keys():
-                d = init_comp[k] - self.comp.get(k, 0.0)
-                if abs(d) > tol:
-                    hopeless = True
-                    break
-            self.composition = Composition.get(self.comp)
-
-            if not hopeless:
-                return self
-
-        self._sites = []
-        self.atoms = init_atoms
-        self.get_sites()
-        return self
-
