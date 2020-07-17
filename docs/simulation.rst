@@ -7,7 +7,13 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   simulation.analysis
+   simulation.configuration
+   simulation.data
+   simulation.io
+   simulation.materials
    simulation.migrations
+   simulation.utils
 
 Submodules
 ----------

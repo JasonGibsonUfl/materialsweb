@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    electronic_visualization.migrations
+   electronic_visualization.testdata
 
 Submodules
 ----------
