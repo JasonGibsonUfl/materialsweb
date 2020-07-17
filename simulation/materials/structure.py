@@ -1314,33 +1314,6 @@ class Structure(models.Model, object):
         self.sites = [Site() for i in range(n)]
         self._atoms = None
 
-    def make_conventional(self, in_place=True, tol=1e-3):
-        """Uses spglib to convert to the conventional cell.
-
-        Keyword Arguments:
-            in_place:
-                If True, changes the current structure. If false returns
-                a new one
-
-            tol:
-                Symmetry precision for symmetry analysis
-
-        Examples::
-
-            >>> s = io.read(INSTALL_PATH+'io/files/POSCAR_FCC_prim')
-            >>> print len(s)
-            1
-            >>> s.make_conventional()
-            >>> print len(s)
-            4
-
-        """
-        if not in_place:
-            new = self.copy()
-            new.make_conventional(tol=tol)
-            return new
-
-        refine_cell(self, symprec=tol)
 
     def make_primitive(self, in_place=True, tol=1e-3):
         """Uses spglib to convert to the primitive cell.
