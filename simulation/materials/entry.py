@@ -443,8 +443,9 @@ class Entry(models.Model):
     @property
     def mass(self):
         """Return the mass of the entry, normalized to per atom."""
-        return sum(Element.objects.get(symbol=elt).mass * amt for
-                   elt, amt in self.unit_comp)
+
+        return sum(Element.objects.get(symbol=elt).mass * self.unit_comp[elt] for
+                   elt in self.unit_comp)
 
     @property
     def volume(self):
@@ -457,12 +458,6 @@ class Entry(models.Model):
             return self.relaxed.volume / self.natoms
         else:
             return self.input.volume / self.natoms
-
-    @property
-    def errors(self):
-        """List of errors encountered in all calculations."""
-        return dict((c.path, c.errors) for c in
-                    self.calculation_set.all())
 
     @property
     def chg(self):
@@ -478,90 +473,6 @@ class Entry(models.Model):
                 self._chg = Grid.load_xdensity(self.path + '/standard/CHGCAR.gz')
         return self._chg
 
-    def do(self, module, *args, **kwargs):
-        """
-        Looks for a computing script matching the first argument, and attempts
-        to run it with itself as the first argument. Sends args and kwargs
-        to the script. Should return a Calculation object, or list of
-        Calculation objects.
-
-        Examples::
-
-            >>> e = Entry.objects.get(id=123)
-            >>> e.do('relaxation')
-            <Calculation: 523 @ relaxation settings>
-
-        """
-        script = getattr(scripts, module)
-        return script(self, *args, **kwargs)
-
-    @transaction.atomic
-    def move(self, path):
-        """
-        Moves all calculation files to the specified path.
-
-        """
-        path = os.path.abspath(path)
-        try:
-            os.system('mv %s %s' % (self.path, path))
-        except( Exception, err):
-            logger.warn(err)
-            return
-        old_path = self.path
-        old_base = os.path.basename(os.path.abspath(old_path.strip('/')))
-        en_newpath = os.path.join(path, old_base)
-        Entry.objects.filter(id=self.id).update(path=en_newpath)
-        self.save()
-        # labels = [ c.label.strip('_[0-9]') for c in self.calculation_set.all() ]
-        for calc in self.calculation_set.all():
-            calc_base = os.path.basename(calc.path.strip('/'))
-            if calc_base != calc.label.strip('_[0-9]'):
-                calc_base = os.path.join(calc.label.strip('_[0-9]'), calc_base)
-            newpath = os.path.join(self.path, calc_base)
-            # newpath = calc.path.replace(old_path, path)
-            vasp.Calculation.objects.filter(id=calc.id).update(path=newpath)
-        logger.info('Moved %s to %s', self, path)
-
-    @property
-    def running(self):
-        return self.job_set.filter(state=1)
-
-    @property
-    def todo(self):
-        return self.task_set.filter(state=0)
-
-    def wipe(self):
-        self.structure_set.exclude(label='input').delete()
-        self.calculation_set.all().delete()
-        self.task_set.update(state=0)
-
-    def reset(self):
-        """
-        Deletes all calculations, removes all associated structures - returns
-        the entry to a pristine state.
-
-        """
-
-        self.structure_set.exclude(label='input').delete()
-        self._structures = None
-
-        self.calculation_set.all().delete()
-        self._calculations = None
-
-        for task in self.tasks:
-            task.state = 0
-            task.save()
-
-        for job in self.job_set.filter(state=1):
-            job.collect()
-            job.delete()
-
-        self.job_set.all().delete()
-
-        for dir in os.listdir(self.path):
-            if os.path.isdir(self.path + '/' + dir):
-                logger.debug('rm -rf %s/%s &> /dev/null' % (self.path, dir))
-                os.system('rm -rf %s/%s &> /dev/null' % (self.path, dir))
 
     def visualize(self, structure='source'):
         """Attempts to open the input structure for visualization using VESTA"""

@@ -220,7 +220,6 @@ class Composition(models.Model):
         return set(self.comp.keys())
 
     def get_mass(self):
-        elements = Element.objects.filter().first()
         return sum([Element.objects.get(symbol=k).mass*v for k, v in self.unit_comp.items() ])
 
     def get_similar(self):
