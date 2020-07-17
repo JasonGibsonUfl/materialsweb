@@ -25,7 +25,6 @@ import simulation.materials.structure as strx
 import simulation.io.poscar as poscar
 from . import potential as pot
 import simulation.custom as cdb
-import simulation.analysis.thermodynamics as thermo
 import simulation.analysis.griddata as grid
 from . import dos
 from simulation.materials.atom import Atom, Site
@@ -338,16 +337,6 @@ class Calculation(models.Model):
                 magmoms.append([1, moments[n]])
         momstr = ' '.join('%i*%.4f' % (v[0], v[1]) for v in magmoms)
         return '  MAGMOM = %s' % momstr
-
-    @property
-    def phase(self):
-        p = thermo.Phase(energy=self.delta_e,
-                         composition=parse_comp(self.composition_id),
-                         description=str(self.input.spacegroup),
-                         stability=self.stability,
-                         per_atom=True)
-        p.id = self.id
-        return p
 
 
     def get_incar(self):
