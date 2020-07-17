@@ -700,7 +700,7 @@ class Structure(models.Model, object):
                 if d < tol and not d is None:
                     return True
         return False
-
+    '''
     def get_distance(self, atom1, atom2, limit=None, wrap_self=True):
         """
         Calculate the shortest distance between two atoms.
@@ -779,7 +779,7 @@ class Structure(models.Model, object):
         dist -= round(dist.dot(y) / yy) * y
         dist -= round(dist.dot(z) / zz) * z
         return dist
-
+    '''
     def add_site(self, site):
         site.structure = self
         self.sites.append(site)
