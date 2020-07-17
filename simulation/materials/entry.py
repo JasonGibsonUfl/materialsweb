@@ -75,8 +75,6 @@ class Entry(models.Model):
     def __str__(self):
         return '%s - %s' % (self.id, self.name)
 
-    def get_absolute_url(self):
-        return reverse('calculation-details', args=[str(self.id)])
 
     @transaction.atomic
     def save(self, *args, **kwargs):
@@ -192,13 +190,6 @@ class Entry(models.Model):
         if isinstance(structure, Structure):
             return Entry.search_by_structure(structure, tol=tol)
 
-    @staticmethod
-    def search_by_structure(structure, tol=1e-2):
-        c = Composition.get(structure.comp)
-        for e in c.entries:
-            if e.structure.compare(structure, tol=tol):
-                return e
-        return None
 
     _elements = None
 
@@ -293,33 +284,14 @@ class Entry(models.Model):
 
     @property
     def structure(self):
-        if 'final' in self.structures:
-            return self.structures['final']
-        elif 'relaxed' in self.structures:
-            return self.structures['relaxed']
-        elif 'relaxation' in self.structures:
-            return self.structures['relaxation']
-        elif 'standard' in self.structures:
-            return self.structures['standard']
-        elif 'fine_relax' in self.structures:
-            return self.structures['fine_relax']
-        else:
-            try:
-                return self.structures[self.label]
-            except KeyError:
-                return None
+        try:
+            return self.structures[self.label]
+        except KeyError:
+            return None
 
     @input.setter
     def input(self, structure):
         self.structures['input'] = structure
-
-    @property
-    def tasks(self):
-        return list(self.task_set.all())
-
-    @property
-    def jobs(self):
-        return list(self.job_set.all())
 
     @property
     def comp(self):
@@ -395,28 +367,6 @@ class Entry(models.Model):
         """
         return set([e.symbol for e in self.elements])
 
-    @property
-    def total_energy(self):
-        """
-        If the structure has been relaxed, returns the formation energy of the
-        final relaxed structure. Otherwise, returns None.
-
-        """
-        es = []
-        if 'static' in self.calculations:
-            if self.calculations['static'].converged:
-                return self.calculations['static'].energy_pa
-                # es.append(self.calculations['static'].energy_pa)
-        if 'standard' in self.calculations:
-            if self.calculations['standard'].converged:
-                return self.calculations['standard'].energy_pa
-                # es.append(self.calculations['standard'].energy_pa)
-        if not es:
-            return None
-        # else:
-        #    return min(es)
-
-    _energy = None
 
     @property
     def spacegroup(self):
