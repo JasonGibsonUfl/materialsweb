@@ -40,7 +40,7 @@
         if (error_msg) {
             var structureProperties = error_msg;
         } else {
-            var formula = {{  entry.composition.html  }};
+            var formula = {{  formula  }}";
             var alatpar = "{{ a }}";
             var blatpar = "{{ b }}";
             var spacegroup = "{{ structure.spacegroup.hm }}";
@@ -48,7 +48,7 @@
             var direct = "{{ direct }}"
             var theory_level = "{{ theory_level }}";
             var formation_energy = "{{ formation_energy }}";
-            var structureProperties = "<br />" + "a: " + alatpar + "<br />" + "b: " + blatpar + "<br />" + "Space Group: " + spacegroup + "<br />" + "Formation Energy: " + formation_energy + " meV/atom";
+            var structureProperties = "Formula: " + formula + "<br />" + "a: " + alatpar + "<br />" + "b: " + blatpar + "<br />" + "Space Group: " + spacegroup + "<br />" + "Formation Energy: " + formation_energy + " meV/atom";
             var electronicProperties = theory_level + "<br />" + "Band gap: (" + direct + ") " + bandgap + " eV";
             var label = "{{ baseUrl  }}database/{{  label  }}";
             var labelpx = label.concat('/pourbaix.png');
@@ -59,7 +59,6 @@
         }
 
         document.getElementById("StructureResultsBox").innerHTML = structureProperties;
-        document.getElementById("StructureResultsBox").insertAdjacentHTML('afterbegin', string_of_html);
         document.getElementById("ElectronicResultsBox").innerHTML = electronicProperties;
 
         var poscar_link = document.getElementById('Poscar_Link');
