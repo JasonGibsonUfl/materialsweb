@@ -208,33 +208,6 @@ class Atom(models.Model):
                 setattr(atom, key, kwargs[key])
         return atom
 
-    def copy(self):
-        """
-        Creates an exact copy of the atom, only without the matching primary
-        key.
-
-        Examples::
-
-            >>> a = Atom.get('Fe', [0,0,0])
-            >>> a.save()
-            >>> a.id
-            1
-            >>> a.copy()
-            >>> a
-            <Atom: Fe - 0.000, 0.000, 0.000>
-            >>> a.id
-            None
-
-        """
-        atom = Atom()
-        keys = ['ox', 'occupancy', 'charge',
-                'magmom', 'volume', 'forces',
-                'coord', 'element_id']
-        for key in keys:
-            setattr(atom, key, getattr(self, key))
-        atom.base_atom = self
-        return atom
-
     def get_site(self, tol=1e-1):
         if self.site is not None:
             return self.site
@@ -261,27 +234,6 @@ class Atom(models.Model):
             vec = np.dot(wrap(self.coord), self.structure.cell)
             self._dist = norm(vec)
         return self._dist
-
-    def is_on(self, site, tol=1e-3):
-        """
-        Tests whether or not the ``Atom`` is on the specified ``Site``.
-
-        Examples::
-
-            >>> a = Atom.create('Fe', [0,0,0])
-            >>> s = a.get_site()
-            >>> a2 = Atom.create('Ni', [0,0,0])
-            >>> a2.is_on(s)
-            True
-
-        """
-        if abs(self.dist - site.dist) < tol:
-            dist = self.structure.get_distance(self, site, limit=tol, wrap_self=True)
-            if dist is None:
-                return False
-        else:
-            return False
-        return dist < tol
 
 
 class Site(models.Model):
@@ -408,7 +360,7 @@ class Site(models.Model):
     def cart_coord(self, value):
         self._cart = value
         if self.structure:
-            coord = self.structure.inv.T.dot(value)
+            coords = self.structure.inv.T.dot(value)
             self.coord = wrap(coords)
 
     @property

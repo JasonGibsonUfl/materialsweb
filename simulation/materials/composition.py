@@ -2,9 +2,7 @@ from django.db import models
 from django.db.models import F
 
 from simulation.materials.element import Element
-from simulation.utils import *
 from simulation.utils.strings import *
-import simulation.analysis.thermodynamics as thermo
 
 class Composition(models.Model):
     """
@@ -37,7 +35,6 @@ class Composition(models.Model):
     mass = models.FloatField(blank=True, null=True)
 
     # thermodyanamic stuff
-    #meidema = models.FloatField(blank=True, null=True)
     structure = models.ForeignKey('Structure', blank=True, null=True, related_name='+', on_delete=models.CASCADE,)
 
     _unique = None
@@ -182,17 +179,6 @@ class Composition(models.Model):
             return
         return min(formations.values_list('delta_e', flat=True))
 
-    @property
-    def icsd_delta_e(self):
-        """
-        Return the lowest formation energy calculated from experimentally
-        measured structures - i.e. excluding prototypes.
-        """
-        calcs = self.calculation_set.exclude(delta_e=None)
-        calcs = calcs.filter(path__contains='icsd')
-        if not calcs.exists():
-            return
-        return min(calcs.values_list('delta_e', flat=True))
 
     @property
     def ndistinct(self):
@@ -232,26 +218,6 @@ class Composition(models.Model):
     def space(self):
         """Return the set of element symbols"""
         return set(self.comp.keys())
-
-    @property
-    def experiment(self):
-        """Return the lowest experimantally measured formation energy at the
-        compositoin.
-        """
-        expts = self.exptformationenergy_set.filter(dft=False)
-        if not expts.exists():
-            return
-        return min(expts.values_list('delta_e', flat=True))
-
-    '''def relative_stability_plot(self,data=data):
-        if not self.energy:
-            return Renderer()
-
-        if data:
-            ps = thermo.PhaseSpace(self.name,data=data)
-        else:
-            ps = thermo.PhaseSpace(self.name)
-        return ps.phase_diagram'''
 
     def get_mass(self):
         elements = Element.objects.filter().first()
