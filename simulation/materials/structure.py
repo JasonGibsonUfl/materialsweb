@@ -28,7 +28,6 @@ from simulation.utils.math_tool import *
 from simulation.data.meta_data import *
 from simulation.analysis.symmetry.routines import get_symmetry_dataset
 from simulation.analysis.symmetry.routines import find_primitive
-from simulation.analysis.pdf import PDF
 from simulation.analysis.symmetry.spacegroup import Spacegroup
 logger = logging.getLogger(__name__)
 
@@ -1100,14 +1099,14 @@ class Structure(models.Model, object):
         xrd.get_peaks()
         xrd.get_intensities()
         return xrd
-    '''
+    
     def get_pdf(self, **kwargs):
         self.pdf = PDF(self, **kwargs)
         self.pdf.get_pair_distances()
         return self.pdf
 
     _cart_rots = None
-
+    '''
     def get_cartesian_rotations(self):
         if self._cart_rots is None:
             self.symmetrize()
