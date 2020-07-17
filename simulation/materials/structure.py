@@ -1002,51 +1002,6 @@ class Structure(models.Model, object):
         r0 = min(rec_mags)
         return np.array([np.round(r / r0, 4) for r in rec_mags])
 
-    def get_TM_kpoint_mesh(self, configuration=None):
-        poscar = os.path.join('/tmp', 'POSCAR')
-        try:
-            simulation.io.poscar.write(self, poscar)
-        except:
-            raise TMKPointsError('Failed to write structure into /tmp/POSCAR')
-        if configuration in ['wavefunction', 'hse06']:
-            TM_script = os.path.join(simulation.INSTALL_PATH, 'analysis', 'vasp', 'getKPoints_HSE')
-        else:
-            TM_script = os.path.join(simulation.INSTALL_PATH, 'analysis', 'vasp', 'getKPoints')
-        with change_directory('/tmp'):
-            TM_stdout = subprocess.check_output(TM_script)
-        if 'error' in TM_stdout.lower():
-            raise TMKPointsError('Failed to get KPOINTS from the TM server')
-        TM_KPOINTS = os.path.join('/tmp', 'KPOINTS')
-        with open(TM_KPOINTS, 'r') as fr:
-            return fr.read()
-
-    '''
-    def get_kpoint_mesh_by_increment(self, kppra):
-        """
-        DEPRECATED: Sometimes results in k-point meshes incommensurate with
-        lattice symmetry. Use either get_TM_kpoint_mesh() or (if you have
-        sympy installed) get_kpoint_mesh_with_sympy(kppra) instead.
-        """
-        recs = self.reciprocal_lattice
-        rec_mags = [norm(recs[0]), norm(recs[1]), norm(recs[2])]
-        r0 = max(rec_mags)
-        refr = np.array([roundclose(r / r0, 1e-2) for r in rec_mags])
-        refr = np.round(refr, 4)
-        scale = 1.0
-        kpts = np.ones(3)
-
-        while self.natoms * np.product(kpts) < kppra:
-            prev_kpts = kpts.copy()
-            refk = np.array(np.ones(3) * refr) * scale
-            kpts = np.array(map(np.round, refk))
-            scale += 1
-
-        upper = kppra - np.product(prev_kpts) * self.natoms
-        lower = np.product(kpts) * self.natoms - kppra
-        if upper < lower:
-            kpts = prev_kpts.copy()
-        return kpts
-    '''
     def copy(self):
         """
         Create a complete copy of the structure, with any primary keys
