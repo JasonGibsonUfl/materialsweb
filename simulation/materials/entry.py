@@ -425,7 +425,7 @@ class Entry(models.Model):
         final relaxed structure. Otherwise, returns None.
         """
         return None
-  
+
     @property
     def stable(self):
         forms = self.formationenergy_set.filter(fit='standard')
@@ -435,37 +435,6 @@ class Entry(models.Model):
         return any([f.stability <= 1E-3 for f in forms])
 
     _history = None
-
-    @property
-    def history_graph(self):
-        if self._history is None:
-            G = nx.Graph()
-
-            for c in self.calculation_set.all():
-                G.add_edge(c.input, c.output, object=c)
-            self._history = G
-        return self._history
-
-    @property
-    def history(self):
-        steps = []
-        if 'static' in self.calculations:
-            step = self.calculations['static']
-        elif 'standard' in self.calculations:
-            step = self.calculations['standard']
-        while step:
-            if isinstance(step, vasp.Calculation):
-                step.type = 'calculation'
-                steps.append(step)
-                step = step.input
-            if isinstance(step, Structure):
-                step.type = 'structure'
-                steps.append(step)
-                try:
-                    step = step.source.all()[0]
-                except:
-                    step = None
-        return steps
 
     @property
     def spacegroup(self):

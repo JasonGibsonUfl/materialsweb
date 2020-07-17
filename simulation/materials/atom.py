@@ -235,6 +235,26 @@ class Atom(models.Model):
             self._dist = norm(vec)
         return self._dist
 
+    def is_on(self, site, tol=1e-3):
+        """
+        Tests whether or not the ``Atom`` is on the specified ``Site``.
+
+        Examples::
+
+            >>> a = Atom.create('Fe', [0,0,0])
+            >>> s = a.get_site()
+            >>> a2 = Atom.create('Ni', [0,0,0])
+            >>> a2.is_on(s)
+            True
+
+        """
+        if abs(self.dist - site.dist) < tol:
+            dist = self.structure.get_distance(self, site, limit=tol, wrap_self=True)
+            if dist is None:
+                return False
+        else:
+            return False
+        return dist < tol
 
 class Site(models.Model):
     """
