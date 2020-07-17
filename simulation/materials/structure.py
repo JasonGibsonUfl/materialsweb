@@ -19,20 +19,16 @@ from django.db import transaction
 
 
 from pymatgen.core.structure import Structure as StructureP
-import simulation
-#from simulation.io import poscar as io
-import shutil
+
 from .element import Element, Species
 from simulation.materials.atom import Atom, Site
 from .composition import Composition
 from simulation.utils.strings import format_comp, parse_comp, reduce_comp
 from simulation.utils.math_tool import *
-from simulation.utils.folder_management import change_directory
 from simulation.data.meta_data import *
 from simulation.analysis.symmetry.routines import get_symmetry_dataset
 from simulation.analysis.symmetry.routines import find_primitive
 from simulation.analysis.pdf import PDF
-from simulation.analysis.xrd import XRD
 from simulation.analysis.symmetry.spacegroup import Spacegroup
 logger = logging.getLogger(__name__)
 
