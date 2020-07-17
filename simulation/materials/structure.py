@@ -1098,13 +1098,13 @@ class Structure(models.Model, object):
             self.find_nearest_neighbors()
         return self._neighbor_dict
 
-
+    '''
     def get_xrd(self, **kwargs):
         xrd = XRD(self)
         xrd.get_peaks()
         xrd.get_intensities()
         return xrd
-
+    '''
     def get_pdf(self, **kwargs):
         self.pdf = PDF(self, **kwargs)
         self.pdf.get_pair_distances()
