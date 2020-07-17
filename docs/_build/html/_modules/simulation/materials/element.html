@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>simulation.materials.element &mdash; MaterialsWeb 2.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> MaterialsWeb
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">materialsweb</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MaterialsWeb</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>simulation.materials.element</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for simulation.materials.element</h1><div class="highlight"><pre>
+<span></span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Django models representing elements and species.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="kn">from</span> <span class="nn">simulation.custom</span> <span class="kn">import</span> <span class="n">DictField</span>
+<span class="kn">from</span> <span class="nn">simulation.utils</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">simulation.utils.strings</span> <span class="kn">import</span> <span class="n">parse_species</span>
+
+
+<span class="k">class</span> <span class="nc">Element</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Core model for an element.</span>
+<span class="sd">    Relationships:</span>
+<span class="sd">      | :mod:`~simulation.Atom` via atom_set</span>
+<span class="sd">      | :mod:`~simulation.Species` via species_set</span>
+<span class="sd">      | :mod:`~simulation.Structure` via structure_set</span>
+<span class="sd">      | :mod:`~simulation.Entry` via entry_set</span>
+<span class="sd">      | :mod:`~simulation.Composition` via composition_set</span>
+<span class="sd">      | :mod:`~simulation.Calculation` via calculation_set</span>
+<span class="sd">      | :mod:`~simulation.Potential` via potential_set</span>
+<span class="sd">      | :mod:`~simulation.Hubbard` via hubbards</span>
+<span class="sd">      | :mod:`~simulation.HubbardCorrection` via hubbardcorrection_set</span>
+<span class="sd">      | :mod:`~simulation.ReferenceEnergy` via referenceenergy_set</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">      | **Identification**</span>
+<span class="sd">      | z: atomic number</span>
+<span class="sd">      | name: full atomic name</span>
+<span class="sd">      | symbol: atomic symbol</span>
+<span class="sd">      | group: group in the periodic table</span>
+<span class="sd">      | period: period in the periodic table</span>
+<span class="sd">      |</span>
+<span class="sd">      | **Physical properties**</span>
+<span class="sd">      | mass: Atomic mass, in AMU (float)</span>
+<span class="sd">      | density: Density at STP, in g/cm^3 (float)</span>
+<span class="sd">      | volume: Atomic volume at STP, in A^3/atom (float)</span>
+<span class="sd">      | atomic_radii: in A (float)</span>
+<span class="sd">      | van_der_waals radii: in A (float)</span>
+<span class="sd">      | covalent_radii: in A (float)</span>
+<span class="sd">      | scattering_factors: A dictionary of scattering factor coeffs.</span>
+<span class="sd">      |</span>
+<span class="sd">      | **Thermodynamic properties**</span>
+<span class="sd">      | melt: melting point in K</span>
+<span class="sd">      | boil: boiling point in K</span>
+<span class="sd">      | specific_heat: C_p in J/K</span>
+<span class="sd">      |</span>
+<span class="sd">      | **Electronic properties**</span>
+<span class="sd">      | electronegativity: Pauling electronegativity</span>
+<span class="sd">      | ion_energy: First ionization energy. (eV)</span>
+<span class="sd">      | s_elec: # of s electrons</span>
+<span class="sd">      | p_elec: # of p electrons</span>
+<span class="sd">      | d_elec: # of d electrons</span>
+<span class="sd">      | f_elec: # of f electrons</span>
+<span class="sd">      |</span>
+<span class="sd">      | **Additional information**</span>
+<span class="sd">      | production: Annual tons of element produced.</span>
+<span class="sd">      | abundance: Amount in earths crust (ppm)</span>
+<span class="sd">      | radioactive: Are all isotopes unstable?</span>
+<span class="sd">      | HHI_P: Herfindahl-Hirschman Index for production.</span>
+<span class="sd">      | HHI_R: Herfindahl-Hirschman Index for reserve</span>
+<span class="sd">    Note:</span>
+<span class="sd">      HHI values from Gaultois, M. et al. Chem. Mater. 25, 2911-2920 (2013).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">### Identification</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">symbol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">### Periodic table</span>
+    <span class="n">group</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">period</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="c1">### Phyical characteristics</span>
+    <span class="n">mass</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">density</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">volume</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">atomic_radii</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">van_der_waals_radii</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">covalent_radii</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">scattering_factors</span> <span class="o">=</span> <span class="n">DictField</span><span class="p">()</span>
+    <span class="n">chemical_potential</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+
+    <span class="c1">### Thermodynamics</span>
+    <span class="n">melt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">boil</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">specific_heat</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+
+    <span class="c1">### Electonic structure</span>
+    <span class="n">electronegativity</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">first_ionization_energy</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">s_elec</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">p_elec</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">d_elec</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">f_elec</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="c1">### misc</span>
+    <span class="n">HHI_P</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">HHI_R</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">production</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">radioactive</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">app_label</span> <span class="o">=</span> <span class="s1">&#39;simulation&#39;</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;elements&#39;</span>
+
+    <span class="c1"># builtins</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span>
+
+    <span class="c1"># accessor</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an element object. Accepts symbols and atomic numbers, or a list</span>
+<span class="sd">        of symbols/atomic numbers.</span>
+
+<span class="sd">        Examples::</span>
+
+<span class="sd">            &gt;&gt;&gt; Element.get(&#39;Fe&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; Element.get(26)</span>
+<span class="sd">            &gt;&gt;&gt; Element.get([&#39;Fe&#39;, &#39;O&#39;])</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">symbol</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># methods</span>
+    <span class="k">def</span> <span class="nf">species_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">species_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">counts</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">ox</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">structure_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">counts</span>
+
+<span class="k">class</span> <span class="nc">Species</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base model for an atomic species. (Element + charge state).</span>
+<span class="sd">    Relationships:</span>
+<span class="sd">      | :mod:`~simulation.Element` via element</span>
+<span class="sd">      | :mod:`~simulation.Entry` via entry_set</span>
+<span class="sd">      | :mod:`~simulation.Structure` via structure_set</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">      | name: Species name. e.g. Fe3+, O2-</span>
+<span class="sd">      | ox: Oxidation state (float)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">element</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Element</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,)</span>
+    <span class="n">ox</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">app_label</span> <span class="o">=</span> <span class="s1">&#39;simulation&#39;</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;species&#39;</span>
+
+    <span class="c1"># builtins</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># accessor</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or creates the specified species.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            value:</span>
+<span class="sd">                Accepts multiple input types. Can be a string, e.g. Fe3+</span>
+<span class="sd">                or a tuple of (symbol, oxidation state) pairs, e.g. (Fe, 3).</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            A :mod:`~simulation.Species` or list of :mod:`~simulation.Species`.</span>
+
+<span class="sd">        Examples::</span>
+
+<span class="sd">            &gt;&gt;&gt; Species.get(&#39;Fe3+&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; Species.get(&#39;Fe3&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; Species.get((&#39;Fe&#39;, 3))</span>
+<span class="sd">            &gt;&gt;&gt; Species.get([ &#39;Fe3+&#39;, &#39;O2-&#39;, &#39;Li1+&#39;])</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">new</span><span class="p">:</span>
+                <span class="n">elt</span><span class="p">,</span> <span class="n">ox</span> <span class="o">=</span> <span class="n">parse_species</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">spec</span><span class="o">.</span><span class="n">element_id</span> <span class="o">=</span> <span class="n">elt</span>
+                <span class="n">spec</span><span class="o">.</span><span class="n">ox</span> <span class="o">=</span> <span class="n">ox</span>
+                <span class="n">spec</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">spec</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ox_format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ox</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ox</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ox</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ox</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jason Gibson
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

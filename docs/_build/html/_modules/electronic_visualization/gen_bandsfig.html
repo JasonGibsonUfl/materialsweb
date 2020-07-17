@@ -1,0 +1,778 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>electronic_visualization.gen_bandsfig &mdash; MaterialsWeb 2.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> MaterialsWeb
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">materialsweb</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MaterialsWeb</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>electronic_visualization.gen_bandsfig</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for electronic_visualization.gen_bandsfig</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">mendeleev</span> <span class="kn">import</span> <span class="n">element</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">suborb_utils</span> <span class="k">as</span> <span class="n">sub</span>
+
+<span class="kn">from</span> <span class="nn">django_plotly_dash</span> <span class="kn">import</span> <span class="n">DjangoDash</span>
+
+<span class="n">external_stylesheets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;https://codepen.io/chriddyp/pen/bWLwgP.css&#39;</span><span class="p">]</span>
+
+
+
+
+<span class="c1"># from pymatgen.ext.matproj import MPRester</span>
+<span class="kn">from</span> <span class="nn">pymatgen.core.periodic_table</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="kn">from</span> <span class="nn">pymatgen.electronic_structure.core</span> <span class="kn">import</span> <span class="n">Spin</span><span class="p">,</span> <span class="n">Orbital</span><span class="p">,</span> <span class="n">OrbitalType</span>
+<span class="kn">from</span> <span class="nn">pymatgen.electronic_structure.plotter</span> <span class="kn">import</span> <span class="n">BSPlotter</span>
+
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
+
+
+<div class="viewcode-block" id="BandsFig"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig">[docs]</a><span class="k">class</span> <span class="nc">BandsFig</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1">## define some styling choices??</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spins</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="n">Spin</span><span class="o">.</span><span class="n">down</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orbs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="n">OrbitalType</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
+                     <span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="n">OrbitalType</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="s1">&#39;px&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">px</span><span class="p">,</span>
+                     <span class="s1">&#39;py&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">py</span><span class="p">,</span> <span class="s1">&#39;pz&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">pz</span><span class="p">,</span>
+                     <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="n">OrbitalType</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="s1">&#39;dz2&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">dz2</span><span class="p">,</span>
+                     <span class="s1">&#39;dx2-y2&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">dx2</span><span class="p">,</span> <span class="s1">&#39;dxy&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">dxy</span><span class="p">,</span>
+                     <span class="s1">&#39;dxz&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">dxz</span><span class="p">,</span> <span class="s1">&#39;dyz&#39;</span><span class="p">:</span> <span class="n">Orbital</span><span class="o">.</span><span class="n">dyz</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fillcolors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(255,153,0,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(255,153,0,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(255,0,0,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(255,0,0,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;px&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(153,0,0,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(153,0,0,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;py&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(255,0,0,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(255,0,0,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;pz&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(250,128,114,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(250,128,114,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(0,0,255,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(0,0,255,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;dz2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(0,0,153,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(0,0,153,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;dx2-y2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(51,102,204,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(51,102,204,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;dxy&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(102,255,204,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(102,255,204,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;dxz&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(51,204,51,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(51,204,51,0)&#39;</span><span class="p">},</span>
+                           <span class="s1">&#39;dyz&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(0,102,0,1)&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(0,102,0,0)&#39;</span><span class="p">}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edgecolors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(255,153,0)&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(255,0,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;px&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(153,0,0)&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;py&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(255,0,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;pz&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(250,128,114)&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(0,0,255)&#39;</span><span class="p">,</span> <span class="s1">&#39;dz2&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(0,0,153)&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;dx2-y2&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(51,102,204)&#39;</span><span class="p">,</span> <span class="s1">&#39;dxy&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(102,255,204)&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;dxz&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(51,204,51)&#39;</span><span class="p">,</span> <span class="s1">&#39;dyz&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(0,102,0)&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2191</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2193</span><span class="s1">&#39;</span><span class="p">}</span>
+
+<div class="viewcode-block" id="BandsFig.get_elemcolors"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_elemcolors">[docs]</a>    <span class="k">def</span> <span class="nf">get_elemcolors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elems</span><span class="p">):</span>
+
+        <span class="c1">## get the element colors corresponding to jmol</span>
+        <span class="c1">## and convert from hex to rgb for mixing</span>
+        <span class="n">elemcolors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+            <span class="n">elhex</span> <span class="o">=</span> <span class="n">element</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="o">.</span><span class="n">jmol_color</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+            <span class="n">elemcolors</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">elhex</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+                               <span class="nb">int</span><span class="p">(</span><span class="n">elhex</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+                               <span class="nb">int</span><span class="p">(</span><span class="n">elhex</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="mi">16</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elemcolors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">elemcolors</span><span class="p">)</span>
+
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_erange_dos"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_erange_dos">[docs]</a>    <span class="k">def</span> <span class="nf">get_erange_dos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">):</span>
+
+        <span class="c1">## Determine energy ranges for the plots</span>
+        <span class="n">cbm</span><span class="p">,</span> <span class="n">vbm</span> <span class="o">=</span> <span class="n">dos</span><span class="o">.</span><span class="n">get_cbm_vbm</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">cbm</span> <span class="o">-</span> <span class="n">vbm</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">erange_dos</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">erange_dos</span> <span class="o">=</span> <span class="p">[</span><span class="n">vbm</span> <span class="o">-</span> <span class="n">dos</span><span class="o">.</span><span class="n">efermi</span> <span class="o">-</span> <span class="mi">4</span><span class="p">,</span>
+                               <span class="n">cbm</span> <span class="o">-</span> <span class="n">dos</span><span class="o">.</span><span class="n">efermi</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_erange_bs"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_erange_bs">[docs]</a>    <span class="k">def</span> <span class="nf">get_erange_bs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bs</span><span class="p">):</span>
+
+        <span class="c1">## Determine energy ranges for the plots</span>
+        <span class="k">if</span> <span class="n">bs</span><span class="o">.</span><span class="n">is_metal</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">erange_bs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">erange_bs</span> <span class="o">=</span> <span class="p">[</span><span class="n">bs</span><span class="o">.</span><span class="n">get_vbm</span><span class="p">()[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">-</span> <span class="mi">4</span><span class="p">,</span>
+                              <span class="n">bs</span><span class="o">.</span><span class="n">get_cbm</span><span class="p">()[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_bandrange"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_bandrange">[docs]</a>    <span class="k">def</span> <span class="nf">get_bandrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bs</span><span class="p">):</span>
+
+        <span class="c1">## set the range of bands to plot</span>
+        <span class="c1">## based on which show up within the energy window of interest</span>
+        <span class="k">if</span> <span class="n">bs</span><span class="o">.</span><span class="n">is_metal</span><span class="p">():</span>
+            <span class="n">bmin</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">bmax</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">nb_bands</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="p">[</span><span class="n">emin</span><span class="p">,</span> <span class="n">emax</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">erange_bs</span>
+            <span class="k">if</span> <span class="n">bs</span><span class="o">.</span><span class="n">is_spin_polarized</span><span class="p">:</span>
+                <span class="n">bvbm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">get_vbm</span><span class="p">()[</span><span class="s2">&quot;band_index&quot;</span><span class="p">][</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">bs</span><span class="o">.</span><span class="n">get_vbm</span><span class="p">()[</span><span class="s2">&quot;band_index&quot;</span><span class="p">][</span><span class="n">Spin</span><span class="o">.</span><span class="n">down</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">bcbm</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">get_cbm</span><span class="p">()[</span><span class="s2">&quot;band_index&quot;</span><span class="p">][</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">bs</span><span class="o">.</span><span class="n">get_cbm</span><span class="p">()[</span><span class="s2">&quot;band_index&quot;</span><span class="p">][</span><span class="n">Spin</span><span class="o">.</span><span class="n">down</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">bmin</span><span class="p">,</span> <span class="n">bmax</span> <span class="o">=</span> <span class="n">bvbm</span><span class="p">,</span> <span class="n">bcbm</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">bmin</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span>
+                       <span class="nb">max</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="n">bmin</span><span class="p">])</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">&gt;</span> <span class="n">emin</span> <span class="ow">or</span>
+                       <span class="nb">max</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">down</span><span class="p">][</span><span class="n">bmin</span><span class="p">])</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">&gt;</span> <span class="n">emin</span><span class="p">):</span>
+                    <span class="n">bmin</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">bmax</span> <span class="o">&lt;</span> <span class="n">bs</span><span class="o">.</span><span class="n">nb_bands</span> <span class="ow">and</span>
+                       <span class="nb">min</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="n">bmax</span><span class="p">])</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">&lt;</span> <span class="n">emax</span> <span class="ow">or</span>
+                       <span class="nb">min</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">down</span><span class="p">][</span><span class="n">bmax</span><span class="p">])</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">&lt;</span> <span class="n">emax</span><span class="p">):</span>
+                    <span class="n">bmax</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bvbm</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">get_vbm</span><span class="p">()[</span><span class="s2">&quot;band_index&quot;</span><span class="p">][</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">bcbm</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">get_cbm</span><span class="p">()[</span><span class="s2">&quot;band_index&quot;</span><span class="p">][</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">bmin</span><span class="p">,</span> <span class="n">bmax</span> <span class="o">=</span> <span class="n">bvbm</span><span class="p">,</span> <span class="n">bcbm</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">bmin</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span>
+                       <span class="nb">max</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="n">bmin</span><span class="p">])</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">&gt;</span> <span class="n">emin</span><span class="p">):</span>
+                    <span class="n">bmin</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">bmax</span> <span class="o">&lt;</span> <span class="n">bs</span><span class="o">.</span><span class="n">nb_bands</span> <span class="ow">and</span>
+                       <span class="nb">min</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="n">bmax</span><span class="p">])</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="o">&lt;</span> <span class="n">emax</span><span class="p">):</span>
+                    <span class="n">bmax</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bmin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">bmax</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_bandsxy"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_bandsxy">[docs]</a>    <span class="k">def</span> <span class="nf">get_bandsxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">bandrange</span><span class="p">):</span>
+
+        <span class="c1">## get coords of the band structure data points</span>
+        <span class="n">bsplot</span> <span class="o">=</span> <span class="n">BSPlotter</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">bsplot</span><span class="o">.</span><span class="n">bs_plot_data</span><span class="p">()</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">kbranch</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;distances&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kbranch</span><span class="p">]</span>
+        <span class="n">yu</span> <span class="o">=</span> <span class="p">[[</span><span class="n">e</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">][</span><span class="n">band</span><span class="p">]]</span> <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">bandrange</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">bs</span><span class="o">.</span><span class="n">is_spin_polarized</span><span class="p">:</span>
+            <span class="n">yd</span> <span class="o">=</span> <span class="p">[[</span><span class="n">e</span> <span class="o">-</span> <span class="n">bs</span><span class="o">.</span><span class="n">efermi</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">bs</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">down</span><span class="p">][</span><span class="n">band</span><span class="p">]]</span> <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">bandrange</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">yd</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">yu</span><span class="p">,</span> <span class="n">yd</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_kpt_labels"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_kpt_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_kpt_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bs</span><span class="p">):</span>
+
+        <span class="n">bsplot</span> <span class="o">=</span> <span class="n">BSPlotter</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+
+        <span class="c1">## get unique K-points</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">bsplot</span><span class="o">.</span><span class="n">get_ticks</span><span class="p">()[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+        <span class="n">labelspos</span> <span class="o">=</span> <span class="n">bsplot</span><span class="o">.</span><span class="n">get_ticks</span><span class="p">()[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span>
+        <span class="n">labels_uniq</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">labelspos_uniq</span> <span class="o">=</span> <span class="p">[</span><span class="n">labelspos</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">labels_uniq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">labelspos_uniq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labelspos</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">labels_uniq</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$\mid$&quot;</span><span class="p">,</span> <span class="s2">&quot;|&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels_uniq</span><span class="p">]</span>
+        <span class="c1">## hack for dash which can&#39;t display latex :(</span>
+        <span class="n">labels_uniq</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$\Gamma$&quot;</span><span class="p">,</span> <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\u0393</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels_uniq</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">labels_uniq</span><span class="p">,</span> <span class="n">labelspos_uniq</span></div>
+
+
+
+<div class="viewcode-block" id="BandsFig.get_dosTraces_tot"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_dosTraces_tot">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosTraces_tot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">):</span>
+
+        <span class="c1">## get line plots for the total DoS</span>
+
+        <span class="n">dosTraces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1">## plot up-spin contributions</span>
+        <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_tot</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">))</span>
+        <span class="c1">## plot down-spin contributions if spin-polarized calculation</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dos</span><span class="o">.</span><span class="n">densities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_tot</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;down&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">dosTraces</span></div>
+
+<div class="viewcode-block" id="BandsFig.dosTrace_tot"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.dosTrace_tot">[docs]</a>    <span class="k">def</span> <span class="nf">dosTrace_tot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">spin</span><span class="p">):</span>
+
+        <span class="c1">## generates, formats, and returns a line trace for the total DoS</span>
+
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#202020&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spin</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="n">linestyle</span><span class="p">[</span><span class="s1">&#39;dash&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dot&#39;</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dos</span><span class="o">.</span><span class="n">densities</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">spins</span><span class="p">[</span><span class="n">spin</span><span class="p">]],</span>
+                          <span class="n">y</span><span class="o">=</span><span class="n">dos</span><span class="o">.</span><span class="n">energies</span> <span class="o">-</span> <span class="n">dos</span><span class="o">.</span><span class="n">efermi</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DoS: total &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span><span class="p">[</span><span class="n">spin</span><span class="p">],</span>
+                          <span class="n">line</span><span class="o">=</span><span class="n">linestyle</span>
+                          <span class="c1">#                          line = dict(color=&quot;#202020&quot;),</span>
+                          <span class="c1">#                          fill = &quot;tozeroy&quot;</span>
+                          <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_dosTraces_el"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_dosTraces_el">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosTraces_el</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
+
+        <span class="c1">## get line plots for the element and orbital projections of DoS</span>
+
+        <span class="n">el_dos</span> <span class="o">=</span> <span class="n">dos</span><span class="o">.</span><span class="n">get_element_dos</span><span class="p">()</span>
+
+        <span class="n">dosTraces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1">## plot up-spin contributions</span>
+        <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_el</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">el_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">))</span>
+        <span class="c1">## plot down-spin contributions if spin-polarized calculation</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">el_dos</span><span class="p">[</span><span class="n">Element</span><span class="p">(</span><span class="n">elem</span><span class="p">)]</span><span class="o">.</span><span class="n">densities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_el</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">el_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;down&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">dosTraces</span></div>
+
+<div class="viewcode-block" id="BandsFig.dosTrace_el"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.dosTrace_el">[docs]</a>    <span class="k">def</span> <span class="nf">dosTrace_el</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">el_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">spin</span><span class="p">):</span>
+
+        <span class="c1">## generates, formats, and returns a line trace for the element projected DoS</span>
+
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">element</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="o">.</span><span class="n">jmol_color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spin</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="n">linestyle</span><span class="p">[</span><span class="s1">&#39;dash&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dot&#39;</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">el_dos</span><span class="p">[</span><span class="n">Element</span><span class="p">(</span><span class="n">elem</span><span class="p">)]</span><span class="o">.</span><span class="n">densities</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">spins</span><span class="p">[</span><span class="n">spin</span><span class="p">]],</span>
+                          <span class="n">y</span><span class="o">=</span><span class="n">dos</span><span class="o">.</span><span class="n">energies</span> <span class="o">-</span> <span class="n">dos</span><span class="o">.</span><span class="n">efermi</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DoS: &quot;</span> <span class="o">+</span> <span class="n">elem</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span><span class="p">[</span><span class="n">spin</span><span class="p">],</span>
+                          <span class="n">line</span><span class="o">=</span><span class="n">linestyle</span>
+                          <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_dosTraces_spd"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_dosTraces_spd">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosTraces_spd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">):</span>
+
+        <span class="c1">## get line plots for the element and orbital projections of DoS</span>
+
+        <span class="n">el_spd_dos</span> <span class="o">=</span> <span class="n">dos</span><span class="o">.</span><span class="n">get_element_spd_dos</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+
+        <span class="n">dosTraces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1">## plot up-spin contributions</span>
+        <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_spd</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">el_spd_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">))</span>
+        <span class="c1">## plot down-spin contributions if spin-polarized calculation</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">el_spd_dos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbs</span><span class="p">[</span><span class="n">orb</span><span class="p">]]</span><span class="o">.</span><span class="n">densities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_spd</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">el_spd_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;down&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">dosTraces</span></div>
+
+<div class="viewcode-block" id="BandsFig.dosTrace_spd"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.dosTrace_spd">[docs]</a>    <span class="k">def</span> <span class="nf">dosTrace_spd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">el_spd_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">,</span> <span class="n">spin</span><span class="p">):</span>
+
+        <span class="c1">## generates, formats, and returns a line trace for the orbital projected DoS</span>
+
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edgecolors</span><span class="p">[</span><span class="n">orb</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">spin</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="n">linestyle</span><span class="p">[</span><span class="s1">&#39;dash&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dot&#39;</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">el_spd_dos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbs</span><span class="p">[</span><span class="n">orb</span><span class="p">]]</span><span class="o">.</span><span class="n">densities</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">spins</span><span class="p">[</span><span class="n">spin</span><span class="p">]],</span>
+                          <span class="n">y</span><span class="o">=</span><span class="n">dos</span><span class="o">.</span><span class="n">energies</span> <span class="o">-</span> <span class="n">dos</span><span class="o">.</span><span class="n">efermi</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DoS: &quot;</span> <span class="o">+</span> <span class="n">elem</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">orb</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span><span class="p">[</span><span class="n">spin</span><span class="p">],</span>
+                          <span class="n">line</span><span class="o">=</span><span class="n">linestyle</span>
+                          <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_dosTraces_suborb"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_dosTraces_suborb">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosTraces_suborb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">suborb</span><span class="p">):</span>
+
+        <span class="c1">## get line plots for the element and sub-orbital projections of DoS</span>
+
+        <span class="c1">#        el_spd_dos = dos.get_element_spd_dos(elem)</span>
+        <span class="n">el_suborb_dos</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">get_element_pdos</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
+
+        <span class="n">dosTraces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1">## plot up-spin contributions</span>
+        <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_suborb</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">el_suborb_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">suborb</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">))</span>
+        <span class="c1">## plot down-spin contributions if spin-polarized calculation</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">el_suborb_dos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbs</span><span class="p">[</span><span class="n">suborb</span><span class="p">]]</span><span class="o">.</span><span class="n">densities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">dosTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dosTrace_spd</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">el_suborb_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">suborb</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;down&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">dosTraces</span></div>
+
+<div class="viewcode-block" id="BandsFig.dosTrace_suborb"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.dosTrace_suborb">[docs]</a>    <span class="k">def</span> <span class="nf">dosTrace_suborb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">el_suborb_dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">suborb</span><span class="p">,</span> <span class="n">spin</span><span class="p">):</span>
+
+        <span class="c1">## generates, formats, and returns a line trace for the sub-orbital projected DoS</span>
+
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edgecolors</span><span class="p">[</span><span class="n">suborb</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">spin</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="n">linestyle</span><span class="p">[</span><span class="s1">&#39;dash&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dot&#39;</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">el_suborb_dos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbs</span><span class="p">[</span><span class="n">suborb</span><span class="p">]]</span><span class="o">.</span><span class="n">densities</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">spins</span><span class="p">[</span><span class="n">spin</span><span class="p">]],</span>
+                          <span class="n">y</span><span class="o">=</span><span class="n">dos</span><span class="o">.</span><span class="n">energies</span> <span class="o">-</span> <span class="n">dos</span><span class="o">.</span><span class="n">efermi</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DoS: &quot;</span> <span class="o">+</span> <span class="n">elem</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">suborb</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span><span class="p">[</span><span class="n">spin</span><span class="p">],</span>
+                          <span class="n">line</span><span class="o">=</span><span class="n">linestyle</span>
+                          <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_bandTraces"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_bandTraces">[docs]</a>    <span class="k">def</span> <span class="nf">get_bandTraces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bs</span><span class="p">):</span>
+
+        <span class="c1">## get simple line plots for the total band structure</span>
+
+        <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">yu</span><span class="p">,</span> <span class="n">yd</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bandsxy</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">)</span>
+
+        <span class="c1">## Each band is plotted as a separate trace</span>
+        <span class="c1">## and appended to the list bandTraces</span>
+        <span class="n">bandTraces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1">## plot up-spin contributions</span>
+        <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">):</span>
+            <span class="n">bandTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandTrace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yu</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">band</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">))</span>
+        <span class="n">bandTraces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">showlegend</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">## show only 1 legend for all traces in the group</span>
+        <span class="c1">## plot down-spin contributions if spin-polarized calculation</span>
+        <span class="k">if</span> <span class="n">bs</span><span class="o">.</span><span class="n">is_spin_polarized</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">):</span>
+                <span class="n">bandTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandTrace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yd</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">band</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;down&#39;</span><span class="p">))</span>
+            <span class="n">bandTraces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">showlegend</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">bandTraces</span></div>
+
+<div class="viewcode-block" id="BandsFig.bandTrace"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.bandTrace">[docs]</a>    <span class="k">def</span> <span class="nf">bandTrace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">spin</span><span class="p">):</span>
+
+        <span class="c1">## generates, formats, and returns a simple line trace for the band structure</span>
+
+        <span class="c1">#        linestyle = dict(color=element(elem).jmol_color)</span>
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#202020&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spin</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="n">linestyle</span><span class="p">[</span><span class="s1">&#39;dash&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dot&#39;</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                          <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                          <span class="n">line</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="s2">&quot;BS: total &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span><span class="p">[</span><span class="n">spin</span><span class="p">],</span>
+                          <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Band &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="p">),</span>
+                          <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">legendgroup</span><span class="o">=</span><span class="s2">&quot;total &quot;</span> <span class="o">+</span> <span class="n">spin</span>
+                          <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="BandsFig.get_fatbandTraces_el"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_fatbandTraces_el">[docs]</a>    <span class="k">def</span> <span class="nf">get_fatbandTraces_el</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
+
+        <span class="c1">## get dot plots for the projected band structure</span>
+        <span class="c1">## dot sizes proportionl to the relative contribution from that element</span>
+
+        <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">yu</span><span class="p">,</span> <span class="n">yd</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bandsxy</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">)</span>
+        <span class="n">pbands</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">get_projection_on_elements</span><span class="p">()</span>
+
+        <span class="c1">## Each band is plotted as a separate scatter trace</span>
+        <span class="c1">## and appended to the list fatbandTraces</span>
+        <span class="n">fatbandTraces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1">## plot up-spin contributions</span>
+        <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">):</span>
+            <span class="n">fatbandTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fatbandTrace_el</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yu</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">pbands</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="s1">&#39;up&#39;</span><span class="p">))</span>
+        <span class="n">fatbandTraces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">showlegend</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">## show only 1 legend for all traces in the group</span>
+        <span class="c1">## plot down-spin contributions if spin-polarized calculation</span>
+        <span class="k">if</span> <span class="n">bs</span><span class="o">.</span><span class="n">is_spin_polarized</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">):</span>
+                <span class="n">fatbandTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fatbandTrace_el</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yd</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">pbands</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">))</span>
+            <span class="n">fatbandTraces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">showlegend</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">fatbandTraces</span></div>
+
+<div class="viewcode-block" id="BandsFig.fatbandTrace_el"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.fatbandTrace_el">[docs]</a>    <span class="k">def</span> <span class="nf">fatbandTrace_el</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pbands</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">spin</span><span class="p">):</span>
+
+        <span class="c1">## generates, formats, and returns a fatband trace</span>
+        <span class="c1">## for band # &quot;band&quot; of the projection onto element &quot;elem&quot;</span>
+
+        <span class="n">markersize</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span> <span class="o">*</span> <span class="n">pbands</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">spins</span><span class="p">[</span><span class="n">spin</span><span class="p">]][</span><span class="n">band</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">elem</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                          <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+                          <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">markersize</span><span class="p">,</span>
+                                      <span class="n">color</span><span class="o">=</span><span class="n">element</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="o">.</span><span class="n">jmol_color</span><span class="p">,</span>
+                                      <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                      <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">element</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="o">.</span><span class="n">jmol_color</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+                          <span class="n">name</span><span class="o">=</span><span class="s2">&quot;BS: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span><span class="p">[</span><span class="n">spin</span><span class="p">],</span>
+                          <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Band &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="p">),</span>
+                          <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">legendgroup</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="o">+</span> <span class="n">spin</span>
+                          <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BandsFig.get_fatbandTraces_spd"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.get_fatbandTraces_spd">[docs]</a>    <span class="k">def</span> <span class="nf">get_fatbandTraces_spd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">):</span>
+
+        <span class="c1">## get dot plots for the projected band structure</span>
+        <span class="c1">## dot sizes proportionl to the relative contribution from that orbital</span>
+
+        <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">yu</span><span class="p">,</span> <span class="n">yd</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bandsxy</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">)</span>
+        <span class="n">pbands</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">get_projections_on_elements_and_orbitals</span><span class="p">({</span><span class="n">elem</span><span class="p">:</span> <span class="p">[</span><span class="n">orb</span><span class="p">]})</span>
+
+        <span class="c1">## Each band is plotted as a separate scatter trace</span>
+        <span class="c1">## and appended to the list fatbandTraces</span>
+        <span class="n">fatbandTraces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1">## plot up-spin contributions</span>
+        <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">):</span>
+            <span class="n">fatbandTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fatbandTrace_spd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yu</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">pbands</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">,</span> <span class="s1">&#39;up&#39;</span><span class="p">))</span>
+        <span class="n">fatbandTraces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">showlegend</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">## show only 1 legend for all traces in the group</span>
+        <span class="c1">## plot down-spin contributions if spin-polarized calculation</span>
+        <span class="k">if</span> <span class="n">bs</span><span class="o">.</span><span class="n">is_spin_polarized</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandrange</span><span class="p">):</span>
+                <span class="n">fatbandTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fatbandTrace_spd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yd</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">pbands</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">))</span>
+            <span class="n">fatbandTraces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">showlegend</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">fatbandTraces</span></div>
+
+<div class="viewcode-block" id="BandsFig.fatbandTrace_spd"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.fatbandTrace_spd">[docs]</a>    <span class="k">def</span> <span class="nf">fatbandTrace_spd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pbands</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">,</span> <span class="n">spin</span><span class="p">):</span>
+
+        <span class="c1">## generates, formats, and returns a fatband trace</span>
+        <span class="c1">## for band # &quot;band&quot; of the projection onto element &quot;elem&quot;, orbital &quot;orb&quot;</span>
+
+        <span class="n">markersize</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span> <span class="o">*</span> <span class="n">pbands</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">spins</span><span class="p">[</span><span class="n">spin</span><span class="p">]][</span><span class="n">band</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">elem</span><span class="p">][</span><span class="n">orb</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                          <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+                          <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">markersize</span><span class="p">,</span>
+                                      <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fillcolors</span><span class="p">[</span><span class="n">orb</span><span class="p">][</span><span class="n">spin</span><span class="p">],</span>
+                                      <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                      <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edgecolors</span><span class="p">[</span><span class="n">orb</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+                          <span class="n">name</span><span class="o">=</span><span class="s2">&quot;BS: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">orb</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span><span class="p">[</span><span class="n">spin</span><span class="p">],</span>
+                          <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Band &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="p">),</span>
+                          <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">legendgroup</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="o">+</span> <span class="n">orb</span> <span class="o">+</span> <span class="n">spin</span>
+                          <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BandsFig.layout_dos"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.layout_dos">[docs]</a>    <span class="k">def</span> <span class="nf">layout_dos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">):</span>
+
+        <span class="c1">## Customize axes and other aspects of the dos plot.</span>
+
+        <span class="n">dosxaxis</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">XAxis</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Density of states&quot;</span><span class="p">,</span>
+            <span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">showline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dos</span><span class="o">.</span><span class="n">densities</span><span class="p">[</span><span class="n">Spin</span><span class="o">.</span><span class="n">up</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="n">mirror</span><span class="o">=</span><span class="s2">&quot;ticks&quot;</span><span class="p">,</span>
+            <span class="n">ticks</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">tickwidth</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="n">dosyaxis</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">YAxis</span><span class="p">(</span>
+            <span class="c1">#            title = &quot;$E - E_f \quad / \quad \\text{eV}$&quot;,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;E - Ef / eV&quot;</span><span class="p">,</span>
+            <span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">showline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">mirror</span><span class="o">=</span><span class="s2">&quot;ticks&quot;</span><span class="p">,</span>
+            <span class="n">ticks</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">tickwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="c1">#        zeroline = False,</span>
+            <span class="n">zerolinecolor</span><span class="o">=</span><span class="s1">&#39;#ababab&#39;</span><span class="p">,</span>
+            <span class="n">zerolinewidth</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="n">doslayout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="n">dosxaxis</span><span class="p">,</span>
+            <span class="n">yaxis</span><span class="o">=</span><span class="n">dosyaxis</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">doslayout</span></div>
+
+<div class="viewcode-block" id="BandsFig.layout_bands"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.layout_bands">[docs]</a>    <span class="k">def</span> <span class="nf">layout_bands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erange</span><span class="p">,</span> <span class="n">labels_uniq</span><span class="p">,</span> <span class="n">labelspos_uniq</span><span class="p">):</span>
+
+        <span class="c1">## Customize axes and other aspects of the bands plot.</span>
+
+        <span class="n">bandxaxis</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">XAxis</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Wavevector&quot;</span><span class="p">,</span>
+            <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">labelspos_uniq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="n">showline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;#ababab&#39;</span><span class="p">,</span>
+            <span class="n">gridwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">ticks</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">showticklabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="n">labelspos_uniq</span><span class="p">,</span>
+            <span class="n">ticktext</span><span class="o">=</span><span class="n">labels_uniq</span><span class="p">,</span>
+            <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="n">bandyaxis</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">YAxis</span><span class="p">(</span>
+            <span class="c1">#        title = &quot;$E - E_f \quad / \quad \\text{eV}$&quot;,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;E - Ef / eV&quot;</span><span class="p">,</span>
+            <span class="nb">range</span><span class="o">=</span><span class="n">erange</span><span class="p">,</span>
+            <span class="n">showline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">mirror</span><span class="o">=</span><span class="s2">&quot;ticks&quot;</span><span class="p">,</span>
+            <span class="n">ticks</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">tickwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="c1">#        zeroline = False,</span>
+            <span class="n">zerolinecolor</span><span class="o">=</span><span class="s1">&#39;#ababab&#39;</span><span class="p">,</span>
+            <span class="n">zerolinewidth</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="n">bandlayout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="n">bandxaxis</span><span class="p">,</span>
+            <span class="n">yaxis</span><span class="o">=</span><span class="n">bandyaxis</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bandlayout</span></div>
+
+<div class="viewcode-block" id="BandsFig.generate_fig"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.gen_bandsfig.BandsFig.generate_fig">[docs]</a>    <span class="k">def</span> <span class="nf">generate_fig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">projlist</span><span class="p">):</span>
+
+        <span class="n">dosbandfig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">shared_yaxes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">bs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_erange_bs</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_bandrange</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+
+            <span class="c1">## get total band structure</span>
+            <span class="n">bandTraces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bandTraces</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+            <span class="c1">## add the total band structure to subplot (1,1)</span>
+            <span class="k">for</span> <span class="n">btrace</span> <span class="ow">in</span> <span class="n">bandTraces</span><span class="p">:</span>
+                <span class="n">dosbandfig</span><span class="o">.</span><span class="n">append_trace</span><span class="p">(</span><span class="n">btrace</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">projlist</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">proj</span> <span class="ow">in</span> <span class="n">projlist</span><span class="p">:</span>
+                    <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span> <span class="o">=</span> <span class="n">proj</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">proj</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">orb</span> <span class="o">==</span> <span class="s2">&quot;Total&quot;</span><span class="p">:</span>
+                        <span class="c1">## get fat band structure colored by element</span>
+                        <span class="n">fatbandTraces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fatbandTraces_el</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
+                        <span class="c1">## add the fat bands to subplot (1,1)</span>
+                        <span class="k">for</span> <span class="n">fbtrace</span> <span class="ow">in</span> <span class="n">fatbandTraces</span><span class="p">:</span>
+                            <span class="n">dosbandfig</span><span class="o">.</span><span class="n">append_trace</span><span class="p">(</span><span class="n">fbtrace</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">orb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;s&#39;</span> <span class="ow">or</span> <span class="n">orb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;p&#39;</span> <span class="ow">or</span> <span class="n">orb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span>
+                        <span class="c1">## get the fat bands colored by orbital</span>
+                        <span class="n">fatbandTraces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fatbandTraces_spd</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="c1">## add the fat bands to subplot (1,1)</span>
+                        <span class="k">for</span> <span class="n">fbtrace</span> <span class="ow">in</span> <span class="n">fatbandTraces</span><span class="p">:</span>
+                            <span class="n">dosbandfig</span><span class="o">.</span><span class="n">append_trace</span><span class="p">(</span><span class="n">fbtrace</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+                            <span class="c1">## format axes</span>
+            <span class="n">labels_uniq</span><span class="p">,</span> <span class="n">labelspos_uniq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_kpt_labels</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+            <span class="n">bandLayout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout_bands</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erange_bs</span><span class="p">,</span> <span class="n">labels_uniq</span><span class="p">,</span> <span class="n">labelspos_uniq</span><span class="p">)</span>
+            <span class="n">dosbandfig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Band structure&quot;</span><span class="p">,</span>
+                    <span class="n">xaxis1</span><span class="o">=</span><span class="n">bandLayout</span><span class="p">[</span><span class="s2">&quot;xaxis&quot;</span><span class="p">],</span>
+                    <span class="n">yaxis1</span><span class="o">=</span><span class="n">bandLayout</span><span class="p">[</span><span class="s2">&quot;yaxis&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dos</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_erange_dos</span><span class="p">(</span><span class="n">dos</span><span class="p">)</span>
+
+            <span class="c1">## add total density of states</span>
+            <span class="n">dosTraces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dosTraces_tot</span><span class="p">(</span><span class="n">dos</span><span class="p">)</span>
+            <span class="c1">## add the densities to subplot (1,2)</span>
+            <span class="k">for</span> <span class="n">dosTrace</span> <span class="ow">in</span> <span class="n">dosTraces</span><span class="p">:</span>
+                <span class="n">dosbandfig</span><span class="o">.</span><span class="n">append_trace</span><span class="p">(</span><span class="n">dosTrace</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">projlist</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">proj</span> <span class="ow">in</span> <span class="n">projlist</span><span class="p">:</span>
+                    <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span> <span class="o">=</span> <span class="n">proj</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">proj</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">orb</span> <span class="o">==</span> <span class="s2">&quot;Total&quot;</span><span class="p">:</span>
+                        <span class="c1">## get element projected density of states</span>
+                        <span class="n">dosTraces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dosTraces_el</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">orb</span> <span class="o">==</span> <span class="s1">&#39;s&#39;</span> <span class="ow">or</span> <span class="n">orb</span> <span class="o">==</span> <span class="s1">&#39;p&#39;</span> <span class="ow">or</span> <span class="n">orb</span> <span class="o">==</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span>
+                        <span class="c1">## get spd projected density of states</span>
+                        <span class="n">dosTraces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dosTraces_spd</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1">## get full sub-orbital projected density of states</span>
+                        <span class="n">dosTraces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dosTraces_suborb</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">elem</span><span class="p">,</span> <span class="n">orb</span><span class="p">)</span>
+                    <span class="c1">## add the densities to subplot (1,2)</span>
+                    <span class="k">for</span> <span class="n">dosTrace</span> <span class="ow">in</span> <span class="n">dosTraces</span><span class="p">:</span>
+                        <span class="n">dosbandfig</span><span class="o">.</span><span class="n">append_trace</span><span class="p">(</span><span class="n">dosTrace</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1">## format axes</span>
+            <span class="n">dosLayout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout_dos</span><span class="p">(</span><span class="n">dos</span><span class="p">)</span>
+            <span class="n">dosbandfig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Band structure and density of states&quot;</span><span class="p">,</span>
+                    <span class="n">xaxis2</span><span class="o">=</span><span class="n">dosLayout</span><span class="p">[</span><span class="s2">&quot;xaxis&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">bs</span><span class="p">:</span>
+                <span class="n">dosLayout</span><span class="p">[</span><span class="s2">&quot;yaxis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">erange_dos</span>
+                <span class="n">dosbandfig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+                        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Density of states&quot;</span><span class="p">,</span>
+                        <span class="n">yaxis1</span><span class="o">=</span><span class="n">dosLayout</span><span class="p">[</span><span class="s2">&quot;yaxis&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="c1">## adjust size of subplots</span>
+        <span class="k">if</span> <span class="n">bs</span> <span class="ow">and</span> <span class="n">dos</span><span class="p">:</span>
+            <span class="n">dosbandfig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">][</span><span class="s2">&quot;xaxis1&quot;</span><span class="p">][</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
+            <span class="n">dosbandfig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">][</span><span class="s2">&quot;xaxis2&quot;</span><span class="p">][</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.702</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">bs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dos</span><span class="p">:</span>
+            <span class="n">dosbandfig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">][</span><span class="s2">&quot;xaxis1&quot;</span><span class="p">][</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">dos</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">bs</span><span class="p">:</span>
+            <span class="n">dosbandfig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">][</span><span class="s2">&quot;xaxis2&quot;</span><span class="p">][</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">dosbandfig</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jason Gibson
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>simulation.custom &mdash; MaterialsWeb 2.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> MaterialsWeb
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">materialsweb</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MaterialsWeb</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>simulation.custom</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for simulation.custom</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+
+<div class="viewcode-block" id="TagField"><a class="viewcode-back" href="../../simulation.html#simulation.custom.TagField">[docs]</a><span class="k">class</span> <span class="nc">TagField</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Stores tags in a single database column.&quot;</span>
+    <span class="c1">#__metaclass__ = models.SubfieldBase</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delimiter</span> <span class="o">=</span> <span class="n">delimiter</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TagField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TagField.to_python"><a class="viewcode-back" href="../../simulation.html#simulation.custom.TagField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="c1"># Otherwise, split by delimiter</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delimiter</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TagField.get_prep_value"><a class="viewcode-back" href="../../simulation.html#simulation.custom.TagField.get_prep_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_prep_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="NumpyArrayField"><a class="viewcode-back" href="../../simulation.html#simulation.custom.NumpyArrayField">[docs]</a><span class="k">class</span> <span class="nc">NumpyArrayField</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Stores a Numpy ndarray.&quot;</span>
+    <span class="c1">#__metaclass__ = models.SubfieldBase</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">NumpyArrayField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NumpyArrayField.to_python"><a class="viewcode-back" href="../../simulation.html#simulation.custom.NumpyArrayField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="NumpyArrayField.get_prep_value"><a class="viewcode-back" href="../../simulation.html#simulation.custom.NumpyArrayField.get_prep_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_prep_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="c1">#return pickle.dumps(value.tolist())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is not a list or numpy array&#39;</span> <span class="o">%</span> <span class="n">value</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="DictField"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictField">[docs]</a><span class="k">class</span> <span class="nc">DictField</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">):</span>
+    <span class="c1">#__metaclass__ = models.SubfieldBase</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Stores a python dictionary&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DictField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DictField.to_python"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DictField.get_prep_value"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictField.get_prep_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_prep_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">defaultdict</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DictField.value_to_string"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictField.value_to_string">[docs]</a>    <span class="k">def</span> <span class="nf">value_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_val_from_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_db_prep_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="JSONField"><a class="viewcode-back" href="../../simulation.html#simulation.custom.JSONField">[docs]</a><span class="k">class</span> <span class="nc">JSONField</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">):</span>
+    <span class="c1">#__metaclass__ = models.SubfieldBase</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Stores a python dictionary&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">JSONField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="JSONField.to_python"><a class="viewcode-back" href="../../simulation.html#simulation.custom.JSONField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONField.get_prep_value"><a class="viewcode-back" href="../../simulation.html#simulation.custom.JSONField.get_prep_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_prep_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;get prep value&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="DictModel"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictModel">[docs]</a><span class="k">class</span> <span class="nc">DictModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">DictField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DictModel.Meta"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictModel.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+    <span class="c1">## dict methods</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+<div class="viewcode-block" id="DictModel.keys"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictModel.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DictModel.values"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictModel.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DictModel.items"><a class="viewcode-back" href="../../simulation.html#simulation.custom.DictModel.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="sync_database"><a class="viewcode-back" href="../../simulation.html#simulation.custom.sync_database">[docs]</a><span class="k">def</span> <span class="nf">sync_database</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This will download a *very* large database.&#39;</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">raw_input</span><span class="p">(</span><span class="s1">&#39;  Are you sure you want to proceed? (y/n) [n]: &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ans</span><span class="o">.</span><span class="n">lower</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">loc</span> <span class="o">=</span> <span class="n">raw_input</span><span class="p">(</span><span class="s1">&#39;Where should the database be downloaded to?&#39;</span><span class="o">+</span>
+            <span class="s1">&#39;[/tmp]: &#39;</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">loc</span><span class="p">:</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://oqmd.org/static/downloads/database.tgz&quot;</span>
+
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">loc</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+    <span class="n">file_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">getheaders</span><span class="p">(</span><span class="s2">&quot;Content-Length&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading: </span><span class="si">%s</span><span class="s2"> Bytes: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_size</span><span class="p">))</span>
+
+    <span class="n">file_size_dl</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">block_sz</span> <span class="o">=</span> <span class="mi">8192</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">block_sz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">buffer</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="n">file_size_dl</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%10d</span><span class="s2">  [</span><span class="si">%3.2f%%</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_size_dl</span><span class="p">,</span> <span class="n">file_size_dl</span> <span class="o">*</span> <span class="mf">100.</span> <span class="o">/</span> <span class="n">file_size</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">status</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="nb">print</span><span class="p">())</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The database has been successfully downloaded.&#39;</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;To include in mysql, issue the following commands as root:&#39;</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;mv /tmp/database.tgz /var/lib/mysql&#39;</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;cd /var/lib/mysql &amp;&amp; tar -xvf database.tgz&#39;</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;Note: if you already have a database named &quot;qmdb&quot; this process&#39;</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39; will overwrite the existing oqmd database.&#39;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jason Gibson
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

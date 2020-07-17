@@ -1,0 +1,575 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>electronic_visualization.dash_main &mdash; MaterialsWeb 2.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> MaterialsWeb
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">materialsweb</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MaterialsWeb</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>electronic_visualization.dash_main</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for electronic_visualization.dash_main</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pymatgen</span> <span class="kn">import</span> <span class="n">Structure</span>
+<span class="kn">from</span> <span class="nn">pymatgen.io.vasp.outputs</span> <span class="kn">import</span> <span class="n">Vasprun</span>
+<span class="kn">from</span> <span class="nn">pymatgen.electronic_structure.dos</span> <span class="kn">import</span> <span class="n">CompleteDos</span>
+<span class="kn">from</span> <span class="nn">pymatgen.electronic_structure.bandstructure</span> <span class="kn">import</span> <span class="n">BandStructureSymmLine</span>
+<span class="kn">from</span> <span class="nn">pymatgen.core.periodic_table</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="c1"># from pymatgen.ext.matproj import MPRester</span>
+
+<span class="kn">import</span> <span class="nn">dash</span>
+<span class="kn">import</span> <span class="nn">dash_core_components</span> <span class="k">as</span> <span class="nn">dcc</span>
+<span class="kn">import</span> <span class="nn">dash_html_components</span> <span class="k">as</span> <span class="nn">html</span>
+<span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">State</span>
+
+<span class="kn">from</span> <span class="nn">.gen_structfig</span> <span class="kn">import</span> <span class="n">StructFig</span>
+<span class="kn">from</span> <span class="nn">.gen_bandsfig</span> <span class="kn">import</span> <span class="n">BandsFig</span>
+
+
+<div class="viewcode-block" id="MyEncoder"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.MyEncoder">[docs]</a><span class="k">class</span> <span class="nc">MyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="c1">## convert numpy types to regular types for conversion to json</span>
+<div class="viewcode-block" id="MyEncoder.default"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.MyEncoder.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">MyEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># tls.set_credentials_file(username=&#39;annemarietan&#39;, api_key=&#39;373kEaPah9OkvR1HbBha&#39;)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">dash</span><span class="o">.</span><span class="n">Dash</span><span class="p">()</span>
+<span class="c1"># app = dash.Dash(__name__,</span>
+<span class="c1">#                external_scripts=[&#39;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML&#39;],</span>
+<span class="c1">#                external_stylesheets=[&#39;https://codepen.io/chriddyp/pen/bWLwgP.css&#39;]</span>
+<span class="c1">#                )</span>
+
+
+<span class="n">app</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+
+    <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s1">&#39;Interactive Electronic Structure Visualization Tool&#39;</span><span class="p">,</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;textAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#0021A5&#39;</span>
+                   <span class="p">}</span>
+            <span class="p">),</span>
+
+    <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="s1">&#39;currently a work in progress by Anne Marie Tan :)&#39;</span><span class="p">,</span>
+             <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;textAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#FA4616&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;marginBottom&#39;</span><span class="p">:</span> <span class="s1">&#39;20px&#39;</span>
+                    <span class="p">}</span>
+             <span class="p">),</span>
+
+    <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+
+        <span class="c1">## hack whitespace between inline-blocks</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;5%&#39;</span>
+                        <span class="p">}</span>
+                 <span class="p">),</span>
+
+        <span class="c1">## boxes to input path to local data</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="s1">&#39;From local data:&#39;</span><span class="p">,</span>
+                     <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span>
+                            <span class="p">}</span>
+                     <span class="p">),</span>
+
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;vasprun_dos&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+                      <span class="c1">#                      value=&#39;&#39;,</span>
+                      <span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;input path to vasprun.xml file from DoS calc. + enter/tab&#39;</span><span class="p">,</span>
+                      <span class="n">debounce</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;30px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;marginBottom&#39;</span><span class="p">:</span> <span class="s1">&#39;5px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;1px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;textAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span>
+                             <span class="p">}</span>
+                      <span class="p">),</span>
+
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;vasprun_bands&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+                      <span class="c1">#                      value=&#39;&#39;,</span>
+                      <span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;input path to vasprun.xml file from bands calc. + enter/tab&#39;</span><span class="p">,</span>
+                      <span class="n">debounce</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;30px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;marginBottom&#39;</span><span class="p">:</span> <span class="s1">&#39;5px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;1px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;textAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span>
+                             <span class="p">}</span>
+                      <span class="p">),</span>
+
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;kpts_bands&#39;</span><span class="p">,</span>
+                      <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+                      <span class="c1">#                      value=&#39;&#39;,</span>
+                      <span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;input path to KPOINTS file from bands calc. + enter/tab&#39;</span><span class="p">,</span>
+                      <span class="n">debounce</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;30px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;1px&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;textAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span>
+                             <span class="p">}</span>
+                      <span class="p">),</span>
+
+            <span class="c1">## dcc.Store components are used to store JSON data in the browser</span>
+            <span class="c1">## (replace the &quot;hidden Div&quot; hack)</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;dos_object&#39;</span><span class="p">),</span>  <span class="c1">## pymatgen dos object</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;bs_object&#39;</span><span class="p">),</span>  <span class="c1">## pymatgen bs object</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;struct_object&#39;</span><span class="p">),</span>  <span class="c1">## pymatgen structure object</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;options&#39;</span><span class="p">),</span>  <span class="c1">## full dict of element/orbital options</span>
+
+        <span class="p">],</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;30%&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;verticalAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;top&#39;</span>
+                   <span class="p">}</span>
+        <span class="p">),</span>
+
+        <span class="c1">## hack whitespace between inline-blocks</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;5%&#39;</span>
+                        <span class="p">}</span>
+                 <span class="p">),</span>
+
+        <span class="c1">## dropdown lists for selecting projections</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="s1">&#39;Select projections:&#39;</span><span class="p">,</span>
+                     <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span>
+                            <span class="p">}</span>
+                     <span class="p">),</span>
+
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;species_dropdown&#39;</span><span class="p">,</span>
+                <span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;select species&#39;</span><span class="p">,</span>
+                <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;34px&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;marginBottom&#39;</span><span class="p">:</span> <span class="s1">&#39;5px&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;1px&#39;</span><span class="p">}</span>
+            <span class="p">),</span>
+
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;orb_dropdown&#39;</span><span class="p">,</span>
+                <span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;select orbital&#39;</span><span class="p">,</span>
+                <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;34px&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;marginBottom&#39;</span><span class="p">:</span> <span class="s1">&#39;5px&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;1px&#39;</span><span class="p">}</span>
+            <span class="p">),</span>
+
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;suborb_dropdown&#39;</span><span class="p">,</span>
+                <span class="n">placeholder</span><span class="o">=</span><span class="s1">&#39;select sub-orbital&#39;</span><span class="p">,</span>
+                <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;34px&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;1px&#39;</span><span class="p">}</span>
+            <span class="p">),</span>
+
+        <span class="p">],</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;30%&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;verticalAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;top&#39;</span>
+                   <span class="p">}</span>
+        <span class="p">),</span>
+
+        <span class="c1">## hack whitespace between inline-blocks</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;5%&#39;</span>
+                        <span class="p">}</span>
+                 <span class="p">),</span>
+
+        <span class="c1">## button to click to generate bands+dos figure</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;submit_button&#39;</span><span class="p">,</span>
+                    <span class="n">n_clicks</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">children</span><span class="o">=</span><span class="s1">&#39;Generate plot&#39;</span><span class="p">,</span>
+                    <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;50px&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;15%&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;verticalAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;bottom&#39;</span>
+                           <span class="p">}</span>
+                    <span class="p">),</span>
+    <span class="p">],</span>
+        <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;marginBottom&#39;</span><span class="p">:</span> <span class="s1">&#39;20px&#39;</span>
+               <span class="p">}</span>
+    <span class="p">),</span>
+
+
+    <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+        <span class="c1">## our simple clickable structure figure!</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;unitcell&#39;</span><span class="p">,</span>
+                  <span class="n">figure</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[]},</span>
+                  <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;30%&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span>
+                         <span class="p">}</span>
+                  <span class="p">),</span>
+
+        <span class="c1">## our interactive bands+dos figure!</span>
+        <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;DOS_bands&#39;</span><span class="p">,</span>
+                  <span class="n">figure</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[]},</span>
+                  <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;65%&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span>
+                         <span class="p">}</span>
+                  <span class="p">),</span>
+    <span class="p">],</span>
+        <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;600px&#39;</span>
+               <span class="p">}</span>
+    <span class="p">),</span>
+
+    <span class="c1">## this div tells which atom was selected (temporary)</span>
+    <span class="c1">#    html.Div(id=&#39;select_atom&#39;,</span>
+    <span class="c1">#            style={&#39;display&#39;: &#39;inline-block&#39;,</span>
+    <span class="c1">#                   &#39;float&#39;: &#39;left&#39;,</span>
+    <span class="c1">#                   &#39;width&#39;: &#39;30%&#39;,</span>
+    <span class="c1">#                   &#39;marginLeft&#39;: &#39;100&#39;</span>
+    <span class="c1">#                   }</span>
+    <span class="c1">#        ),</span>
+
+<span class="p">],</span>
+    <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;backgroundColor&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFFFF&#39;</span><span class="p">}</span>
+<span class="p">)</span>
+
+
+<span class="c1">## The &quot;inputs&quot; and &quot;outputs&quot; of our application interface</span>
+<span class="c1">## are described declaratively through the app.callback decorator</span>
+<span class="c1">## The inputs and outputs are simply the properties of a particular component</span>
+<span class="c1">## Whenever an input property changes,</span>
+<span class="c1">## the function that the callback decorator wraps will get called.</span>
+<span class="c1">## Dash passes the new value of the input property to the function</span>
+<span class="c1">## and updates the output property with whatever was returned by the function.</span>
+
+<div class="viewcode-block" id="get_dos"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.get_dos">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;dos_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;vasprun_dos&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">get_dos</span><span class="p">(</span><span class="n">vasprun_dos</span><span class="p">):</span>
+    <span class="c1">## get CompleteDos object and &quot;save&quot; in hidden div in json format</span>
+    <span class="n">dos</span> <span class="o">=</span> <span class="n">Vasprun</span><span class="p">(</span><span class="n">vasprun_dos</span><span class="p">)</span><span class="o">.</span><span class="n">complete_dos</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dos</span><span class="o">.</span><span class="n">as_dict</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="get_bs"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.get_bs">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;bs_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;dos_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;vasprun_bands&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;kpts_bands&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">get_bs</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">vasprun_bands</span><span class="p">,</span> <span class="n">kpts_bands</span><span class="p">):</span>
+    <span class="c1">## get BandStructureSymmLine object and &quot;save&quot; in hidden div in json format</span>
+    <span class="n">bands</span> <span class="o">=</span> <span class="n">Vasprun</span><span class="p">(</span><span class="n">vasprun_bands</span><span class="p">,</span> <span class="n">parse_projected_eigen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dos</span><span class="p">:</span>
+        <span class="n">dos</span> <span class="o">=</span> <span class="n">CompleteDos</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">dos</span><span class="p">))</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="n">bands</span><span class="o">.</span><span class="n">get_band_structure</span><span class="p">(</span><span class="n">kpts_bands</span><span class="p">,</span> <span class="n">line_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">efermi</span><span class="o">=</span><span class="n">dos</span><span class="o">.</span><span class="n">efermi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="n">bands</span><span class="o">.</span><span class="n">get_band_structure</span><span class="p">(</span><span class="n">kpts_bands</span><span class="p">,</span> <span class="n">line_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(),</span> <span class="bp">cls</span><span class="o">=</span><span class="n">MyEncoder</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_structure"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.get_structure">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;struct_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;vasprun_dos&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;vasprun_bands&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">get_structure</span><span class="p">(</span><span class="n">vasprun_dos</span><span class="p">,</span> <span class="n">vasprun_bands</span><span class="p">):</span>
+    <span class="c1">## get structure object and &quot;save&quot; in hidden div in json format</span>
+    <span class="k">if</span> <span class="n">vasprun_dos</span><span class="p">:</span>
+        <span class="n">structure</span> <span class="o">=</span> <span class="n">Vasprun</span><span class="p">(</span><span class="n">vasprun_dos</span><span class="p">)</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">vasprun_bands</span><span class="p">:</span>
+        <span class="n">structure</span> <span class="o">=</span> <span class="n">Vasprun</span><span class="p">(</span><span class="n">vasprun_bands</span><span class="p">)</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">as_dict</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="get_options_all"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.get_options_all">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;struct_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">get_options_all</span><span class="p">(</span><span class="n">struct</span><span class="p">):</span>
+    <span class="c1">## determine full list of options and store in hidden div</span>
+
+    <span class="c1">## de-serialize structure from json format to pymatgen object</span>
+    <span class="n">structure</span> <span class="o">=</span> <span class="n">Structure</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">struct</span><span class="p">))</span>
+
+    <span class="c1">## determine if sub-orbital projections exist. If so, set lm = True</span>
+    <span class="c1">#    orbs = [Orbital.__str__(orb) for atom_dos in vasprun.complete_dos.pdos.values()</span>
+    <span class="c1">#                                 for orb,pdos in atom_dos.items()]</span>
+    <span class="c1">#    lm = any([&quot;x&quot; in s for s in orbs])</span>
+
+    <span class="c1">## determine the list of unique elements in the system</span>
+    <span class="n">elems</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">specie</span><span class="p">)</span> <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">structure</span><span class="o">.</span><span class="n">sites</span><span class="p">]</span>
+    <span class="c1">## remove duplicate entries</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span>
+
+    <span class="c1">## generate the full list of options with sub-orbital projections</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="n">options</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; Total&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; Total&#39;</span><span class="p">],</span>
+                         <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; s&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; s&#39;</span><span class="p">]}</span>
+        <span class="k">if</span> <span class="n">Element</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="o">.</span><span class="n">block</span> <span class="o">==</span> <span class="s1">&#39;p&#39;</span> <span class="ow">or</span> <span class="n">Element</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="o">.</span><span class="n">block</span> <span class="o">==</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; p&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; px&#39;</span><span class="p">,</span> <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; py&#39;</span><span class="p">,</span> <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; pz&#39;</span><span class="p">,</span>
+                                                <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; p summed&#39;</span><span class="p">]})</span>
+        <span class="k">if</span> <span class="n">Element</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="o">.</span><span class="n">block</span> <span class="o">==</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; d&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; dxz&#39;</span><span class="p">,</span> <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; dyz&#39;</span><span class="p">,</span> <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; dxy&#39;</span><span class="p">,</span>
+                                                <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; dx2-y2&#39;</span><span class="p">,</span> <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; dz2&#39;</span><span class="p">,</span> <span class="n">elem</span> <span class="o">+</span> <span class="s1">&#39; d summed&#39;</span><span class="p">]})</span>
+    <span class="c1">#    options.update({&#39;Total&#39;:{&#39;Total&#39;: None}})</span>
+
+    <span class="k">return</span> <span class="n">options</span></div>
+
+
+<div class="viewcode-block" id="set_elem_options"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.set_elem_options">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;species_dropdown&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">set_elem_options</span><span class="p">(</span><span class="n">options</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">options</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="set_orb_options"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.set_orb_options">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;orb_dropdown&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;species_dropdown&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">set_orb_options</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">selected_species</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">orb</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">orb</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="n">selected_species</span>
+            <span class="k">for</span> <span class="n">orb</span> <span class="ow">in</span> <span class="n">options</span><span class="p">[</span><span class="n">sp</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="set_suborb_options"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.set_suborb_options">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;suborb_dropdown&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;species_dropdown&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;orb_dropdown&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">set_suborb_options</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">selected_species</span><span class="p">,</span> <span class="n">selected_orb</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">suborb</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">suborb</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">orb</span> <span class="ow">in</span> <span class="n">selected_orb</span>
+            <span class="k">if</span> <span class="n">orb</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">selected_species</span>
+            <span class="k">for</span> <span class="n">suborb</span> <span class="ow">in</span> <span class="n">options</span><span class="p">[</span><span class="n">orb</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="n">orb</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="update_dosbandsfig"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.update_dosbandsfig">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;DOS_bands&#39;</span><span class="p">,</span> <span class="s1">&#39;figure&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;submit_button&#39;</span><span class="p">,</span> <span class="s1">&#39;n_clicks&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;dos_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+               <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;bs_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)],</span>
+              <span class="c1">#              [State(&#39;orb_dropdown&#39;, &#39;value&#39;)])</span>
+              <span class="p">[</span><span class="n">State</span><span class="p">(</span><span class="s1">&#39;suborb_dropdown&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">update_dosbandsfig</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">projlist</span><span class="p">):</span>
+    <span class="c1">## figure updates when the inputs change or the button is clicked</span>
+    <span class="c1">## figure does NOT update when elements or orbitals are selected</span>
+    <span class="c1">## de-serialize dos and bs from json format to pymatgen objects</span>
+    <span class="k">if</span> <span class="n">dos</span><span class="p">:</span>
+        <span class="n">dos</span> <span class="o">=</span> <span class="n">CompleteDos</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">dos</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">bs</span><span class="p">:</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="n">BandStructureSymmLine</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">bs</span><span class="p">))</span>
+    <span class="c1">## update the band structure and dos figure</span>
+    <span class="n">dosbandfig</span> <span class="o">=</span> <span class="n">BandsFig</span><span class="p">()</span><span class="o">.</span><span class="n">generate_fig</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">projlist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dosbandfig</span></div>
+
+
+
+
+<div class="viewcode-block" id="update_structfig"><a class="viewcode-back" href="../../electronic_visualization.html#electronic_visualization.dash_main.update_structfig">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;unitcell&#39;</span><span class="p">,</span> <span class="s1">&#39;figure&#39;</span><span class="p">),</span>
+              <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;struct_object&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">update_structfig</span><span class="p">(</span><span class="n">struct</span><span class="p">):</span>
+    <span class="c1">## de-serialize structure from json format to pymatgen object</span>
+    <span class="n">structure</span> <span class="o">=</span> <span class="n">Structure</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">struct</span><span class="p">))</span>
+    <span class="c1">## Generate our simple structure figure</span>
+    <span class="n">structfig</span> <span class="o">=</span> <span class="n">StructFig</span><span class="p">()</span><span class="o">.</span><span class="n">generate_fig</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">structfig</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jason Gibson
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

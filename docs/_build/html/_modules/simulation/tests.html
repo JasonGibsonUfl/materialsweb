@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>simulation.tests &mdash; MaterialsWeb 2.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> MaterialsWeb
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">materialsweb</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MaterialsWeb</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>simulation.tests</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for simulation.tests</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">simulation.materials.entry</span> <span class="kn">import</span> <span class="n">Entry</span>
+<span class="kn">from</span> <span class="nn">simulation.analysis.vasp.calculation</span> <span class="kn">import</span> <span class="n">Calculation</span>
+<span class="kn">from</span> <span class="nn">scripts.fill_elements</span> <span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">run_e</span>
+<span class="kn">from</span> <span class="nn">scripts.fill_spacegroups</span> <span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">run_s</span>
+<span class="kn">from</span> <span class="nn">scripts.fill_wyckoffsites</span> <span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">run_w</span>
+
+<div class="viewcode-block" id="TestSimulation"><a class="viewcode-back" href="../../simulation.html#simulation.tests.TestSimulation">[docs]</a><span class="k">class</span> <span class="nc">TestSimulation</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestSimulation.setUp"><a class="viewcode-back" href="../../simulation.html#simulation.tests.TestSimulation.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">run_e</span><span class="p">()</span>
+        <span class="n">run_s</span><span class="p">()</span>
+        <span class="n">run_w</span><span class="p">()</span>
+        <span class="n">path2D</span> <span class="o">=</span> <span class="s1">&#39;/var/www/materialsweb/static/database/mp-691133&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span> <span class="o">=</span> <span class="n">Calculation</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path2D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">path2D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">entry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">composition2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry2D</span><span class="o">.</span><span class="n">composition</span>
+
+        <span class="n">path3D</span> <span class="o">=</span> <span class="s1">&#39;/var/www/materialsweb/static/database/MAX_phases/all_competitors/mp-867780&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span> <span class="o">=</span> <span class="n">Calculation</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path3D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">path3D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry3D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">entry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">composition3D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry3D</span><span class="o">.</span><span class="n">composition</span></div>
+
+<div class="viewcode-block" id="TestSimulation.test_calculation"><a class="viewcode-back" href="../../simulation.html#simulation.tests.TestSimulation.test_calculation">[docs]</a>    <span class="k">def</span> <span class="nf">test_calculation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Calcualtion quantities&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span><span class="o">-</span><span class="mf">102.1843278</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">energy_pa</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.3865204875</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">magmom</span><span class="p">,</span> <span class="mf">11.9998855</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">magmom_pa</span><span class="p">,</span> <span class="mf">0.74999284375</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">band_gap</span><span class="p">,</span> <span class="mf">1.0072</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">formation_energy</span><span class="p">,</span> <span class="mi">179</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;Entry Quantities&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry2D</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;Compostion quantities&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition2D</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span> <span class="mf">21.250710427785002</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition2D</span><span class="o">.</span><span class="n">formula</span><span class="p">,</span> <span class="s1">&#39;Cr1 H1 O2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition2D</span><span class="o">.</span><span class="n">generic</span><span class="p">,</span> <span class="s1">&#39;ABC2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition2D</span><span class="o">.</span><span class="n">element_list</span><span class="p">,</span> <span class="s1">&#39;Cr_H_O_&#39;</span><span class="p">)</span>
+
+        <span class="sd">&#39;&#39;&#39;Calcualtion quantities&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span><span class="o">-</span><span class="mf">21.42383041</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">energy_pa</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.3559576025</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">magmom</span><span class="p">,</span> <span class="mf">1.1246361</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">magmom_pa</span><span class="p">,</span> <span class="mf">0.281159025</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation3D</span><span class="o">.</span><span class="n">band_gap</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;Entry Quantities&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry3D</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;Compostion quantities&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition3D</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span> <span class="mf">33.23515081405</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition3D</span><span class="o">.</span><span class="n">formula</span><span class="p">,</span> <span class="s1">&#39;Al3 Cr1&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition3D</span><span class="o">.</span><span class="n">generic</span><span class="p">,</span> <span class="s1">&#39;AB3&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">composition3D</span><span class="o">.</span><span class="n">element_list</span><span class="p">,</span> <span class="s1">&#39;Al_Cr_&#39;</span><span class="p">)</span>
+        
+        <span class="n">ml_list</span> <span class="o">=</span><span class="p">[</span><span class="mf">3.8536327377042804e-05</span><span class="p">,</span> <span class="mf">3.853628381808742e-05</span><span class="p">,</span> <span class="mf">3.853628381808746e-05</span><span class="p">,</span> <span class="mf">3.853632737704282e-05</span><span class="p">,</span> <span class="mf">3.953138878697092e-05</span><span class="p">,</span> <span class="mf">3.9531390956468254e-05</span><span class="p">,</span> <span class="mf">3.953138878697098e-05</span><span class="p">,</span> <span class="mf">3.953139095646848e-05</span><span class="p">,</span> <span class="mf">3.5848701044293688e-06</span><span class="p">,</span> <span class="mf">4.451154568298833e-05</span><span class="p">,</span> <span class="mf">3.584870104429372e-06</span><span class="p">,</span> <span class="mf">3.5848789431573475e-06</span><span class="p">,</span> <span class="mf">4.4511563103682824e-05</span><span class="p">,</span> <span class="mf">4.451154568298852e-05</span><span class="p">,</span> <span class="mf">3.5848789431573623e-06</span><span class="p">,</span> <span class="mf">4.4511563103683095e-05</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calculation2D</span><span class="o">.</span><span class="n">get_symmetry_functions_g2</span><span class="p">(),</span> <span class="n">ml_list</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jason Gibson
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
