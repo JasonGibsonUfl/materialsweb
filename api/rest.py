@@ -63,7 +63,6 @@ class QueryEngine():
         all_results = all_results.distinct()
         if name != None:
             for a in all_results:
-                print(a)
                 if a.entry.name == name:
                     return a
         return all_results

@@ -125,6 +125,7 @@ def database_view(request, *args,**kwargs):
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range,
                                          formation_energy_range=formation_energy_range,dimension=dimensions,
                                         crystal_system=select_crystal_systems, name=name)
+        '''
         for a in all_results:
             if a.band_gap == None :
                 a.band_gap = 'None'
@@ -132,7 +133,7 @@ def database_view(request, *args,**kwargs):
                 a.band_gap = '0.0000'
             else:
                 a.band_gap = round(float(a.band_gap),4)
-
+        '''
 
         context = {
             'all_results': all_results
