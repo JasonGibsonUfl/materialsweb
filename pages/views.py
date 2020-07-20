@@ -84,14 +84,15 @@ def database_view(request, *args,**kwargs):
                 formula = formula[-1]
                 formula = re.sub(r'[0-9]+', '', formula)
                 formula = re.findall('[A-Z][^A-Z]*', formula)
-            band_gap_min = request.POST.get('band_gap_min')
-            band_gap_max = request.POST.get('band_gap_max')
-            band_range = [band_gap_min, band_gap_max]
+
         else:
             formula =None
             name = formula
-            print(formula)
-        
+            print(name)
+
+        band_gap_min = request.POST.get('band_gap_min')
+        band_gap_max = request.POST.get('band_gap_max')
+        band_range = [band_gap_min, band_gap_max]
         formation_energy_min = request.POST.get('formation_energy_min')
         formation_energy_max = request.POST.get('formation_energy_max')
         if formation_energy_min == '-4.00' and formation_energy_max == '4.00':
