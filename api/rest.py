@@ -65,7 +65,7 @@ class QueryEngine():
             for a in all_results:
                 print(a)
                 if a.entry.name == name:
-                    all_results = a
+                    return a
         return all_results
 
     def element_query(self, elements=[],Ql=[]):
