@@ -166,7 +166,7 @@ def result_view(request, *args, **kwargs):
             direct = 'indirect'
     else:
         direct = ''
-    path = str(path.split('/')[-1])
+    path = str(path.split('database/')[-1])
     print(path)
     label = path
     formation_energy = calculation.formation_energy
