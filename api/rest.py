@@ -26,11 +26,7 @@ class QueryEngine():
             for e in elements:
                 all_results = all_results.filter(element_set=e)
 
-        if name != None:
-            if len(all_results)>0:
-                all_results = all_results.filter(entry__name=band_gap_range)
-            else:
-                all_results = Calculation.objects.filter(entry__name=band_gap_range)
+
         if band_gap_range != None:
             if len(all_results)>0:
                 all_results = all_results.filter(band_gap__range=band_gap_range)
@@ -63,8 +59,12 @@ class QueryEngine():
 
         if len(all_results) == 0 :
             all_results = Calculation.objects.all()
-        all_results = all_results.distinct()
 
+        all_results = all_results.distinct()
+        if name != None:
+            for a in all_results:
+                if a.entry.name == name:
+                    all_results = a
         return all_results
 
     def element_query(self, elements=[],Ql=[]):
