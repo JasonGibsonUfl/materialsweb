@@ -7,6 +7,10 @@ import pymysql as dba
 from simulation.materials.entry import Entry
 from simulation.analysis.vasp.calculation import Calculation
 from django.db.models import Q
+import urllib
+
+global url
+url = 'http://10.5.46.39/static/'
 
 class QueryEngine():
 
@@ -84,3 +88,17 @@ class QueryEngine():
             except:
                 query_set = Calculation.objects.filter(el)
         return query_set
+
+    def get_KRR(system):
+        '''
+        Method to allow easy access to all pre-trainned kernal ridge regresion machine learning models of GASP runs
+        Args:
+            system (str): A chemical system (e.g. Cd-Te)
+        returns:
+            pickle object of machine learning model
+        '''
+        import pickle
+        urlm =url+'models/'+system+'.sav'
+        print(urlm)
+        model = pickle.load(urllib.request.urlopen(urlm))
+        return model

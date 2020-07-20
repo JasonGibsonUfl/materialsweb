@@ -1448,15 +1448,3 @@ class Calculation(models.Model):
 
         return g_2
     
-    
-    @staticmethod
-    def get_KRR(system):
-        '''
-        Method to allow easy access to all pre-trainned kernal ridge regresion machine learning models of GASP runs
-        Args:
-            system (str): A chemical system (e.g. Cd-Te)
-        returns:
-            pickle object of machine learning model
-        '''
-        import pickle
-        model = pickle.load(urllib.request.urlopen(url+'models/'+system+'.sav'))
