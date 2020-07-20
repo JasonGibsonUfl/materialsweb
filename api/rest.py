@@ -108,7 +108,7 @@ class QueryEngine():
 
     '''Machine Learning'''
     @staticmethod
-    def get_soap(file, rcut=7, nmax=6, lmax=8):
+    def get_soap(file, rcut=7, nmax=8, lmax=8):
         print('./' + file)
         ml=vasp.read_vasp('./'+file)
         species=['Cd','Te']
