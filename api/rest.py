@@ -22,6 +22,7 @@ class QueryEngine():
         #                                   calculation__formation_energy__range=formation_energy_range)
         all_results = []
         if len(elements) >0:
+            print('in Elements')
             all_results = Calculation.objects.filter(element_set=elements.pop(0))
             for e in elements:
                 all_results = all_results.filter(element_set=e)
@@ -58,6 +59,7 @@ class QueryEngine():
                 all_results = Calculation.objects.filter(entry__structure__spacegroup__lattice_system__in=crystal_system)
 
         if len(all_results) == 0 :
+            print('NO Results')
             all_results = Calculation.objects.all()
 
         all_results = all_results.distinct()
