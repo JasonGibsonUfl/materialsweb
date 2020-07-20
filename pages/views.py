@@ -181,6 +181,7 @@ def result_view(request, *args, **kwargs):
     else:
         print('Three Dimensional')
         data=structure.get_jmol3()
+
     context = {
         'entry': entry,
         'path': path,
@@ -195,6 +196,7 @@ def result_view(request, *args, **kwargs):
         'formula': formula,
 
     }
+    print(context)
 
     return render(request, 'result.html', context)
 
