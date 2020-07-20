@@ -84,10 +84,10 @@ def database_view(request, *args,**kwargs):
         print(formula)
         if formula[-1] == '':
             formula = formula[0:-1]
-        else:
+        #else:
             #formula = formula[-1]
-            formula = re.sub(r'[0-9]+', '', formula)
-            formula = re.findall('[A-Z][^A-Z]*', formula)
+            #formula = re.sub(r'[0-9]+', '', formula)
+            #formula = re.findall('[A-Z][^A-Z]*', formula)
 
 
 
