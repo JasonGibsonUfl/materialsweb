@@ -86,8 +86,9 @@ def database_view(request, *args,**kwargs):
                 formula = re.findall('[A-Z][^A-Z]*', formula)
 
         else:
-            formula =None
+
             name = formula
+            formula = []
             print(name)
 
         band_gap_min = request.POST.get('band_gap_min')
