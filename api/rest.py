@@ -64,7 +64,7 @@ class QueryEngine():
         if name != None:
             for a in all_results:
                 if a.entry.name == name:
-                    return a
+                    return [a]
         return all_results
 
     def element_query(self, elements=[],Ql=[]):
