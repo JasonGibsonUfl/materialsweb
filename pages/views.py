@@ -153,6 +153,7 @@ def result_view(request, *args, **kwargs):
     mwid = full_path.split('/')[-1]
     entry = Entry.objects.get(id=mwid)
     path = entry.path
+    print(path)
     structure = StructureP.from_file(path + '/POSCAR')
     calculation = Calculation.objects.get(path=path)
     band_gap = round(calculation.dos.find_gap(),3)
@@ -166,6 +167,7 @@ def result_view(request, *args, **kwargs):
     else:
         direct = ''
     path = str(path.split('/')[-1])
+    print(path)
     label = path
     formation_energy = calculation.formation_energy
     a = round(structure.lattice.a, 3)
