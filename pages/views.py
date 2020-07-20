@@ -138,8 +138,7 @@ def database_view(request, *args,**kwargs):
         context = {
             'all_results': all_results
         }
-        print(len(context['all_results']))
-        #context = 'TEMP'
+
     else:
         context = { 'all_results': ''}
 
