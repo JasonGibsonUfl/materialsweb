@@ -75,21 +75,22 @@ def database_view(request, *args,**kwargs):
         dim2 = dim1
         dim3 = dim2
         formula = request.POST.get('FormulaBox')
-        if '-' in formula:
-            formula = str(formula).split('-')
-            print(formula)
-            if formula[-1] == '':
-                formula = formula[0:-1]
-            else:
-                formula = formula[-1]
-                formula = re.sub(r'[0-9]+', '', formula)
-                formula = re.findall('[A-Z][^A-Z]*', formula)
-
-        else:
-
+        if '-' not in formula:
             name = formula
-            formula = []
-            print(name)
+        else:
+            name = None
+
+        formula = str(formula).split('-')
+        print(formula)
+        if formula[-1] == '':
+            formula = formula[0:-1]
+        else:
+            formula = formula[-1]
+            formula = re.sub(r'[0-9]+', '', formula)
+            formula = re.findall('[A-Z][^A-Z]*', formula)
+
+
+
 
         band_gap_min = request.POST.get('band_gap_min')
         band_gap_max = request.POST.get('band_gap_max')
@@ -125,7 +126,7 @@ def database_view(request, *args,**kwargs):
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range,
                                          formation_energy_range=formation_energy_range,dimension=dimensions,
                                         crystal_system=select_crystal_systems, name=name)
-        '''
+
         for a in all_results:
             if a.band_gap == None :
                 a.band_gap = 'None'
@@ -133,7 +134,7 @@ def database_view(request, *args,**kwargs):
                 a.band_gap = '0.0000'
             else:
                 a.band_gap = round(float(a.band_gap),4)
-        '''
+
 
         context = {
             'all_results': all_results
