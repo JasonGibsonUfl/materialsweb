@@ -75,18 +75,22 @@ def database_view(request, *args,**kwargs):
         dim2 = dim1
         dim3 = dim2
         formula = request.POST.get('FormulaBox')
-        formula = str(formula).split('-')
-        print(formula)
-        if formula[-1] == '':
-            formula = formula[0:-1]
+        if '-' in formula:
+            formula = str(formula).split('-')
+            print(formula)
+            if formula[-1] == '':
+                formula = formula[0:-1]
+            else:
+                formula = formula[-1]
+                formula = re.sub(r'[0-9]+', '', formula)
+                formula = re.findall('[A-Z][^A-Z]*', formula)
+            band_gap_min = request.POST.get('band_gap_min')
+            band_gap_max = request.POST.get('band_gap_max')
+            band_range = [band_gap_min, band_gap_max]
         else:
-            formula = formula[-1]
-            formula = re.sub(r'[0-9]+', '', formula)
-            formula = re.findall('[A-Z][^A-Z]*', formula)
-        print(formula)
-        band_gap_min = request.POST.get('band_gap_min')
-        band_gap_max = request.POST.get('band_gap_max')
-        band_range = [band_gap_min, band_gap_max]
+            formula =None
+            name = formula
+            print(formula)
         
         formation_energy_min = request.POST.get('formation_energy_min')
         formation_energy_max = request.POST.get('formation_energy_max')

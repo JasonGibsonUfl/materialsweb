@@ -516,10 +516,12 @@ class Structure(models.Model, object):
                     f['keys'][0], f['keys'][1], lp['alpha'],
                     f['keys'][2], lp['gamma'])
         else:
+            print(f['keys'][0])
+            print(lp['gamma'])
             lpstr += '&alpha; = %0.3g, &beta; = %0.3g, &gamma; = %0.3g' % (
-                f['keys'][0], lp['alpha'],
-                f['keys'][1], lp['beta'],
-                f['keys'][2], lp['gamma'])
+                float(lp['alpha']),
+                float(lp['beta']),
+                float(lp['gamma']))
         return lpstr
 
     lp = lat_params
@@ -700,7 +702,7 @@ class Structure(models.Model, object):
                 if d < tol and not d is None:
                     return True
         return False
-    '''
+
     def get_distance(self, atom1, atom2, limit=None, wrap_self=True):
         """
         Calculate the shortest distance between two atoms.
@@ -779,7 +781,7 @@ class Structure(models.Model, object):
         dist -= round(dist.dot(y) / yy) * y
         dist -= round(dist.dot(z) / zz) * z
         return dist
-    '''
+
     def add_site(self, site):
         site.structure = self
         self.sites.append(site)

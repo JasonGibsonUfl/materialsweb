@@ -21,6 +21,10 @@ from lxml import etree
 from django.db import models
 from django.db import transaction
 
+from pymatgen.io.vasp import Xdatcar
+from pymatgen.io.vasp import Oszicar
+from sklearn.cluster import KMeans
+import numpy as np
 import simulation.materials.structure as strx
 import simulation.io.poscar as poscar
 from . import potential as pot
@@ -178,8 +182,6 @@ class Calculation(models.Model):
         entry.save()
         self.entry = entry
 
-        #create DOS
-        #dos = DOS(entry=entry)
         dos=DOS.read(source+'/DOSCAR')
         dos.save()
         self.dos = dos
@@ -1214,27 +1216,13 @@ class Calculation(models.Model):
             calc.output.set_label(calc.label)
         return calc
 
-
-
-    #### calculation management
-
     def write(self):
         '''
         Write calculation to disk
         '''
-        os.system('mkdir %s 2> /dev/null' % self.path)
-        poscar = open(self.path + '/POSCAR', 'w')
-        potcar = open(self.path + '/POTCAR', 'w')
-        incar = open(self.path + '/INCAR', 'w')
-        kpoints = open(self.path + '/KPOINTS', 'w')
-        poscar.write(self.POSCAR)
-        potcar.write(self.POTCAR)
-        incar.write(self.INCAR)
-        kpoints.write(self.KPOINTS)
-        poscar.close()
-        potcar.close()
-        incar.close()
-        kpoints.close()
+        self.write_poscar()
+        self.write_incar()
+        self.write_kpoints()
 
 
     def set_label(self, label):
@@ -1258,7 +1246,7 @@ class Calculation(models.Model):
 
     '''Get Files'''
     def write_poscar(self):
-        urlp = url + self.label+'/POSCAR'
+        urlp = url + self.path.split('database/')[-1] + '/POSCAR'
         file = urllib.request.urlopen(urlp)
         with open('POSCAR','a') as poscar:
             for line in file:
@@ -1266,7 +1254,7 @@ class Calculation(models.Model):
                 poscar.write(decoded_line)
 
     def write_kpoints(self):
-        urlp = url + self.label+'/KPOINTS'
+        urlp = url + self.path.split('database/')[-1] + '/KPOINTS'
         file = urllib.request.urlopen(urlp)
         with open('KPOINTS','a') as poscar:
             for line in file:
@@ -1274,7 +1262,7 @@ class Calculation(models.Model):
                 poscar.write(decoded_line)
 
     def write_incar(self):
-        urlp = url + self.label+'/INCAR'
+        urlp = url + self.path.split('database/')[-1] + '/INCAR'
         file = urllib.request.urlopen(urlp)
         with open('INCAR','a') as poscar:
             for line in file:
@@ -1326,10 +1314,6 @@ class Calculation(models.Model):
         #os.remove('./XdATCAR')
 
 
-        from pymatgen.io.vasp import Xdatcar
-        from pymatgen.io.vasp import Oszicar
-        from sklearn.cluster import KMeans
-        import numpy as np
         n = 100  # number of steps to sample
         s_extension = 'poscar'
         e_extension = 'energy'
