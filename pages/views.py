@@ -123,6 +123,7 @@ def database_view(request, *args,**kwargs):
             select_crystal_systems=None
         print(select_crystal_systems)
         all_results = []
+        print(name)
         all_results = qe.get_calculation(elements=formula, band_gap_range=band_range,
                                          formation_energy_range=formation_energy_range,dimension=dimensions,
                                         crystal_system=select_crystal_systems, name=name)
@@ -153,7 +154,6 @@ def result_view(request, *args, **kwargs):
     mwid = full_path.split('/')[-1]
     entry = Entry.objects.get(id=mwid)
     path = entry.path
-    print(path)
     structure = StructureP.from_file(path + '/POSCAR')
     calculation = Calculation.objects.get(path=path)
     band_gap = round(calculation.dos.find_gap(),3)
@@ -167,7 +167,6 @@ def result_view(request, *args, **kwargs):
     else:
         direct = ''
     path = str(path.split('database/')[-1])
-    print(path)
     label = path
     formation_energy = calculation.formation_energy
     a = round(structure.lattice.a, 3)
@@ -196,7 +195,6 @@ def result_view(request, *args, **kwargs):
         'formula': formula,
 
     }
-    print(context)
 
     return render(request, 'result.html', context)
 
