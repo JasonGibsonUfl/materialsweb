@@ -83,6 +83,7 @@ def database_view(request, *args,**kwargs):
         formula = str(formula).split('-')
         print(formula)
         if formula[-1] == '':
+            print('in')
             formula = formula[0:-1]
         #else:
             #formula = formula[-1]
@@ -97,10 +98,10 @@ def database_view(request, *args,**kwargs):
         band_range = [band_gap_min, band_gap_max]
         formation_energy_min = request.POST.get('formation_energy_min')
         formation_energy_max = request.POST.get('formation_energy_max')
-        if formation_energy_min == '-4.00' and formation_energy_max == '4.00':
+        if formation_energy_min == '-400.00' and formation_energy_max == '400.00':
             formation_energy_range=None
         else:
-            formation_energy_range = [str(float(formation_energy_min)*1000.0), str(float(formation_energy_max)*1000.0)]
+            formation_energy_range = [str(float(formation_energy_min)), str(float(formation_energy_max))]
         if band_gap_min == '0.00' and band_gap_max == '10.00':
             band_range = None
 
