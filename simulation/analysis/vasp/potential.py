@@ -14,8 +14,6 @@ class Potential(models.Model):
         | calculation
         | element
     Attributes:
-        | name
-        | date
         | electrons: Electrons in potential.
         | enmax
         | enmin

@@ -81,14 +81,8 @@ class Calculation(models.Model):
         | :mod:`~simulation.Structure` via output. Resulting structure.
         | :mod:`~simulation.Element` via element_set.
         | :mod:`~simulation.Potential` via potential_set.
-        | :mod:`~simulation.Hubbard` via hubbard_set.
         | :mod:`~simulation.Entry` via entry.
-        | :mod:`~simulation.Fit` via fit. Reference energy sets that have been fit using
-        |   this calculation.
-        | :mod:`~simulation.FormationEnergy` via formationenergy_set. Formation
-        |   energies computed from this calculation, for different choices of
-        |   fit sets.
-        | :mod:`~simulation.MetaData` via meta_data
+
     Attributes:
         | id
         | label: key for entry.calculations dict.

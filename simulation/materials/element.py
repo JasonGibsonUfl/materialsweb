@@ -54,14 +54,6 @@ class Element(models.Model):
       | d_elec: # of d electrons
       | f_elec: # of f electrons
       |
-      | **Additional information**
-      | production: Annual tons of element produced.
-      | abundance: Amount in earths crust (ppm)
-      | radioactive: Are all isotopes unstable?
-      | HHI_P: Herfindahl-Hirschman Index for production.
-      | HHI_R: Herfindahl-Hirschman Index for reserve
-    Note:
-      HHI values from Gaultois, M. et al. Chem. Mater. 25, 2911-2920 (2013).
     """
     ### Identification
     z = models.IntegerField()
