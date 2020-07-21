@@ -41,15 +41,24 @@ def substrate_view(request, *args,**kwargs):
     return render(request, 'substrate.html', {})
 
 def about_view(request, *args,**kwargs):
-    return render(request, 'about.html', {})
+    context = {}
+    is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
+    context.update({"is_signed_in": is_signed_in})
+    return render(request, 'about.html', context)
 
 
 def docs_view(request, *args,**kwargs):
-    return render(request, 'docs.html', {})
+    context = {}
+    is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
+    context.update({"is_signed_in": is_signed_in})
+    return render(request, 'docs.html', context)
 
 
 def contact_view(request, *args,**kwargs):
-    return render(request, 'contact.html', {})
+    context = {}
+    is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
+    context.update({"is_signed_in": is_signed_in})
+    return render(request, 'contact.html', context)
 
 
 def api_view(request, *args,**kwargs):
