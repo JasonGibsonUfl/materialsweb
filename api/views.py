@@ -14,7 +14,7 @@ import datetime
 
 
 class SpacegroupViewSet(viewsets.ModelViewSet):
-    queryset = Spacegroup.objects.all().order_by('id')
+    queryset = Spacegroup.objects.all().order_by('number')
     serializer_class = SpacegroupSerializer
 
 
