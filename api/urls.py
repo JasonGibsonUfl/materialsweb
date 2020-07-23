@@ -6,9 +6,12 @@ router = routers.DefaultRouter()
 router.register(r'elements', views.ElementViewSet)
 router.register(r'calculation', views.CalculationViewSet)
 router.register(r'entry', views.EntryViewSet)
-router.register(r'/composition', views.CompositionViewSet)
-router.register(r'/structure', views.StructureViewSet)
-router.register(r'/atom', views.AtomViewSet)
+router.register(r'composition', views.CompositionViewSet)
+router.register(r'structure', views.StructureViewSet)
+router.register(r'atom', views.AtomViewSet)
+router.register(r'site', views.SiteViewSet)
+router.register(r'species', views.SpeciesViewSet)
+
 
 
 

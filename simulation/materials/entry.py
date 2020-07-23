@@ -57,7 +57,7 @@ class Entry(models.Model):
     """
     ### structure properties
     path = models.CharField(max_length=255, unique=True)
-    meta_data = models.ManyToManyField('MetaData')
+    #meta_data = models.ManyToManyField('MetaData')
     label = models.CharField(max_length=20, null=True)
 
     ### record keeping

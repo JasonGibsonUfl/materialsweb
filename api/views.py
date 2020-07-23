@@ -1,11 +1,11 @@
 from rest_framework import viewsets
 from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
 from .serializers import*
-from simulation.materials.element import Element
+from simulation.materials.element import Element, Species
 from simulation.materials.entry import Entry
 from simulation.materials.composition import Composition
 from simulation.materials.structure import Structure
-from simulation.materials.atom import Atom
+from simulation.materials.atom import Atom, Site
 from simulation.analysis.vasp.calculation import Calculation
 
 import datetime
@@ -14,6 +14,10 @@ class ElementViewSet(viewsets.ModelViewSet):
     queryset = Element.objects.all().order_by('name')
     serializer_class = ElementSerializer
 
+
+class SpeciesViewSet(viewsets.ModelViewSet):
+    queryset = Species.objects.all().order_by('name')
+    serializer_class = SpeciesSerializer
 
 class CalculationViewSet(viewsets.ModelViewSet):
     queryset = Calculation.objects.all().order_by('id')
@@ -38,4 +42,12 @@ class StructureViewSet(viewsets.ModelViewSet):
 class AtomViewSet(viewsets.ModelViewSet):
     queryset = Atom.objects.all().order_by('id')
     serializer_class = AtomSerializer
+
+
+
+class SiteViewSet(viewsets.ModelViewSet):
+    queryset = Site.objects.all().order_by('id')
+    serializer_class = AtomSerializer
+
+
 
