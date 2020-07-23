@@ -7,6 +7,7 @@ from simulation.materials.composition import Composition
 from simulation.materials.structure import Structure
 from simulation.materials.atom import Atom, Site
 from simulation.analysis.vasp.calculation import Calculation
+from simulation.analysis.vasp.dos import DOS
 
 import datetime
 
@@ -22,6 +23,11 @@ class SpeciesViewSet(viewsets.ModelViewSet):
 class CalculationViewSet(viewsets.ModelViewSet):
     queryset = Calculation.objects.all().order_by('id')
     serializer_class = CalculationSerializer
+
+
+class DosViewSet(viewsets.ModelViewSet):
+    queryset = DOS.objects.all().order_by('id')
+    serializer_class = DosSerializer
 
 class EntryViewSet(viewsets.ModelViewSet):
     queryset = Entry.objects.all().order_by('id')

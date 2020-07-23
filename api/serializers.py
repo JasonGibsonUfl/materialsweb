@@ -5,6 +5,7 @@ from simulation.materials.composition import Composition
 from simulation.materials.structure import Structure
 from simulation.materials.atom import Atom, Site
 from simulation.analysis.vasp.calculation import Calculation
+from simulation.analysis.vasp.dos import DOS
 
 
 class ElementSerializer(serializers.HyperlinkedModelSerializer):
@@ -22,6 +23,12 @@ class SpeciesSerializer(serializers.HyperlinkedModelSerializer):
 class CalculationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Calculation
+        fields = '__all__'
+
+
+class DosSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = DOS
         fields = '__all__'
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
