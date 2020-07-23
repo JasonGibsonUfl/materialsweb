@@ -16,55 +16,56 @@ import datetime
 class SpacegroupViewSet(viewsets.ModelViewSet):
     queryset = Spacegroup.objects.all().order_by('number')
     serializer_class = SpacegroupSerializer
-
+    http_method_names = ['get']
 
 class WyckoffSiteViewSet(viewsets.ModelViewSet):
     queryset = WyckoffSite.objects.all().order_by('id')
     serializer_class = WyckoffSiteSerializer
-
+    http_method_names = ['get']
 
 class ElementViewSet(viewsets.ModelViewSet):
     queryset = Element.objects.all().order_by('name')
     serializer_class = ElementSerializer
+    http_method_names = ['get']
 
 class SpeciesViewSet(viewsets.ModelViewSet):
     queryset = Species.objects.all().order_by('name')
     serializer_class = SpeciesSerializer
+    http_method_names = ['get']
 
 class CalculationViewSet(viewsets.ModelViewSet):
     queryset = Calculation.objects.all().order_by('id')
     serializer_class = CalculationSerializer
+    http_method_names = ['get']
 
 
 class DosViewSet(viewsets.ModelViewSet):
     queryset = DOS.objects.all().order_by('id')
     serializer_class = DosSerializer
+    http_method_names = ['get']
 
 class EntryViewSet(viewsets.ModelViewSet):
     queryset = Entry.objects.all().order_by('id')
     serializer_class = EntrySerializer
+    http_method_names = ['get']
 
 
 class CompositionViewSet(viewsets.ModelViewSet):
     queryset = Composition.objects.all().order_by('id')
     serializer_class = CompositionSerializer
-
-
+    http_method_names = ['get']
 
 class StructureViewSet(viewsets.ModelViewSet):
     queryset = Structure.objects.all().order_by('id')
     serializer_class = StructureSerializer
-
+    http_method_names = ['get']
 
 class AtomViewSet(viewsets.ModelViewSet):
     queryset = Atom.objects.all().order_by('id')
     serializer_class = AtomSerializer
-
-
+    http_method_names = ['get']
 
 class SiteViewSet(viewsets.ModelViewSet):
     queryset = Site.objects.all().order_by('id')
     serializer_class = AtomSerializer
-
-
-
+    http_method_names = ['get']
