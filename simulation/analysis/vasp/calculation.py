@@ -33,7 +33,6 @@ import simulation.analysis.griddata as grid
 from . import dos
 from simulation.materials.atom import Atom, Site
 from simulation.utils.strings import *
-from simulation.data.meta_data import MetaData, add_meta_data
 from simulation.materials.element import Element
 from simulation.custom import DictField, NumpyArrayField
 from simulation.materials.entry import Entry
@@ -69,8 +68,6 @@ class VaspError(Exception):
     """General problem with vasp calculation."""
 
 
-@add_meta_data('error')
-@add_meta_data('warning')
 class Calculation(models.Model):
     """
     Base class for storing a VASP calculation.
@@ -104,7 +101,6 @@ class Calculation(models.Model):
     # = labeling =#
     configuration = models.CharField(db_index=True, max_length=15,
                                      null=True, blank=True)
-    meta_data = models.ManyToManyField(MetaData)
     dimension = models.IntegerField(blank=True)
     label = models.CharField(max_length=63, default='')
     entry = models.ForeignKey('Entry', db_index=True, null=True, blank=True, on_delete=models.CASCADE,)
@@ -117,8 +113,8 @@ class Calculation(models.Model):
     # = inputs =#
     input = models.ForeignKey(strx.Structure, related_name='calculated',
                               null=True, blank=True, on_delete=models.CASCADE,)
-    hubbard_set = models.ManyToManyField('Hubbard')
-    potential_set = models.ManyToManyField('Potential')
+    #hubbard_set = models.ManyToManyField('Hubbard')
+    #potential_set = models.ManyToManyField('Potential')
     settings = DictField(blank=True, null=True)
 
     # = outputs =#
@@ -236,9 +232,8 @@ class Calculation(models.Model):
             self.dos = self.dos
         super(Calculation, self).save(*args, **kwargs)
         self.hubbard_set.set(self.hubbards)
-        self.potential_set.set(self.potentials)
+        #self.potential_set.set(self.potentials)
         self.element_set.set([Element.get(e) for e in set(self.elements)])
-        self.meta_data.set(self.error_objects)
         if not self.formation is None:
             self.formation.save()
 
