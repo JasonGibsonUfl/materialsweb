@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from simulation.materials.element import Element
 from simulation.materials.entry import Entry
+from simulation.materials.composition import Composition
+from simulation.materials.structure import Structure
+from simulation.materials.atom import Atom
 from simulation.analysis.vasp.calculation import Calculation
 
 
@@ -9,8 +12,6 @@ class ElementSerializer(serializers.HyperlinkedModelSerializer):
         model = Element
         fields = '__all__'
 
-from rest_framework import serializers
-from simulation.materials.element import Element
 
 
 class CalculationSerializer(serializers.HyperlinkedModelSerializer):
@@ -22,3 +23,24 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Entry
         fields = '__all__'
+
+
+class CompositionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Composition
+        fields = '__all__'
+
+
+class StructureSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Structure
+        fields = '__all__'
+
+
+class AtomSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Atom
+        fields = '__all__'
+
+
+
