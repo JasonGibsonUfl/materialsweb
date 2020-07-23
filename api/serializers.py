@@ -6,6 +6,18 @@ from simulation.materials.structure import Structure
 from simulation.materials.atom import Atom, Site
 from simulation.analysis.vasp.calculation import Calculation
 from simulation.analysis.vasp.dos import DOS
+from simulation.analysis.symmetry.spacegroup import Spacegroup, WyckoffSite
+
+
+class SpacegroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Spacegroup
+        fields = '__all__'
+
+class WyckoffSiteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = WyckoffSite
+        fields = '__all__'
 
 
 class ElementSerializer(serializers.HyperlinkedModelSerializer):

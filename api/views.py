@@ -8,13 +8,24 @@ from simulation.materials.structure import Structure
 from simulation.materials.atom import Atom, Site
 from simulation.analysis.vasp.calculation import Calculation
 from simulation.analysis.vasp.dos import DOS
+from simulation.analysis.symmetry.spacegroup import Spacegroup, WyckoffSite
 
 import datetime
+
+
+class SpacegroupViewSet(viewsets.ModelViewSet):
+    queryset = Spacegroup.objects.all().order_by('id')
+    serializer_class = SpacegroupSerializer
+
+
+class WyckoffSiteViewSet(viewsets.ModelViewSet):
+    queryset = WyckoffSite.objects.all().order_by('id')
+    serializer_class = WyckoffSiteSerializer
+
 
 class ElementViewSet(viewsets.ModelViewSet):
     queryset = Element.objects.all().order_by('name')
     serializer_class = ElementSerializer
-
 
 class SpeciesViewSet(viewsets.ModelViewSet):
     queryset = Species.objects.all().order_by('name')
