@@ -231,7 +231,7 @@ class Calculation(models.Model):
             self.dos.save()
             self.dos = self.dos
         super(Calculation, self).save(*args, **kwargs)
-        self.hubbard_set.set(self.hubbards)
+        #self.hubbard_set.set(self.hubbards)
         #self.potential_set.set(self.potentials)
         self.element_set.set([Element.get(e) for e in set(self.elements)])
         if not self.formation is None:
