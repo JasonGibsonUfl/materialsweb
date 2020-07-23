@@ -13,7 +13,6 @@ class Composition(models.Model):
         | :mod:`~simulation.Entry` via entry_set
         | :mod:`~simulation.ExptFormationEnergy` via exptformationenergy_set
         | :mod:`~simulation.FormationEnergy` via formationenergy_set
-        | :mod:`~simulation.MetaData` via meta_data
         | :mod:`~simulation.Structure` via structure_set
         | :mod:`~simulation.Prototype` via prototype_set
     Attributes:
@@ -26,7 +25,6 @@ class Composition(models.Model):
     formula = models.CharField(primary_key=True, max_length=255)
     generic = models.CharField(max_length=255, blank=True, null=True)
     element_list = models.CharField(max_length=255, blank=True, null=True)
-    meta_data = models.ManyToManyField('MetaData')
 
     element_set = models.ManyToManyField('Element')
     ntypes = models.IntegerField(null=True)

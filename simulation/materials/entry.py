@@ -14,7 +14,6 @@ from simulation.materials.element import Element, Species
 from simulation.materials.structure import Structure, StructureError
 from simulation.utils import *
 # from simulation.computing.resources import Project
-from simulation.data.meta_data import *
 import simulation.io as io
 # import simulation.computing.scripts as scripts
 import simulation.analysis.vasp as vasp
@@ -23,12 +22,6 @@ import simulation
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-k_desc = 'Descriptive keyword for looking up entries'
-h_desc = 'A note indicating a reason the entry should not be calculated'
-
-
-@add_meta_data('keyword', description=k_desc)
-@add_meta_data('hold', description=h_desc)
 class Entry(models.Model):
     """Base class for a database entry.
     The core model for typical database entries. An Entry model represents an
@@ -44,7 +37,6 @@ class Entry(models.Model):
         | :mod:`~simulation.Element` via element_set
         | :mod:`~simulation.FormationEnergy` via formationenergy_set
         | :mod:`~simulation.Job` via job_set
-        | :mod:`~simulation.MetaData` via meta_data
         | :mod:`~simulation.Project` via project_set
         | :mod:`~simulation.Species` via species_set
         | :mod:`~simulation.Structure` via structure_set
@@ -57,7 +49,6 @@ class Entry(models.Model):
     """
     ### structure properties
     path = models.CharField(max_length=255, unique=True)
-    #meta_data = models.ManyToManyField('MetaData')
     label = models.CharField(max_length=20, null=True)
 
     ### record keeping
@@ -101,8 +92,6 @@ class Entry(models.Model):
             self.element_set.set(self.elements)
         if self._species:
             self.species_set.set(self.species)
-        if self._keywords or self._holds:
-            self.meta_data = self.hold_objects + self.keyword_objects
         self.label = 'hold'
 
     @staticmethod

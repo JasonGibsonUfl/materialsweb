@@ -25,7 +25,6 @@ from simulation.materials.atom import Atom, Site
 from .composition import Composition
 from simulation.utils.strings import format_comp, parse_comp, reduce_comp
 from simulation.utils.math_tool import *
-from simulation.data.meta_data import *
 from simulation.analysis.symmetry.routines import get_symmetry_dataset
 from simulation.analysis.symmetry.routines import find_primitive
 from simulation.analysis.symmetry.spacegroup import Spacegroup
@@ -56,7 +55,6 @@ class Structure(models.Model, object):
         | :mod:`~simulation.Spacegroup` via spacegroup
         | :mod:`~simulation.Species` via species_set
         | :mod:`~simulation.Reference` Original literature reference.
-        | :mod:`~simulation.MetaData` via meta_data
     Attributes:
         | **Identification**
         | id
@@ -94,7 +92,6 @@ class Structure(models.Model, object):
     entry = models.ForeignKey('Entry', null=True, on_delete=models.CASCADE,)
     element_set = models.ManyToManyField('Element')
     species_set = models.ManyToManyField('Species')
-    meta_data = models.ManyToManyField('MetaData')
     label = models.CharField(blank=True, max_length=63)
     measured = models.BooleanField(default=False)
 
@@ -287,7 +284,6 @@ class Structure(models.Model, object):
 
         self.element_set.set(self.elements)
         self.species_set.set(self.species)
-        #self.meta_data = self.comment_objects + self.keyword_objects
 
         if not self._sites is None:
             for s in self.sites:
