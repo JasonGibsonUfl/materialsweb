@@ -12,6 +12,8 @@ router.register(r'atom', views.AtomViewSet)
 router.register(r'site', views.SiteViewSet)
 router.register(r'species', views.SpeciesViewSet)
 router.register(r'dos', views.DosViewSet)
+router.register(r'species', views.SpacegroupViewSet)
+router.register(r'dos', views.WyckoffSiteViewSet)
 
 
 
