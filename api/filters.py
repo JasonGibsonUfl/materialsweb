@@ -5,7 +5,7 @@ from simulation.analysis.vasp.calculation import Calculation
 
 class CalculationFilter(django_filters.FilterSet):
     band_gap = filters.RangeFilter()
-    lattice_system = django_filters.CharFilter(field_name = 'entry', lookup_expr='contains')
+    lattice_system = django_filters.CharFilter(field_name = 'entry_structure', lookup_expr='contains')
 
     class Meta:
         model = Calculation
