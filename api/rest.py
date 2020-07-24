@@ -14,6 +14,20 @@ from dscribe.descriptors import SOAP
 global url
 url = 'http://10.5.46.39/static/'
 
+
+class MWRester(object):
+    def __init__(self, api_key=None,
+                 endpoint="https://2dmaterialsweb.org/rest"):
+        if api_key is not None:
+            self.api_key = api_key
+        else:
+            self.api_key = ""
+        self.preamble = endpoint
+        import requests
+        self.session = requests.Session()
+        self.session.headers = {"x-api-key": self.api_key}
+
+
 class QueryEngine():
 
     # TODO: change to read only .cnf file
