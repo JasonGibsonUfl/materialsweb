@@ -34,7 +34,7 @@ class SpeciesViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 from api.filters import DynamicSearchFilter
-from rest_framework import DjangoFilterBackend
+from django_filter.rest_framework import DjangoFilterBackend
 class CalculationViewSet(viewsets.ModelViewSet):
     queryset = Calculation.objects.all().order_by('id')
     serializer_class = CalculationSerializer
