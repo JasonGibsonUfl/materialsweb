@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
 from .serializers import*
 from simulation.materials.element import Element, Species
@@ -37,6 +37,7 @@ class CalculationViewSet(viewsets.ModelViewSet):
     queryset = Calculation.objects.all().order_by('id')
     serializer_class = CalculationSerializer
     http_method_names = ['get']
+    filter_backends = (filters.SearchFilter,)
     search_fields = ['dimension']
 
 
