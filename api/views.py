@@ -37,6 +37,7 @@ class CalculationViewSet(viewsets.ModelViewSet):
     queryset = Calculation.objects.all().order_by('id')
     serializer_class = CalculationSerializer
     http_method_names = ['get']
+    search_fields = ['dimension']
 
 
 class DosViewSet(viewsets.ModelViewSet):
