@@ -5,7 +5,11 @@ from simulation.analysis.vasp.calculation import Calculation
 
 class CalculationFilter(django_filters.FilterSet):
     band_gap = filters.RangeFilter()
+    lattice_system = django_filters.CharFilter(name = 'entry__structure__spacegroup__lattice_system', lookup_expr='contains')
 
     class Meta:
         model = Calculation
-        fields = ['band_gap','entry__structure__spacegroup__lattice_system']
+        fields = [
+            'band_gap',
+            'lattice_system',
+        ]
