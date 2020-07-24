@@ -39,11 +39,6 @@ class CalculationViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
     filter_backends = (filters.SearchFilter,)
     search_fields = ['dimension']
-    REST_FRAMEWORK = {
-        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-        'PAGE_SIZE': 100
-    }
-
 
 class DosViewSet(viewsets.ModelViewSet):
     queryset = DOS.objects.all().order_by('id')
