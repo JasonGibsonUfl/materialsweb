@@ -8,4 +8,4 @@ class CalculationFilter(django_filters.FilterSet):
 
     class Meta:
         model = Calculation
-        fields = ['band_gap']
+        fields = ['band_gap','entry__structure__spacegroup__lattice_system']
