@@ -38,7 +38,7 @@ class CalculationViewSet(viewsets.ModelViewSet):
     serializer_class = CalculationSerializer
     http_method_names = ['get']
     filter_backends = (filters.SearchFilter,)
-    search_fields = ['dimension']
+    search_fields = ['dimension','natoms']
 
 class DosViewSet(viewsets.ModelViewSet):
     queryset = DOS.objects.all().order_by('id')
