@@ -4,8 +4,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from simulation.analysis.vasp.calculation import Calculation
 
 class CalculationFilter(django_filters.FilterSet):
-    bandgap = filters.RangeFilter()
+    band_gap = filters.RangeFilter()
 
     class Meta:
         model = Calculation
-        fields = ['bandgap']
+        fields = ['band_gap']
