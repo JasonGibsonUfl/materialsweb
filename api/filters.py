@@ -16,4 +16,6 @@ class CalculationFilter(django_filters.FilterSet):
             'formation_energy',
             'spacegroup_number',
             'lattice_system',
+            'dimension',
+
         ]
