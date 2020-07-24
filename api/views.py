@@ -34,14 +34,14 @@ class SpeciesViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 from api.filters import DynamicSearchFilter
-
+from rest_framework import DjangoFilterBackend
 class CalculationViewSet(viewsets.ModelViewSet):
     queryset = Calculation.objects.all().order_by('id')
     serializer_class = CalculationSerializer
     http_method_names = ['get']
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (DjangoFilterBackend,)
 
-    search_fields = ['dimension','natoms']
+    filter_fields = ['dimension','natoms']
 
 class DosViewSet(viewsets.ModelViewSet):
     queryset = DOS.objects.all().order_by('id')
