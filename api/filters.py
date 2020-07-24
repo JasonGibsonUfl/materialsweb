@@ -14,5 +14,6 @@ class CalculationFilter(django_filters.FilterSet):
         fields = [
             'band_gap',
             'formation_energy',
+            'spacegroup_number',
             'lattice_system',
         ]
