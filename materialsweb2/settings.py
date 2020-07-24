@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'pages',
     'accounts',
     'django_extensions',
+    'django_filters',
     #'django.contrib.admindocs',
     #'reset_migrations',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
