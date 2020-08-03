@@ -223,7 +223,7 @@ app.layout = html.Div([
                     ),
     ],
     ),)
-    ]
+    ],
         style={'display': 'block',
                'marginBottom': '20px'
                }
