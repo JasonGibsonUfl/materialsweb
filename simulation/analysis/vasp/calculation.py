@@ -34,7 +34,7 @@ from . import dos
 from simulation.materials.atom import Atom, Site
 from simulation.utils.strings import *
 from simulation.materials.element import Element
-from simulation.custom import DictField, NumpyArrayField
+from simulation.custom import DictField
 from simulation.materials.entry import Entry
 from simulation.analysis.vasp.dos import DOS
 from simulation.analysis.vasp.potential import Potential
@@ -1264,7 +1264,6 @@ class Calculation(models.Model):
         urlp = url + self.label+'/POSCAR'
         file = urllib.request.urlopen(urlp)
         species = self.composition.element_list.split('_')[0:-1]
-        print(species)
         with open('PoSCAR','a') as poscar:
             for line in file:
                 decoded_line = line.decode("utf-8")

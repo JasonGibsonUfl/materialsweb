@@ -25,6 +25,8 @@ from .gen_bandsfig import BandsFig
 import os
 import base64
 from urllib.parse import quote as urlquote
+from lxml import etree                                                                              
+import xml.etree.ElementTree as et  
 
 UPLOAD_DIRECTORY = "/var/www/materialsweb/static/temp"
 
@@ -53,16 +55,17 @@ app.layout = html.Div([
 
     html.H3('Interactive Electronic Structure Visualization Tool',
             style={'textAlign': 'center',
-                   'color': '#0021A5'
+                   'color': '#fcb040',
+                   'marginBottom': '5px'
                    }
             ),
 
-    html.Div('currently a work in progress by Anne Marie Tan :) \n Current load time takes several minutes',
+    html.Div('developed by Anne Marie Tan :) \n Current load time takes several minutes',
              style={'textAlign': 'center',
-                    'color': '#FA4616',
+                    'color': '#454343',
                     'marginBottom': '20px'
-                    }
-             ),
+                   }
+            ),
 
     html.Div([
 
@@ -74,7 +77,7 @@ app.layout = html.Div([
 
         ## boxes to input path to local data
         html.Div([
-            html.Div('From local data:',
+            html.Div('From data stored locally:',
                      style={'display': 'block'
                             }
                      ),
@@ -84,15 +87,6 @@ app.layout = html.Div([
                 id="upload-data-dos",
                 # id='vasprun_dos',
 
-                # type='text',
-
-                # children=html.Div([
-                # 'Drag and Drop or ',
-                # html.A('Select Files')
-                # ]),
-                #                      value='',
-                # placeholder='input path to vasprun.xml file from DoS calc. + enter/tab',
-                # debounce=True,
                 style={'display': 'block',
                        'height': '30px',
                        'width': '100%',
@@ -231,35 +225,44 @@ app.layout = html.Div([
                }
     ),
 
-    html.Div([
-        ## our simple clickable structure figure!
-        dcc.Graph(id='unitcell',
-                  figure={'data': []},
-                  style={'display': 'inline-block',
-                         'width': '30%',
-                         'height': '100%'
-                         }
-                  ),
+    html.Div([dcc.Loading(id="loading",
+                          type="dot",
+                          children=html.Div([
+                                  
+                                ## our simple clickable structure figure!
+                                dcc.Graph(id='unitcell',
+                                          figure={'data': []},
+                                          style={'display': 'inline-block',
+                                                 'width': '30%',
+                                                 'height': '100%'
+                                                 }
+                                          ),
+                                
+                                ## our interactive bands+dos figure!
+                                dcc.Graph(id='DOS_bands',
+                                          figure={'data': []},
+                                          style={'display': 'inline-block',
+                                                 'width': '65%',
+                                                 'height': '100%'
+                                                 }
+                                          ),
+                                ],
+                                style={'display': 'block',
+                                       'height': '600px'
+                                       }
+                                ),
+                         ),   
+            ],
+            style={'display': 'block',
+                   'height': '600px'
+                   }
+            ),        
 
-        ## our interactive bands+dos figure!
-        dcc.Graph(id='DOS_bands',
-                  figure={'data': []},
-                  style={'display': 'inline-block',
-                         'width': '65%',
-                         'height': '100%'
-                         }
-                  ),
+    
     ],
-        style={'display': 'block',
-               'height': '600px'
-               }
-    ),
-
-],
-    style={'backgroundColor': '#FFFFFF'}
+    style={'backgroundColor': '#FFFFFF',
+           'fontFamily': 'arial'}
 )
-from lxml import etree
-import xml.etree.ElementTree as et
 
 def save_file(name, content):
     """Decode and store a file uploaded with Plotly Dash."""
@@ -362,9 +365,7 @@ def update_output(uploaded_filenames, uploaded_file_contents):
               [Input('vasprun_dos', 'value')])
 def get_dos(vasprun_dos):
     ## get CompleteDos object and "save" in hidden div in json format
-    print('IN VASP GET DOS')
-    print(vasprun_dos)
-    dos = Vasprun(vasprun_dos).complete_dos
+    dos = Vasprun(vasprun_dos).complete_dos 
     return json.dumps(dos.as_dict())
 
 
@@ -372,14 +373,14 @@ def get_dos(vasprun_dos):
               [Input('dos_object', 'data'),
                Input('vasprun_bands', 'value'),
                Input('kpts_bands', 'value')])
-def get_bs(dos, vasprun_bands, kpts_bands):
+def get_bs(dos, vasprun_bands, kpts_bands):  
     ## get BandStructureSymmLine object and "save" in hidden div in json format
-    bands = Vasprun(vasprun_bands, parse_projected_eigen=True)
+    bands = Vasprun(vasprun_bands, parse_projected_eigen = True)
     if dos:
         dos = CompleteDos.from_dict(json.loads(dos))
-        bs = bands.get_band_structure(kpts_bands, line_mode=True, efermi=dos.efermi)
+        bs = bands.get_band_structure(kpts_bands, line_mode=True, efermi=dos.efermi)  
     else:
-        bs = bands.get_band_structure(kpts_bands, line_mode=True)
+        bs = bands.get_band_structure(kpts_bands, line_mode=True) 
     return json.dumps(bs.as_dict(), cls=MyEncoder)
 
 
@@ -388,9 +389,9 @@ def get_bs(dos, vasprun_bands, kpts_bands):
                Input('vasprun_bands', 'value')])
 def get_structure(vasprun_dos, vasprun_bands):
     ## get structure object and "save" in hidden div in json format
-    if vasprun_dos:
+    if vasprun_dos: 
         structure = Vasprun(vasprun_dos).structures[-1]
-    elif vasprun_bands:
+    elif vasprun_bands: 
         structure = Vasprun(vasprun_bands).structures[-1]
     return json.dumps(structure.as_dict())
 
@@ -402,11 +403,6 @@ def get_options_all(struct):
 
     ## de-serialize structure from json format to pymatgen object
     structure = Structure.from_dict(json.loads(struct))
-
-    ## determine if sub-orbital projections exist. If so, set lm = True
-    #    orbs = [Orbital.__str__(orb) for atom_dos in vasprun.complete_dos.pdos.values()
-    #                                 for orb,pdos in atom_dos.items()]
-    #    lm = any(["x" in s for s in orbs])
 
     ## determine the list of unique elements in the system
     elems = [str(site.specie) for site in structure.sites]

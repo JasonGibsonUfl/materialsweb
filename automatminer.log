@@ -1,0 +1,770 @@
+2020-07-31 08:38:10 INFO     Problem type is: regression
+2020-07-31 08:38:10 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type composition not in the dataframe to be fitted. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe to be fitted. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type composition not in the dataframe. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 08:38:10 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 08:38:10 INFO     DataCleaner: Starting fitting.
+2020-07-31 08:38:10 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 08:38:10 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 08:38:10 INFO     DataCleaner: Before handling na: 3738 samples, 5 features
+2020-07-31 08:38:10 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 08:38:10 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 08:38:10 INFO     DataCleaner: After handling na: 3738 samples, 5 features
+2020-07-31 08:38:10 INFO     DataCleaner: Finished fitting.
+2020-07-31 08:38:10 INFO     FeatureReducer: Starting fitting.
+2020-07-31 08:38:10 INFO     FeatureReducer: 1 features removed due to cross correlation more than 0.95
+2020-07-31 08:38:14 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 3 initial features to 3
+2020-07-31 08:38:14 INFO     FeatureReducer: Finished fitting.
+2020-07-31 08:38:14 INFO     FeatureReducer: Starting transforming.
+2020-07-31 08:38:14 INFO     FeatureReducer: Finished transforming.
+2020-07-31 08:38:14 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 08:39:50 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 08:39:50 INFO     MatPipe successfully fit.
+2020-07-31 08:40:22 INFO     Beginning MatPipe prediction using fitted pipeline.
+2020-07-31 08:40:22 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 08:40:22 INFO     AutoFeaturizer: Featurizer type composition not in the dataframe. Skipping...
+2020-07-31 08:40:22 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe. Skipping...
+2020-07-31 08:40:22 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 08:40:22 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 08:40:22 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 08:40:22 INFO     DataCleaner: Starting transforming.
+2020-07-31 08:40:22 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'fill'
+2020-07-31 08:40:22 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 08:40:22 INFO     DataCleaner: Before handling na: 935 samples, 4 features
+2020-07-31 08:40:22 INFO     DataCleaner: After handling na: 935 samples, 4 features
+2020-07-31 08:40:22 INFO     DataCleaner: Target not found in df columns. Ignoring...
+2020-07-31 08:40:22 INFO     DataCleaner: Finished transforming.
+2020-07-31 08:40:22 INFO     FeatureReducer: Starting transforming.
+2020-07-31 08:40:22 WARNING  FeatureReducer: Target not found in columns to transform.
+2020-07-31 08:40:22 INFO     FeatureReducer: Finished transforming.
+2020-07-31 08:40:22 INFO     TPOTAdaptor: Starting predicting.
+2020-07-31 08:40:22 INFO     TPOTAdaptor: Prediction finished successfully.
+2020-07-31 08:40:22 INFO     TPOTAdaptor: Finished predicting.
+2020-07-31 08:40:22 INFO     MatPipe prediction completed.
+2020-07-31 08:56:29 INFO     Problem type is: regression
+2020-07-31 08:56:29 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 08:56:29 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 08:56:29 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 08:56:45 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe to be fitted. Skipping...
+2020-07-31 08:56:45 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 08:56:45 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 08:56:45 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 08:56:45 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 08:56:45 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 08:56:57 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe. Skipping...
+2020-07-31 08:56:57 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 08:56:57 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 08:56:57 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 08:56:57 INFO     DataCleaner: Starting fitting.
+2020-07-31 08:56:57 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 08:56:57 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 08:56:58 INFO     DataCleaner: Before handling na: 3738 samples, 137 features
+2020-07-31 08:56:58 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 08:56:58 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 08:56:58 INFO     DataCleaner: After handling na: 3738 samples, 137 features
+2020-07-31 08:56:58 INFO     DataCleaner: Finished fitting.
+2020-07-31 08:56:58 INFO     FeatureReducer: Starting fitting.
+2020-07-31 08:56:58 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 08:57:09 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 57 initial features to 2
+2020-07-31 08:57:09 INFO     FeatureReducer: Finished fitting.
+2020-07-31 08:57:09 INFO     FeatureReducer: Starting transforming.
+2020-07-31 08:57:10 INFO     FeatureReducer: Finished transforming.
+2020-07-31 08:57:10 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 08:58:15 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 08:58:15 INFO     MatPipe successfully fit.
+2020-07-31 09:00:06 INFO     Beginning MatPipe prediction using fitted pipeline.
+2020-07-31 09:00:06 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:00:06 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:00:11 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:00:14 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe. Skipping...
+2020-07-31 09:00:14 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:00:14 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:00:14 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:00:14 INFO     DataCleaner: Starting transforming.
+2020-07-31 09:00:14 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'fill'
+2020-07-31 09:00:14 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:00:14 INFO     DataCleaner: Before handling na: 935 samples, 136 features
+2020-07-31 09:00:14 INFO     DataCleaner: After handling na: 935 samples, 136 features
+2020-07-31 09:00:14 INFO     DataCleaner: Target not found in df columns. Ignoring...
+2020-07-31 09:00:14 INFO     DataCleaner: Finished transforming.
+2020-07-31 09:00:14 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:00:15 WARNING  FeatureReducer: Target not found in columns to transform.
+2020-07-31 09:00:15 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:00:15 INFO     TPOTAdaptor: Starting predicting.
+2020-07-31 09:00:15 INFO     TPOTAdaptor: Prediction finished successfully.
+2020-07-31 09:00:15 INFO     TPOTAdaptor: Finished predicting.
+2020-07-31 09:00:15 INFO     MatPipe prediction completed.
+2020-07-31 09:16:04 INFO     Problem type is: regression
+2020-07-31 09:16:04 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:16:04 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:16:04 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:16:04 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:16:58 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:16:59 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:17:07 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:17:07 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:17:07 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:17:07 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:17:07 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:17:20 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:17:37 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:17:37 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:17:37 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:17:37 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:17:37 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:17:37 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:17:38 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:17:38 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:17:38 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:17:38 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:17:38 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:17:38 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:17:38 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:19:03 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:19:03 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:19:03 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:19:03 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:19:03 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:20:34 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:20:34 INFO     MatPipe successfully fit.
+2020-07-31 09:20:34 INFO     Beginning MatPipe prediction using fitted pipeline.
+2020-07-31 09:20:34 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:20:34 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:20:34 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:20:48 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:20:50 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:20:53 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:20:55 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:20:57 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:20:57 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:20:57 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:20:57 INFO     DataCleaner: Starting transforming.
+2020-07-31 09:20:57 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'fill'
+2020-07-31 09:20:57 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:20:57 INFO     DataCleaner: Before handling na: 935 samples, 152 features
+2020-07-31 09:20:57 INFO     DataCleaner: After handling na: 935 samples, 152 features
+2020-07-31 09:20:57 INFO     DataCleaner: Target not found in df columns. Ignoring...
+2020-07-31 09:20:58 INFO     DataCleaner: Finished transforming.
+2020-07-31 09:20:58 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:20:58 WARNING  FeatureReducer: Target not found in columns to transform.
+2020-07-31 09:20:58 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:20:58 INFO     TPOTAdaptor: Starting predicting.
+2020-07-31 09:20:58 INFO     TPOTAdaptor: Prediction finished successfully.
+2020-07-31 09:20:58 INFO     TPOTAdaptor: Finished predicting.
+2020-07-31 09:20:58 INFO     MatPipe prediction completed.
+2020-07-31 09:24:47 INFO     Problem type is: regression
+2020-07-31 09:24:47 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:24:47 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:24:47 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:24:47 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:25:34 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:25:36 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:25:51 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:25:51 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:25:52 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:25:52 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:25:52 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:26:11 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:26:21 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:26:21 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:26:21 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:26:21 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:26:21 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:26:21 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:26:21 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:26:21 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:26:21 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:26:21 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:26:21 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:26:21 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:26:21 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:27:27 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:27:27 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:27:27 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:27:27 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:27:27 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:28:30 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:28:30 INFO     MatPipe successfully fit.
+2020-07-31 09:28:31 INFO     Problem type is: regression
+2020-07-31 09:28:31 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:28:31 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:28:31 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:28:31 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:29:27 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:29:28 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:29:34 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:29:34 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:29:34 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:29:34 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:29:34 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:29:47 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:29:57 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:29:57 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:29:57 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:29:57 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:29:57 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:29:57 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:29:57 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:29:57 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:29:57 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:29:58 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:29:58 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:29:58 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:29:58 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:31:19 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:31:19 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:31:19 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:31:19 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:31:19 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:32:21 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:32:21 INFO     MatPipe successfully fit.
+2020-07-31 09:32:22 INFO     Problem type is: regression
+2020-07-31 09:32:22 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:32:22 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:32:22 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:32:22 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:33:00 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:33:01 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:33:05 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:33:05 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:33:05 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:33:05 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:33:05 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:33:17 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:33:26 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:33:26 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:33:26 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:33:26 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:33:26 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:33:26 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:33:26 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:33:26 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:33:26 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:33:26 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:33:26 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:33:26 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:33:27 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:34:21 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:34:21 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:34:21 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:34:21 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:34:21 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:36:24 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:36:24 INFO     MatPipe successfully fit.
+2020-07-31 09:36:25 INFO     Problem type is: regression
+2020-07-31 09:36:25 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:36:25 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:36:25 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:36:25 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:37:19 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:37:19 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:37:24 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:37:24 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:37:24 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:37:24 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:37:24 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:37:42 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:37:54 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:37:54 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:37:55 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:37:55 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:37:55 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:37:55 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:37:55 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:37:55 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:37:55 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:37:55 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:37:55 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:37:55 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:37:55 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:39:02 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:39:02 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:39:02 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:39:02 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:39:02 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:40:40 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:40:40 INFO     MatPipe successfully fit.
+2020-07-31 09:40:41 INFO     Problem type is: regression
+2020-07-31 09:40:41 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:40:41 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:40:41 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:40:41 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:41:18 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:41:19 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:41:23 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:41:23 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:41:23 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:41:23 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:41:23 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:41:34 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:41:44 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:41:44 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:41:44 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:41:44 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:41:44 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:41:44 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:41:44 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:41:44 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:41:44 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:41:44 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:41:44 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:41:44 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:41:44 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:42:39 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:42:39 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:42:39 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:42:39 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:42:39 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:43:52 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:43:52 INFO     MatPipe successfully fit.
+2020-07-31 09:43:52 INFO     Problem type is: regression
+2020-07-31 09:43:52 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:43:52 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:43:52 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:43:52 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:44:30 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:44:30 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:44:34 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:44:34 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:44:34 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:44:34 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:44:34 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:44:46 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:44:55 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:44:55 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:44:55 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:44:55 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:44:55 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:44:55 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:44:55 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:44:55 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:44:55 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:44:56 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:44:56 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:44:56 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:44:56 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:45:52 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:45:52 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:45:52 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:45:52 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:45:52 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:46:54 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:46:54 INFO     MatPipe successfully fit.
+2020-07-31 09:46:55 INFO     Problem type is: regression
+2020-07-31 09:46:55 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:46:55 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:46:55 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:46:55 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:47:33 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:47:33 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:47:37 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:47:37 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:47:37 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:47:37 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:47:37 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:47:49 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:47:57 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:47:57 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:47:57 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:47:57 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:47:57 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:47:57 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:47:57 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:47:57 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:47:57 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:47:57 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:47:57 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:47:57 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:47:58 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:48:52 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:48:52 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:48:52 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:48:52 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:48:52 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:50:47 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:50:47 INFO     MatPipe successfully fit.
+2020-07-31 09:50:48 INFO     Problem type is: regression
+2020-07-31 09:50:48 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 09:50:48 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 09:50:48 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 09:50:48 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:51:24 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 09:51:25 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 09:51:28 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 09:51:28 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 09:51:28 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 09:51:28 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:51:28 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 09:51:40 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 09:51:49 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:51:49 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:51:49 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:51:49 INFO     DataCleaner: Starting fitting.
+2020-07-31 09:51:49 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 09:51:49 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:51:49 INFO     DataCleaner: Before handling na: 3738 samples, 153 features
+2020-07-31 09:51:49 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 09:51:49 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 09:51:49 INFO     DataCleaner: After handling na: 3738 samples, 153 features
+2020-07-31 09:51:49 INFO     DataCleaner: Finished fitting.
+2020-07-31 09:51:49 INFO     FeatureReducer: Starting fitting.
+2020-07-31 09:51:49 INFO     FeatureReducer: 79 features removed due to cross correlation more than 0.95
+2020-07-31 09:52:44 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 09:52:44 INFO     FeatureReducer: Finished fitting.
+2020-07-31 09:52:44 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:52:44 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:52:44 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 09:54:08 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 09:54:08 INFO     MatPipe successfully fit.
+2020-07-31 09:59:36 INFO     Beginning MatPipe prediction using fitted pipeline.
+2020-07-31 09:59:36 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 09:59:36 INFO     AutoFeaturizer: Featurizer type composition not in the dataframe. Skipping...
+2020-07-31 09:59:36 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe. Skipping...
+2020-07-31 09:59:36 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 09:59:36 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 09:59:36 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 09:59:36 INFO     DataCleaner: Starting transforming.
+2020-07-31 09:59:36 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'fill'
+2020-07-31 09:59:36 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 09:59:36 INFO     DataCleaner: Before handling na: 935 samples, 6 features
+2020-07-31 09:59:36 WARNING  DataCleaner: Mismatched columns found in dataframe used for fitting and argument dataframe.
+2020-07-31 09:59:36 WARNING  DataCleaner: Coercing mismatched columns...
+2020-07-31 09:59:36 WARNING  DataCleaner: Assuming missing columns in argument df are one-hot encoding issues. Setting to zero the following new columns:
+['Size', 'Cd', 'Te', 'MagpieData minimum Number', 'MagpieData maximum Number', 'MagpieData range Number', 'MagpieData mean Number', 'MagpieData avg_dev Number', 'MagpieData mode Number', 'MagpieData minimum MendeleevNumber', 'MagpieData maximum MendeleevNumber', 'MagpieData range MendeleevNumber', 'MagpieData mean MendeleevNumber', 'MagpieData avg_dev MendeleevNumber', 'MagpieData mode MendeleevNumber', 'MagpieData minimum AtomicWeight', 'MagpieData maximum AtomicWeight', 'MagpieData range AtomicWeight', 'MagpieData mean AtomicWeight', 'MagpieData avg_dev AtomicWeight', 'MagpieData mode AtomicWeight', 'MagpieData minimum MeltingT', 'MagpieData maximum MeltingT', 'MagpieData range MeltingT', 'MagpieData mean MeltingT', 'MagpieData avg_dev MeltingT', 'MagpieData mode MeltingT', 'MagpieData minimum Column', 'MagpieData maximum Column', 'MagpieData range Column', 'MagpieData mean Column', 'MagpieData avg_dev Column', 'MagpieData mode Column', 'MagpieData minimum Row', 'MagpieData maximum Row', 'MagpieData range Row', 'MagpieData mean Row', 'MagpieData avg_dev Row', 'MagpieData mode Row', 'MagpieData minimum CovalentRadius', 'MagpieData maximum CovalentRadius', 'MagpieData range CovalentRadius', 'MagpieData mean CovalentRadius', 'MagpieData mode CovalentRadius', 'MagpieData minimum Electronegativity', 'MagpieData maximum Electronegativity', 'MagpieData range Electronegativity', 'MagpieData mean Electronegativity', 'MagpieData avg_dev Electronegativity', 'MagpieData mode Electronegativity', 'MagpieData minimum NsValence', 'MagpieData maximum NsValence', 'MagpieData range NsValence', 'MagpieData mean NsValence', 'MagpieData avg_dev NsValence', 'MagpieData mode NsValence', 'MagpieData minimum NpValence', 'MagpieData maximum NpValence', 'MagpieData range NpValence', 'MagpieData mean NpValence', 'MagpieData avg_dev NpValence', 'MagpieData mode NpValence', 'MagpieData minimum NdValence', 'MagpieData maximum NdValence', 'MagpieData range NdValence', 'MagpieData mean NdValence', 'MagpieData avg_dev NdValence', 'MagpieData mode NdValence', 'MagpieData minimum NfValence', 'MagpieData maximum NfValence', 'MagpieData range NfValence', 'MagpieData mean NfValence', 'MagpieData avg_dev NfValence', 'MagpieData mode NfValence', 'MagpieData minimum NValence', 'MagpieData maximum NValence', 'MagpieData range NValence', 'MagpieData mean NValence', 'MagpieData avg_dev NValence', 'MagpieData mode NValence', 'MagpieData minimum NsUnfilled', 'MagpieData maximum NsUnfilled', 'MagpieData range NsUnfilled', 'MagpieData mean NsUnfilled', 'MagpieData avg_dev NsUnfilled', 'MagpieData mode NsUnfilled', 'MagpieData minimum NpUnfilled', 'MagpieData maximum NpUnfilled', 'MagpieData range NpUnfilled', 'MagpieData mean NpUnfilled', 'MagpieData avg_dev NpUnfilled', 'MagpieData mode NpUnfilled', 'MagpieData minimum NdUnfilled', 'MagpieData maximum NdUnfilled', 'MagpieData range NdUnfilled', 'MagpieData mean NdUnfilled', 'MagpieData avg_dev NdUnfilled', 'MagpieData mode NdUnfilled', 'MagpieData minimum NfUnfilled', 'MagpieData maximum NfUnfilled', 'MagpieData range NfUnfilled', 'MagpieData mean NfUnfilled', 'MagpieData avg_dev NfUnfilled', 'MagpieData mode NfUnfilled', 'MagpieData minimum NUnfilled', 'MagpieData maximum NUnfilled', 'MagpieData range NUnfilled', 'MagpieData mean NUnfilled', 'MagpieData avg_dev NUnfilled', 'MagpieData mode NUnfilled', 'MagpieData minimum GSvolume_pa', 'MagpieData maximum GSvolume_pa', 'MagpieData range GSvolume_pa', 'MagpieData mean GSvolume_pa', 'MagpieData avg_dev GSvolume_pa', 'MagpieData mode GSvolume_pa', 'MagpieData minimum GSbandgap', 'MagpieData maximum GSbandgap', 'MagpieData range GSbandgap', 'MagpieData mean GSbandgap', 'MagpieData avg_dev GSbandgap', 'MagpieData mode GSbandgap', 'MagpieData minimum GSmagmom', 'MagpieData maximum GSmagmom', 'MagpieData range GSmagmom', 'MagpieData mean GSmagmom', 'MagpieData avg_dev GSmagmom', 'MagpieData mode GSmagmom', 'MagpieData minimum SpaceGroupNumber', 'MagpieData maximum SpaceGroupNumber', 'MagpieData range SpaceGroupNumber', 'MagpieData mean SpaceGroupNumber', 'MagpieData avg_dev SpaceGroupNumber', 'MagpieData mode SpaceGroupNumber', 'sine coulomb matrix eig 0', 'sine coulomb matrix eig 2', 'sine coulomb matrix eig 5', 'sine coulomb matrix eig 6', 'sine coulomb matrix eig 7', 'sine coulomb matrix eig 8', 'sine coulomb matrix eig 9', 'sine coulomb matrix eig 10', 'sine coulomb matrix eig 11', 'sine coulomb matrix eig 12', 'sine coulomb matrix eig 13', 'sine coulomb matrix eig 14', 'sine coulomb matrix eig 15']
+2020-07-31 09:59:36 WARNING  DataCleaner: Following columns are being dropped:
+['Formation Energy predicted']
+2020-07-31 09:59:36 INFO     DataCleaner: After handling na: 935 samples, 152 features
+2020-07-31 09:59:36 INFO     DataCleaner: Target not found in df columns. Ignoring...
+2020-07-31 09:59:36 INFO     DataCleaner: Finished transforming.
+2020-07-31 09:59:36 INFO     FeatureReducer: Starting transforming.
+2020-07-31 09:59:36 WARNING  FeatureReducer: Target not found in columns to transform.
+2020-07-31 09:59:36 INFO     FeatureReducer: Finished transforming.
+2020-07-31 09:59:36 INFO     TPOTAdaptor: Starting predicting.
+2020-07-31 09:59:36 INFO     TPOTAdaptor: Prediction finished successfully.
+2020-07-31 09:59:36 INFO     TPOTAdaptor: Finished predicting.
+2020-07-31 09:59:36 INFO     MatPipe prediction completed.
+2020-07-31 10:03:17 INFO     Problem type is: regression
+2020-07-31 10:03:17 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:03:17 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:03:17 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:03:17 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:04:23 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:04:25 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:04:37 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:04:37 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:04:37 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:04:37 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:04:37 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:05:01 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:05:11 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:05:11 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:05:11 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:05:11 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:05:11 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:05:11 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:05:11 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:05:11 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:05:11 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:05:11 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:05:11 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:05:11 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:05:12 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:06:10 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:06:10 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:06:10 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:06:10 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:06:10 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:07:12 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:07:12 INFO     MatPipe successfully fit.
+2020-07-31 10:07:13 INFO     Problem type is: regression
+2020-07-31 10:07:13 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:07:13 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:07:13 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:07:13 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:08:03 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:08:03 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:08:08 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:08:08 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:08:08 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:08:08 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:08:08 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:08:24 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:08:36 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:08:36 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:08:36 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:08:36 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:08:36 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:08:36 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:08:36 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:08:36 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:08:36 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:08:36 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:08:36 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:08:36 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:08:36 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:09:34 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:09:34 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:09:34 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:09:34 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:09:34 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:11:01 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:11:01 INFO     MatPipe successfully fit.
+2020-07-31 10:11:02 INFO     Problem type is: regression
+2020-07-31 10:11:02 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:11:02 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:11:02 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:11:02 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:11:44 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:11:45 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:11:49 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:11:49 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:11:49 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:11:49 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:11:49 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:12:03 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:12:12 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:12:12 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:12:12 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:12:12 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:12:12 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:12:12 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:12:13 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:12:13 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:12:13 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:12:13 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:12:13 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:12:13 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:12:13 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:13:09 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:13:09 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:13:09 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:13:09 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:13:09 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:14:12 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:14:12 INFO     MatPipe successfully fit.
+2020-07-31 10:14:13 INFO     Problem type is: regression
+2020-07-31 10:14:13 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:14:13 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:14:13 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:14:13 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:14:51 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:14:51 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:14:55 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:14:55 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:14:55 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:14:55 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:14:55 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:15:07 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:15:16 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:15:16 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:15:16 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:15:16 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:15:16 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:15:16 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:15:16 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:15:16 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:15:16 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:15:16 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:15:16 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:15:17 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:15:17 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:16:12 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:16:12 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:16:12 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:16:12 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:16:12 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:17:20 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:17:20 INFO     MatPipe successfully fit.
+2020-07-31 10:17:20 INFO     Problem type is: regression
+2020-07-31 10:17:20 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:17:20 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:17:20 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:17:20 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:18:01 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:18:02 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:18:10 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:18:10 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:18:10 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:18:10 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:18:10 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:18:35 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:18:51 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:18:51 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:18:51 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:18:51 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:18:51 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:18:51 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:18:51 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:18:51 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:18:51 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:18:51 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:18:51 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:18:51 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:18:52 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:20:06 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:20:06 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:20:06 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:20:06 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:20:06 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:21:17 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:21:17 INFO     MatPipe successfully fit.
+2020-07-31 10:21:18 INFO     Problem type is: regression
+2020-07-31 10:21:18 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:21:18 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:21:18 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:21:18 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:21:59 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:21:59 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:22:03 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:22:03 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:22:04 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:22:04 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:22:04 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:22:16 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:22:26 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:22:26 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:22:26 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:22:26 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:22:26 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:22:26 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:22:27 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:22:27 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:22:27 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:22:27 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:22:27 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:22:27 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:22:27 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:23:31 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:23:31 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:23:31 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:23:31 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:23:31 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:24:39 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:24:39 INFO     MatPipe successfully fit.
+2020-07-31 10:24:40 INFO     Problem type is: regression
+2020-07-31 10:24:40 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:24:40 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:24:40 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:24:40 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:25:23 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:25:24 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:25:29 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:25:29 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:25:30 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:25:30 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:25:30 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:25:45 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:25:56 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:25:56 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:25:56 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:25:56 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:25:56 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:25:56 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:25:56 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:25:56 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:25:56 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:25:56 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:25:56 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:25:56 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:25:57 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:27:07 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:27:07 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:27:07 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:27:07 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:27:07 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:28:18 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:28:18 INFO     MatPipe successfully fit.
+2020-07-31 10:28:20 INFO     Problem type is: regression
+2020-07-31 10:28:20 INFO     Fitting MatPipe pipeline to data.
+2020-07-31 10:28:20 INFO     AutoFeaturizer: Starting fitting.
+2020-07-31 10:28:20 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:28:20 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:29:07 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:29:08 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:29:17 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe to be fitted. Skipping...
+2020-07-31 10:29:17 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe to be fitted. Skipping...
+2020-07-31 10:29:18 INFO     AutoFeaturizer: Finished fitting.
+2020-07-31 10:29:18 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:29:18 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:29:33 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:29:45 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:29:45 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:29:45 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:29:45 INFO     DataCleaner: Starting fitting.
+2020-07-31 10:29:45 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'drop'
+2020-07-31 10:29:45 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:29:45 INFO     DataCleaner: Before handling na: 3738 samples, 151 features
+2020-07-31 10:29:45 INFO     DataCleaner: 0 samples did not have target values. They were dropped.
+2020-07-31 10:29:45 INFO     DataCleaner: Handling feature na by max na threshold of 0.01 with method 'drop'.
+2020-07-31 10:29:45 INFO     DataCleaner: After handling na: 3738 samples, 151 features
+2020-07-31 10:29:45 INFO     DataCleaner: Finished fitting.
+2020-07-31 10:29:45 INFO     FeatureReducer: Starting fitting.
+2020-07-31 10:29:46 INFO     FeatureReducer: 77 features removed due to cross correlation more than 0.95
+2020-07-31 10:30:48 INFO     TreeFeatureReducer: Finished tree-based feature reduction of 73 initial features to 5
+2020-07-31 10:30:48 INFO     FeatureReducer: Finished fitting.
+2020-07-31 10:30:48 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:30:48 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:30:48 INFO     TPOTAdaptor: Starting fitting.
+2020-07-31 10:32:51 INFO     TPOTAdaptor: Finished fitting.
+2020-07-31 10:32:51 INFO     MatPipe successfully fit.
+2020-07-31 10:33:08 INFO     Beginning MatPipe prediction using fitted pipeline.
+2020-07-31 10:33:08 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:33:08 INFO     AutoFeaturizer: composition column already exists, overwriting with composition from structure.
+2020-07-31 10:33:08 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:33:20 INFO     AutoFeaturizer: Guessing oxidation states of compositions, as they were not present in input.
+2020-07-31 10:33:21 INFO     AutoFeaturizer: Featurizing with ElementProperty.
+2020-07-31 10:33:24 INFO     AutoFeaturizer: Guessing oxidation states of structures if they were not present in input.
+2020-07-31 10:33:25 INFO     AutoFeaturizer: Featurizing with SineCoulombMatrix.
+2020-07-31 10:33:28 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:33:28 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:33:28 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:33:28 INFO     DataCleaner: Starting transforming.
+2020-07-31 10:33:28 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'fill'
+2020-07-31 10:33:28 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:33:28 INFO     DataCleaner: Before handling na: 935 samples, 150 features
+2020-07-31 10:33:28 INFO     DataCleaner: After handling na: 935 samples, 150 features
+2020-07-31 10:33:28 INFO     DataCleaner: Target not found in df columns. Ignoring...
+2020-07-31 10:33:28 INFO     DataCleaner: Finished transforming.
+2020-07-31 10:33:28 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:33:28 WARNING  FeatureReducer: Target not found in columns to transform.
+2020-07-31 10:33:28 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:33:28 INFO     TPOTAdaptor: Starting predicting.
+2020-07-31 10:33:28 INFO     TPOTAdaptor: Prediction finished successfully.
+2020-07-31 10:33:28 INFO     TPOTAdaptor: Finished predicting.
+2020-07-31 10:33:28 INFO     MatPipe prediction completed.
+2020-07-31 10:33:40 INFO     Beginning MatPipe prediction using fitted pipeline.
+2020-07-31 10:33:40 INFO     AutoFeaturizer: Starting transforming.
+2020-07-31 10:33:40 INFO     AutoFeaturizer: Featurizer type composition not in the dataframe. Skipping...
+2020-07-31 10:33:40 INFO     AutoFeaturizer: Featurizer type structure not in the dataframe. Skipping...
+2020-07-31 10:33:40 INFO     AutoFeaturizer: Featurizer type bandstructure not in the dataframe. Skipping...
+2020-07-31 10:33:40 INFO     AutoFeaturizer: Featurizer type dos not in the dataframe. Skipping...
+2020-07-31 10:33:40 INFO     AutoFeaturizer: Finished transforming.
+2020-07-31 10:33:40 INFO     DataCleaner: Starting transforming.
+2020-07-31 10:33:40 INFO     DataCleaner: Cleaning with respect to samples with sample na_method 'fill'
+2020-07-31 10:33:40 INFO     DataCleaner: Replacing infinite values with nan for easier screening.
+2020-07-31 10:33:40 INFO     DataCleaner: Before handling na: 935 samples, 6 features
+2020-07-31 10:33:40 WARNING  DataCleaner: Mismatched columns found in dataframe used for fitting and argument dataframe.
+2020-07-31 10:33:40 WARNING  DataCleaner: Coercing mismatched columns...
+2020-07-31 10:33:40 WARNING  DataCleaner: Assuming missing columns in argument df are one-hot encoding issues. Setting to zero the following new columns:
+['Size', 'MagpieData minimum Number', 'MagpieData maximum Number', 'MagpieData range Number', 'MagpieData mean Number', 'MagpieData avg_dev Number', 'MagpieData mode Number', 'MagpieData minimum MendeleevNumber', 'MagpieData maximum MendeleevNumber', 'MagpieData range MendeleevNumber', 'MagpieData mean MendeleevNumber', 'MagpieData avg_dev MendeleevNumber', 'MagpieData mode MendeleevNumber', 'MagpieData minimum AtomicWeight', 'MagpieData maximum AtomicWeight', 'MagpieData range AtomicWeight', 'MagpieData mean AtomicWeight', 'MagpieData avg_dev AtomicWeight', 'MagpieData mode AtomicWeight', 'MagpieData minimum MeltingT', 'MagpieData maximum MeltingT', 'MagpieData range MeltingT', 'MagpieData mean MeltingT', 'MagpieData avg_dev MeltingT', 'MagpieData mode MeltingT', 'MagpieData minimum Column', 'MagpieData maximum Column', 'MagpieData range Column', 'MagpieData mean Column', 'MagpieData avg_dev Column', 'MagpieData mode Column', 'MagpieData minimum Row', 'MagpieData maximum Row', 'MagpieData range Row', 'MagpieData mean Row', 'MagpieData avg_dev Row', 'MagpieData mode Row', 'MagpieData minimum CovalentRadius', 'MagpieData maximum CovalentRadius', 'MagpieData range CovalentRadius', 'MagpieData mean CovalentRadius', 'MagpieData mode CovalentRadius', 'MagpieData minimum Electronegativity', 'MagpieData maximum Electronegativity', 'MagpieData range Electronegativity', 'MagpieData mean Electronegativity', 'MagpieData avg_dev Electronegativity', 'MagpieData mode Electronegativity', 'MagpieData minimum NsValence', 'MagpieData maximum NsValence', 'MagpieData range NsValence', 'MagpieData mean NsValence', 'MagpieData avg_dev NsValence', 'MagpieData mode NsValence', 'MagpieData minimum NpValence', 'MagpieData maximum NpValence', 'MagpieData range NpValence', 'MagpieData mean NpValence', 'MagpieData avg_dev NpValence', 'MagpieData mode NpValence', 'MagpieData minimum NdValence', 'MagpieData maximum NdValence', 'MagpieData range NdValence', 'MagpieData mean NdValence', 'MagpieData avg_dev NdValence', 'MagpieData mode NdValence', 'MagpieData minimum NfValence', 'MagpieData maximum NfValence', 'MagpieData range NfValence', 'MagpieData mean NfValence', 'MagpieData avg_dev NfValence', 'MagpieData mode NfValence', 'MagpieData minimum NValence', 'MagpieData maximum NValence', 'MagpieData range NValence', 'MagpieData mean NValence', 'MagpieData avg_dev NValence', 'MagpieData mode NValence', 'MagpieData minimum NsUnfilled', 'MagpieData maximum NsUnfilled', 'MagpieData range NsUnfilled', 'MagpieData mean NsUnfilled', 'MagpieData avg_dev NsUnfilled', 'MagpieData mode NsUnfilled', 'MagpieData minimum NpUnfilled', 'MagpieData maximum NpUnfilled', 'MagpieData range NpUnfilled', 'MagpieData mean NpUnfilled', 'MagpieData avg_dev NpUnfilled', 'MagpieData mode NpUnfilled', 'MagpieData minimum NdUnfilled', 'MagpieData maximum NdUnfilled', 'MagpieData range NdUnfilled', 'MagpieData mean NdUnfilled', 'MagpieData avg_dev NdUnfilled', 'MagpieData mode NdUnfilled', 'MagpieData minimum NfUnfilled', 'MagpieData maximum NfUnfilled', 'MagpieData range NfUnfilled', 'MagpieData mean NfUnfilled', 'MagpieData avg_dev NfUnfilled', 'MagpieData mode NfUnfilled', 'MagpieData minimum NUnfilled', 'MagpieData maximum NUnfilled', 'MagpieData range NUnfilled', 'MagpieData mean NUnfilled', 'MagpieData avg_dev NUnfilled', 'MagpieData mode NUnfilled', 'MagpieData minimum GSvolume_pa', 'MagpieData maximum GSvolume_pa', 'MagpieData range GSvolume_pa', 'MagpieData mean GSvolume_pa', 'MagpieData avg_dev GSvolume_pa', 'MagpieData mode GSvolume_pa', 'MagpieData minimum GSbandgap', 'MagpieData maximum GSbandgap', 'MagpieData range GSbandgap', 'MagpieData mean GSbandgap', 'MagpieData avg_dev GSbandgap', 'MagpieData mode GSbandgap', 'MagpieData minimum GSmagmom', 'MagpieData maximum GSmagmom', 'MagpieData range GSmagmom', 'MagpieData mean GSmagmom', 'MagpieData avg_dev GSmagmom', 'MagpieData mode GSmagmom', 'MagpieData minimum SpaceGroupNumber', 'MagpieData maximum SpaceGroupNumber', 'MagpieData range SpaceGroupNumber', 'MagpieData mean SpaceGroupNumber', 'MagpieData avg_dev SpaceGroupNumber', 'MagpieData mode SpaceGroupNumber', 'sine coulomb matrix eig 0', 'sine coulomb matrix eig 2', 'sine coulomb matrix eig 5', 'sine coulomb matrix eig 6', 'sine coulomb matrix eig 7', 'sine coulomb matrix eig 8', 'sine coulomb matrix eig 9', 'sine coulomb matrix eig 10', 'sine coulomb matrix eig 11', 'sine coulomb matrix eig 12', 'sine coulomb matrix eig 13', 'sine coulomb matrix eig 14', 'sine coulomb matrix eig 15']
+2020-07-31 10:33:40 WARNING  DataCleaner: Following columns are being dropped:
+['Formation Energy predicted']
+2020-07-31 10:33:40 INFO     DataCleaner: After handling na: 935 samples, 150 features
+2020-07-31 10:33:40 INFO     DataCleaner: Target not found in df columns. Ignoring...
+2020-07-31 10:33:40 INFO     DataCleaner: Finished transforming.
+2020-07-31 10:33:40 INFO     FeatureReducer: Starting transforming.
+2020-07-31 10:33:40 WARNING  FeatureReducer: Target not found in columns to transform.
+2020-07-31 10:33:40 INFO     FeatureReducer: Finished transforming.
+2020-07-31 10:33:40 INFO     TPOTAdaptor: Starting predicting.
+2020-07-31 10:33:40 INFO     TPOTAdaptor: Prediction finished successfully.
+2020-07-31 10:33:40 INFO     TPOTAdaptor: Finished predicting.
+2020-07-31 10:33:40 INFO     MatPipe prediction completed.
