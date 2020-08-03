@@ -67,7 +67,9 @@ app.layout = html.Div([
                    }
             ),
 
-    html.Div([
+    html.Div([dcc.Loading(id="loading",
+                          type="dot",
+                          children=html.Div([
 
         ## hack whitespace between inline-blocks
         html.Div(style={'display': 'inline-block',
@@ -220,6 +222,8 @@ app.layout = html.Div([
                            }
                     ),
     ],
+    ),)
+    ]
         style={'display': 'block',
                'marginBottom': '20px'
                }
