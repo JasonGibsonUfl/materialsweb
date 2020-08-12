@@ -2,7 +2,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
-
+from materialsweb2.settings import BASE_DIR
 from dash.dependencies import Input, Output, State
 import json
 import json
@@ -28,7 +28,7 @@ from urllib.parse import quote as urlquote
 from lxml import etree                                                                              
 import xml.etree.ElementTree as et  
 
-UPLOAD_DIRECTORY = "/var/www/materialsweb/static/temp"
+UPLOAD_DIRECTORY = BASE_DIR+"/materialsweb/static/temp"
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)

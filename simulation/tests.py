@@ -4,21 +4,21 @@ from simulation.analysis.vasp.calculation import Calculation
 from scripts.fill_elements import run as run_e
 from scripts.fill_spacegroups import run as run_s
 from scripts.fill_wyckoffsites import run as run_w
-
+from materialsweb2.settings import BASE_DIR
 class TestSimulation(TestCase):
 
     def setUp(self):
         run_e()
         run_s()
         run_w()
-        path2D = '/var/www/materialsweb/static/database/mp-691133'
+        path2D = BASE_DIR+'/static/database/mp-691133'
 
         self.calculation2D = Calculation().read(path2D)
         self.calculation2D.create_all(path2D)
         self.entry2D = self.calculation2D.entry
         self.composition2D = self.entry2D.composition
 
-        path3D = '/var/www/materialsweb/static/database/MAX_phases/all_competitors/mp-867780'
+        path3D = BASE_DIR+'/static/database/MAX_phases/all_competitors/mp-867780'
 
         self.calculation3D = Calculation().read(path3D)
         self.calculation3D.create_all(path3D)

@@ -7,7 +7,8 @@ django.setup()
 from simulation import *
 from simulation.analysis.vasp.calculation import Calculation    
 import os
-a=os.walk('/var/www/materialsweb/static/database/MAX_phases/')
+from materialsweb2.settings import BASE_DIR
+a=os.walk(BASE_DIR+'/static/database/MAX_phases/')
 for b in a:
         if len(b[1])==0:
            path = b[0]

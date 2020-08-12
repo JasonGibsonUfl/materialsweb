@@ -25,8 +25,9 @@ from .gen_bandsfig import BandsFig
 import os
 import base64
 from urllib.parse import quote as urlquote
+from materialsweb2.settings import BASE_DIR
 
-UPLOAD_DIRECTORY = "/var/www/materialsweb/static/temp"
+UPLOAD_DIRECTORY = BASE_DIR+"/materialsweb/static/temp"
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
