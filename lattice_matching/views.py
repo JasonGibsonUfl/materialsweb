@@ -14,6 +14,7 @@ def lattice_matching_view(request, *args,**kwargs):
         user_input_2 = user_input_2.read().decode("utf-8")
         a= StructureMatcher(user_input_1,user_input_2,20, 5)
         print(a)
+        context.update({"data": a})
 
 
     return render(request, 'lattice.html', context)
