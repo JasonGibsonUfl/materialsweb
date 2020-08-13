@@ -13,7 +13,8 @@
       <input type="text" name="user_strain" value="10" id="user_strain">
       <button type="submit">Submit</button>
   </form>
-
+    <script type="text/javascript" src="{% static 'javascript/3Dmol/jquery.js' %}">
+    </script>
     <script>
       (function() {
         var viewer = $3Dmol.createViewer($("#3Dmoldiv"));
