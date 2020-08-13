@@ -43,6 +43,7 @@ def get_jmol3(structure):
     string = string.replace(']', '')
     string = string.replace(', ', r'\n')
     string = string.replace("'", "")
+    string = string.replace('Se', 'H')
     print(string)
     return string
 
