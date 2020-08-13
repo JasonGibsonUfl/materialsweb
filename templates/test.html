@@ -10,7 +10,7 @@
         rel='stylesheet' type='text/css'>/
 </head>
 
-<body onload="displayResults();">
+<body >
   <div id="TopBar" style="background-color: white; position: absolute; top: 0; height: 125px; width: 100%; opacity: 0.9;"></div>
 
     <div id="HomePageHeaderBox">
@@ -34,17 +34,7 @@
 
     <script type="text/javascript" src="{% static 'javascript/3Dmol/jquery.js' %}">
     </script>
-    <script>
-    function displayResults() {
-        var error_msg = "{{ err_msg }}";
-        if (error_msg) {
-            var structureProperties = error_msg;
-        } else {
-        var data = "{{ data }}";
-        }
 
-    }
-    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="{% static "parallax.js" %}"></script>
 
