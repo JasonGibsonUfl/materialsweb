@@ -69,34 +69,6 @@
 
     </div>
 
-    <a id='Poscar_Link' style='position: relative; top: 105px; left: 543px;'
-      download="POSCAR">
-      <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
-        POSCAR
-    </a>
-    <a id='Incar_Link' style='position: relative; top: 190px; left: 386px;'
-      download="INCAR">
-      <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
-      INCAR
-    </a>
-    <a id='Kpoints_Link' style='position: relative; top: 275px; left: 250px;'
-      download="KPOINTS">
-      <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
-      KPOINTS
-    </a>
-
-    <a id='Bands_Link' style='position: relative; top: 575px; left: -400px;'
-      download="{{ redform }}_bands.pdf">
-      <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
-      Bandstructure
-    </a>
-
-    <a id='Pourbaix_Link' style='position: relative; top: 925px; left: 0px;'
-      download="{{ redform }}_pbx.pdf">
-      <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
-      Pourbaix Diagram
-    </a>
-
     <div id="3Dmolborderdiv" style="width: 402px; height: 402px;
     position: absolute; border: 1px solid black;
     border-radius: 3px; left: 52px; top: 145px;">
@@ -116,16 +88,7 @@
           })();
         </script>
 
-    <div id="StructureResultsBox">
-        <!--Formula: {{  entry.composition.formula  }}
-        <br>
-        a: {{  a  }}
-        <br>
-        b: {{  b  }}
-        <br>
-        {{  structure.spacegroup.hm  }}-->
-
-    </div>
+    <div id="StructureResultsBox"></div>
     <div id="ElectronicResultsBox"></div>
 
     <script>
@@ -138,11 +101,5 @@
       ga('send', 'pageview');
 
     </script>
-  <p>{{  label  }}|add:'t'</p>
-    {% with "{{  label  }}"|add:'test' as test %}
-    <p>test</p>
-    {% endwith %}
-  
-    <!--<img id="BandsDiagram" src="{% static '{{ label }}' %}" style="display: inline-block; width: 500px; height: 350px; position: relative; left: 450px; top: -50px;">
-    <img id="PourbaixDiagram" src="{% static 'mp-691133/pourbaix.png' %}" style="display: inline-block; width: 600px; height: 450px; position: absolute; clear: both; left: 0px; top: 1025px;">-->
+
 </body>
