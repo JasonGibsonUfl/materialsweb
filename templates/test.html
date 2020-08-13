@@ -12,6 +12,7 @@
     <script src="{% static 'javascript/3Dmol/3Dmol-nojquery-min.js' %}"></script>
       <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
+          <br>
           <p>POSCAR_sub</p>
           <input type="file" name="user_input_1" id="user_input_1">
           <p>POSCAR_twod</p>
@@ -46,7 +47,7 @@
     border-radius: 3px; left: 755px; top: 245px;">
     </div>
     <div id="3Dmoldiv2d" style="width: 400px; height: 400px; position: relative;
-        left: 755px; top: -770px;">
+        left: 755px; top: -765px;">
     </div>
         <script>
           (function() {
