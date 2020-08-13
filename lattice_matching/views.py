@@ -20,6 +20,8 @@ def lattice_matching_view(request, *args,**kwargs):
         a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
         context.update({"data": a})
         context.update({"structure_1": get_jmol2(user_input_1)})
+        context.update({"structure_2": get_jmol2(user_input_2)})
+
 
     return render(request, 'test.html', context)
 
