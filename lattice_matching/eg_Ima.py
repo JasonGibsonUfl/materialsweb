@@ -14,7 +14,7 @@ Usage: Provide inputs <path to poscar substrate>, <path to poscar 2D> and
 """
 # import the lma module
 # from mpinterfaces import transformations
-import transformations
+from . import transformations
 from pymatgen import Structure, Lattice
 import numpy as np
 import os
