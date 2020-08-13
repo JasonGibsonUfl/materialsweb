@@ -27,7 +27,7 @@
     <script>
       (function() {
         var viewer = $3Dmol.createViewer($("#3Dmoldiv"));
-        var data = "{{  structure_1  }}"
+        var data = "{{  structure_1  }}";
         viewer.setBackgroundColor(0xffffff);
         viewer.addModel(data, "xyz");
         viewer.setStyle({}, {sphere:{}, line:{}});
@@ -47,5 +47,5 @@
 
     </script>
 
-<p>{{  data  }}</p>
+<p>{{  structure_1  }}</p>
 {% endblock %}
