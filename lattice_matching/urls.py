@@ -3,5 +3,5 @@ from django.urls import path, include
 from django.conf.urls import url
 
 urlpatterns = [
-    path('lattice', views.lattice_view, name='lattice'),
+    path('app', views.lattice_matching_view, name='app'),
     ]
