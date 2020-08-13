@@ -23,7 +23,7 @@ def lattice_matching_view(request, *args,**kwargs):
         context.update({"data": a})
         context.update({"structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar'))})
         context.update({"structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar'))})
-        context.update({"structure_3": get_jmol2(s3)})
+        context.update({"structure_3": get_jmol3(s3)})
 
 
     return render(request, 'test.html', context)
