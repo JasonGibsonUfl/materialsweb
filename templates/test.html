@@ -40,57 +40,9 @@
         if (error_msg) {
             var structureProperties = error_msg;
         } else {
-        var data = {
+        var data = "{{ data }}";
         }
 
-        document.getElementById("StructureResultsBox").innerHTML = structureProperties;
-        document.getElementById("ElectronicResultsBox").innerHTML = electronicProperties;
-
-        var poscar_link = document.getElementById('Poscar_Link');
-        poscar_link.href = label_POSCAR;
-        var incar_link = document.getElementById('Incar_Link');
-        incar_link.href = label_INCAR;
-        var kpoints_link = document.getElementById('Kpoints_Link');
-        kpoints_link.href = label_KPOINTS;
-
-        var bands_link = document.getElementById('Bands_Link');
-        bands_link.href = "{{ baseUrl }}bands/{{ mwid }}.pdf";
-
-        bands_diagram = document.createElement("img");
-        bands_diagram.id = 'BandsDiagram';
-        bands_diagram.src = labelpd;
-        bands_diagram.onerror = function() {
-          document.getElementById('BandsDiagram').src="{% static "Images/not_found.png" %}";
-          document.getElementById('BandsDiagram').style.width = '310px';
-        };
-        bands_diagram.style.display = 'inline-block';
-        bands_diagram.style.width = '500px';
-        bands_diagram.style.height = '350px';
-        bands_diagram.style.position = 'relative';
-        bands_diagram.style.left = '450px';
-        bands_diagram.style.top = '-155px';
-        document.body.appendChild(bands_diagram);
-        var pbx_link = document.getElementById("Pourbaix_Link");
-        pbx_link.href ="{{ baseUrl }}pourbaix/{{ mwid }}.pdf";
-        pbx_diagram = document.createElement("img");
-        pbx_diagram.id = 'PourbaixDiagram';
-        pbx_diagram.src = labelpx;
-
-        pbx_diagram.style.display = 'inline-block';
-        pbx_diagram.style.width = '600px';
-        pbx_diagram.style.height = '450px';
-        pbx_diagram.style.position = 'absolute';
-        pbx_diagram.style.clear = 'both';
-        pbx_diagram.style.left = '0px';
-        pbx_diagram.style.top = '1025px';
-        pbx_diagram.onerror = function() {
-          document.getElementById('PourbaixDiagram').src="{% static '/Images/not_found.png' %}";
-          document.getElementById('PourbaixDiagram').style.top = '1075px';
-          document.getElementById('PourbaixDiagram').style.left = '50px';
-          document.getElementById('PourbaixDiagram').style.height = '350px';
-          document.getElementById('PourbaixDiagram').style.width = '310px';
-        };
-        document.body.appendChild(pbx_diagram);
     }
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -100,7 +52,22 @@
     <div id="ParallaxContainer" style="background-color: transparent; position: absolute; top: 125; height: 1350px; width: 100%;" data-parallax="scroll" data-image-src="{% static 'Images/Icon.png' %}"></div>
     <div id="StructureContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 125; height: 450px; width: 100%;"></div>
     <div id="BandsDiagramContainer" style="background-color: #c0c0c0; opacity: 0.9; position: absolute; top: 575; height: 450px; width: 100%;"></div>
-    <div id="PourbaixDiagramContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 1025; height: 450px; width: 100%;"></div>
+    <div id="PourbaixDiagramContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 1025; height: 450px; width: 100%;">
+      <h2>Upload</h2>
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <p>POSCAR_sub</p>
+          <input type="file" name="user_input_1" id="user_input_1">
+          <p>POSCAR_twod</p>
+          <input type="file" name="user_input_2" id="user_input_2">
+          <p>Area (Angstrom)</p>
+          <input type="text" name="user_area" value="20" id="user_area">
+          <p>Strain (%)</p>
+          <input type="text" name="user_strain" value="10" id="user_strain">
+          <button type="submit">Submit</button>
+      </form>
+
+    </div>
 
     <a id='Poscar_Link' style='position: relative; top: 105px; left: 543px;'
       download="POSCAR">
@@ -140,7 +107,7 @@
         <script>
           (function() {
             var viewer = $3Dmol.createViewer($("#3Dmoldiv"));
-            var data = "{{  data  }}"
+            var data = "{{  structure_1  }}"
             viewer.setBackgroundColor(0xffffff);
             viewer.addModel(data, "xyz");
             viewer.setStyle({}, {sphere:{}, line:{}});
