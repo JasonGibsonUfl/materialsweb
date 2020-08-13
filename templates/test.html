@@ -25,7 +25,7 @@
     <div id="3Dmolborderdivsub" style="width: 425px; height: 425px;
     position: absolute; border: 1px solid black;
     border-radius: 3px; left: 330px; top: 180px;">
-        <h3 style="top: -20">Substrate</h3>
+        <h6 style="top: -20">Substrate</h6>
 
     </div>
     <div id="3Dmoldivsub" style="width: 400px; height: 400px; position: relative;
@@ -61,6 +61,25 @@
             viewer.render();
           })();
         </script>
+    <div id="3Dmolborderdivresult" style="width: 425px; height: 425px;
+    position: absolute; border: 1px solid black;
+    border-radius: 3px; left: 1190px; top: 180px;">
+    </div>
+    <div id="3Dmoldivresult" style="width: 400px; height: 400px; position: relative;
+        left: 1190px; top: -825px;">
+    </div>
+        <script>
+          (function() {
+            var viewer = $3Dmol.createViewer($("#3Dmoldivresult"));
+            var data = "{{  structure_1  }}"
+            viewer.setBackgroundColor(0xffffff);
+            viewer.addModel(data, "xyz");
+            viewer.setStyle({}, {sphere:{}, line:{}});
+            viewer.zoomTo();
+            viewer.render();
+          })();
+        </script>
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
