@@ -3,8 +3,8 @@
   <h2>Upload</h2>
   <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <label for="user_input_1">POSCAR_sub</label>
       <input type="file" name="user_input_1" id="user_input_1">
+      <label for="user_input_1">POSCAR_sub</label>
       <label for="user_input_2">POSCAR_twod</label>
       <input type="file" name="user_input_2" id="user_input_2">
       <label for="user_area">Area</label>
