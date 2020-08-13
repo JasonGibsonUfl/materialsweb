@@ -29,7 +29,7 @@ import os
 def StructureMatcher(user_input_one, user_input_two, user_area, user_strain,
                      all_matches=True):
     # Output message is only used if the algorithm fails or if the user did not enter POSCAR files
-    output_message = ""
+    output_message = "test"
     associated_areas = []
     associated_ustrains = []
     associated_vstrains = []
