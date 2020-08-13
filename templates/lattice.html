@@ -3,14 +3,13 @@
   <h2>Upload</h2>
   <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <label for="user_input_1">POSCAR_sub</label>
-      <p>POSCAR</p>
+      <p>POSCAR_sub</p>
       <input type="file" name="user_input_1" id="user_input_1">
-      <label for="user_input_2">POSCAR_twod</label>
+      <p>POSCAR_twod</p>
       <input type="file" name="user_input_2" id="user_input_2">
-      <label for="user_area">Area</label>
+      <p>Area (Angstrom)</p>
       <input type="text" name="user_area" value="20" id="user_area">
-      <label for="user_strain">Area</label>
+      <p>Strain (%)</p>
       <input type="text" name="user_strain" value="10" id="user_strain">
       <button type="submit">Submit</button>
   </form>
