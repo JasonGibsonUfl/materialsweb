@@ -17,7 +17,14 @@
     <script type="text/javascript" src="{% static 'javascript/3Dmol/jquery.js' %}">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="{% static "parallax.js" %}"></script>
+    <script src="{% static 'parallax.js' %}"></script>
+    <div id="3Dmolborderdiv" style="width: 402px; height: 402px;
+    position: absolute; border: 1px solid black;
+    border-radius: 3px; left: 52px; top: 145px;">
+    </div>
+    <div id="3Dmoldiv" style="width: 400px; height: 400px; position: relative;
+        left: 46px; top: -125px;">
+    </div>
     <script>
       (function() {
         var viewer = $3Dmol.createViewer($("#3Dmoldiv"));
