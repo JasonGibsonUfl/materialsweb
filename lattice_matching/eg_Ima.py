@@ -33,6 +33,8 @@ def StructureMatcher(user_input_one, user_input_two, user_area, user_strain,
     associated_areas = []
     associated_ustrains = []
     associated_vstrains = []
+    sub = None
+    twod = None
     # user_input_one is a POSCAR file or string of a POSCAR file
     # User_input_two is another POSCAR file or string of a POSCAR file
     # user_area is the maximum area of the combined heterostructure in squared Angstroms
@@ -40,14 +42,8 @@ def StructureMatcher(user_input_one, user_input_two, user_area, user_strain,
     # all_matches specifies whether the code should spit out all possible matches
 
     try:
-        if type(user_input_one) == str:
-            sub = Structure.from_str(user_input_one)
-        else:
-            sub = user_input_one
-        if type(user_input_two) == str:
-            twod = Structure.from_str(user_input_two)
-        else:
-            twod = user_input_two
+        sub = Structure.from_str(user_input_one)
+        twod = Structure.from_str(user_input_two)
     except:
         output_message = "These are not recognizable POSCARs, try again."
 
