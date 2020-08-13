@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from pages import views
 from electronic_visualization import simpleexample
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,3 +40,5 @@ urlpatterns = [
     path('lattice_matching/', include(('lattice_matching.urls', 'lattice_matching'),namespace='lattice_matching')),
 
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
