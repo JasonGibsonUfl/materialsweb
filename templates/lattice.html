@@ -1,4 +1,10 @@
 {% extends 'home.html' %}
 {% block apps %}
   <h2>Upload</h2>
+  <form>
+      {% csrf_token %}
+      <input type="file" name="poscar1">
+      <input type="file" name="poscar2">
+      <button type="submit">Submit</button>
+  </form>
 {% endblock %}
