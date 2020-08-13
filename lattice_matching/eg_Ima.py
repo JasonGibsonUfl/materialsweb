@@ -40,12 +40,13 @@ def StructureMatcher(user_input_one, user_input_two, user_area, user_strain,
     # user_area is the maximum area of the combined heterostructure in squared Angstroms
     # user_strain is the maximum strain in decimal form (i.e. 0.06 would be 6% strain)
     # all_matches specifies whether the code should spit out all possible matches
-
+    sub = Structure.from_str(user_input_one)
     try:
         sub = Structure.from_str(user_input_one)
         twod = Structure.from_str(user_input_two)
     except:
         output_message = "These are not recognizable POSCARs, try again."
+        print(output_message)
 
     # provide input match constraints as a dictionary
     match_constraints = {'max_area': user_area, 'max_mismatch': user_strain, 'max_angle_diff': 4,
