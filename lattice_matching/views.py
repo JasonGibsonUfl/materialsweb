@@ -22,7 +22,7 @@ def lattice_matching_view(request, *args,**kwargs):
         s3 =a[1][-1].to(fmt='poscar')
         context.update({"data": a})
         context.update({"structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar'))})
-        context.update({"structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar'))})
+        context.update({"structure_2": get_jmol2(Structure.from_str(user_input_2, fmt='poscar'))})
         context.update({"structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar'))})
 
 
@@ -35,6 +35,7 @@ def get_jmol3(structure):
     xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
     for site in structure.sites:
         element = site._species.reduced_formula.replace('2', '')
+        print(element)
         atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))
         xyz_structure.append(atom)
     string = str(xyz_structure)
