@@ -7,8 +7,8 @@ def lattice_matching_view(request, *args,**kwargs):
     context.update({"is_signed_in": is_signed_in})
 
     if request.method == 'POST':
-        user_input_1 = request.FILES['user_input_1']
-        user_input_2 = request.FILES['user_input_2']
+        user_input_1 = request.FILES.get('user_input_1', None)
+        user_input_2 = request.FILES.get('user_input_2', None)
         print(type(user_input_2))
         user_input_1 = user_input_1.read().decode("utf-8")
         #user_input_2 = user_input_2.read().decode("utf-8")
