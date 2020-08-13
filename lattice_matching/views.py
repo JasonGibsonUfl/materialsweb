@@ -19,16 +19,16 @@ def lattice_matching_view(request, *args,**kwargs):
         user_strain = request.POST.get('user_strain', None)
         a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
         print(type(a[1][-1]))
+        s3 =a[1][-1]
         context.update({"data": a})
-        context.update({"structure_1": get_jmol2(user_input_1)})
-        context.update({"structure_2": get_jmol3(user_input_2)})
-        context.update({"structure_3": get_jmol2(a[1][-1].to())})
+        context.update({"structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar'))})
+        context.update({"structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar'))})
+        context.update({"structure_3": get_jmol2(s3)})
 
 
     return render(request, 'test.html', context)
 
 def get_jmol3(structure):
-    structure = Structure.from_str(structure, fmt='poscar')
     analyzer = SpacegroupAnalyzer(structure)
     structure = analyzer.get_refined_structure()
     structure.make_supercell([2, 2, 2])
@@ -47,7 +47,6 @@ def get_jmol3(structure):
 def get_jmol2(structure):
     from pymatgen.core.operations import SymmOp
     needs_shift = False
-    structure = Structure.from_str(structure, fmt='poscar')
     if structure.lattice.a == max(structure.lattice.abc):
         translation = SymmOp.from_rotation_and_translation(translation_vec=(structure.lattice.a / 2, 0, 0))
         for site in structure.sites:
