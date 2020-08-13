@@ -21,9 +21,7 @@ def lattice_matching_view(request, *args,**kwargs):
         context.update({"data": a})
         context.update({"structure_1": get_jmol3(user_input_1)})
 
-
-
-    return render(request, 'lattice.html', context)
+    return render(request, 'test.html', context)
 
 def get_jmol3(structure):
     structure = Structure.from_str(structure, fmt='poscar')
