@@ -35,6 +35,6 @@ urlpatterns = [
     path('electronic_visualization', views.electronic_visualization_view, name='electronic_visualization'),
     path('substrate', views.substrate_view, name='substrate'),
     path('django_plotly_dash/', include('django_plotly_dash.urls')),
-    path('/', include(('lattice.urls', 'lattice'),namespace='lattice')),
+    path('/', include(('lattice_matching.urls', 'lattice'),namespace='lattice')),
 
 ]
