@@ -8,5 +8,5 @@ def lattice_matching_view(request, *args,**kwargs):
 
     if request.method == 'POST':
         user_input_1 = request.FILES['user_input_1']
-        print(user_input_1)
+        print(user_input_1.name)
     return render(request, 'lattice.html', context)
