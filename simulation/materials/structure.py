@@ -19,7 +19,7 @@ from django.db import transaction
 
 
 from pymatgen.core.structure import Structure as StructureP
-
+from materialsweb2.settings import BASE_DIR
 from .element import Element, Species
 from simulation.materials.atom import Atom, Site
 from .composition import Composition
@@ -166,7 +166,7 @@ class Structure(models.Model, object):
     def get_jmol2(self):
         from pymatgen.core.operations import SymmOp
         needs_shift = False
-        structure = StructureP.from_file(self.entry.path+'/POSCAR')
+        structure = StructureP.from_file(BASE_DIR + self.entry.path.split('/var/www/materialsweb')[-1] + '/POSCAR')
         if structure.lattice.a == max(structure.lattice.abc):
             translation = SymmOp.from_rotation_and_translation(translation_vec=(structure.lattice.a / 2, 0, 0))
             for site in structure.sites:
@@ -210,7 +210,7 @@ class Structure(models.Model, object):
 
     def get_jmol3(self):
         from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
-        structure = StructureP.from_file(self.entry.path + '/POSCAR')
+        structure = StructureP.from_file(BASE_DIR + self.entry.path.split('/var/www/materialsweb')[-1] + '/POSCAR')
         analyzer = SpacegroupAnalyzer(structure)
         structure = analyzer.get_refined_structure()
         structure.make_supercell([2, 2, 2])
