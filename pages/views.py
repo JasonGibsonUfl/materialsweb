@@ -4,6 +4,7 @@ from simulation.analysis.vasp.calculation import Calculation
 from simulation.materials.structure import Structure
 from api.rest import QueryEngine
 from pymatgen.core.structure import Structure as StructureP
+from materialsweb2.settings import BASE_DIR
 from django.db.models import Q
 import ast
 import re
@@ -159,7 +160,8 @@ def result_view(request, *args, **kwargs):
     mwid = full_path.split('/')[-1]
     entry = Entry.objects.get(id=mwid)
     path = entry.path
-    structure = StructureP.from_file(path + '/POSCAR')
+    print(BASE_DIR + path.split('/var/www/materialsweb')[-1] + '/POSCAR')
+    structure = StructureP.from_file(BASE_DIR + path.split('/var/www/materialsweb')[-1] + '/POSCAR')
     calculation = Calculation.objects.get(path=path)
     band_gap = round(calculation.dos.find_gap(),3)
     ##TEST
