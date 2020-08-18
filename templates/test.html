@@ -5,10 +5,22 @@
 
     <script type="text/javascript" src="{% static 'javascript/3Dmol/jquery.js' %}">
     </script>
+    <script>
+        function download(filename, text) {
+          var element = document.createElement('a');
+          element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+          element.setAttribute('download', filename);
 
+          element.style.display = 'none';
+          document.body.appendChild(element);
+
+          element.click();
+
+          document.body.removeChild(element);
+        }
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="{% static "parallax.js" %}"></script>
-
     <script src="{% static 'javascript/3Dmol/3Dmol-nojquery-min.js' %}"></script>
       <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
@@ -28,6 +40,11 @@
             <p>Area = {{ Area }} (Angstrom^2)</p>
             <p>POST</p>
             <button type="submit" id="next" name="next">Next</button>
+            <form onsubmit="download(this['name'].value, this['text'].value)">
+              <input type="text" name="name" value="POSCAR">
+              <textarea name="text"></textarea>
+              <input type="submit" value="Download">
+            </form>
           </div>
       </form>
 
