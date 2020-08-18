@@ -11,6 +11,7 @@ def lattice_matching_view(request, *args,**kwargs):
     context.update({"is_signed_in": is_signed_in})
 
     if request.method == 'POST':
+        i=0
         if 'submit' in request.POST:
             print('SUBMIT HIT')
             i = 0
