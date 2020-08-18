@@ -68,7 +68,8 @@
         <p>Strain V = {{ strain_v }} (%)</p>
         <p>Area = {{ Area }} (Angstrom^2)</p>
         <form method="post">
-           <p>POST</p>
+          {% csrf_token %}
+          <p>POST</p>
           <button id="next" name="next">Next</button>
         </form>
     </div>
