@@ -11,6 +11,8 @@ def lattice_matching_view(request, *args,**kwargs):
     context.update({"is_signed_in": is_signed_in})
 
     if request.method == 'POST':
+        print('HERE')
+        print(request.GET.get('submit'))
         if request.GET.get('submit'):
             print('SUBMIT HIT')
         else:
@@ -31,8 +33,7 @@ def lattice_matching_view(request, *args,**kwargs):
         strain_u = a[2][i]
         strain_v = a[3][i]
         area = a[4][i]
-        print('area')
-        print(a[4][0])
+
         context.update(({
             "data": a,
             "structure_1": get_jmol3(Structure.from_str(user_input_1, fmt='poscar')),
