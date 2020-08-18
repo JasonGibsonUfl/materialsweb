@@ -34,19 +34,17 @@
           <input type="text" name="user_strain" value="10" id="user_strain">
           <button type="submit" id="submit" name="submit">Submit</button>
           <div id="Structure_info" style="position: absolute; left: 1200px; top: 220 px;">
+            <button type="submit" id="next" name="next">Next</button>
             <p>Stucture {{ page_c }} of {{ page_t }}</p>
             <p>Strain U = {{ strain_u }} (%)</p>
             <p>Strain V = {{ strain_v }} (%)</p>
             <p>Area = {{ Area }} (Angstrom^2)</p>
-            <p>POST</p>
-            <button type="submit" id="next" name="next">Next</button>
-
           </div>
       </form>
       <form onsubmit="download(this['name'].value, this['text'].value)">
           <input type="text" name="name" value="POSCAR" style="display:none">
           <textarea name="text" style="display:none;">{{ download }}</textarea>
-          <button type="submit" value="Download" style="position: relative; left: 1280px; bottom: -190 px;">Download</button>
+          <button type="submit" value="Download" style="position: relative; left: 1280px;">Download</button>
       </form>
     <div id="3Dmolborderdivsub" style="width: 425px; height: 425px;
     position: absolute; border: 1px solid black;
