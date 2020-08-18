@@ -45,7 +45,7 @@
       </form>
       <form onsubmit="download(this['name'].value, this['text'].value)">
           <input type="text" name="name" value="POSCAR">
-          <textarea name="text" style="display:none;">TEST FILE</textarea>
+          <textarea name="text" style="display:none;">{{ download }}</textarea>
           <input type="submit" value="Download">
       </form>
     <div id="3Dmolborderdivsub" style="width: 425px; height: 425px;

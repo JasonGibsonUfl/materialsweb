@@ -70,6 +70,7 @@ def lattice_matching_view(request, *args,**kwargs):
                 "Area": area,
                 "page_c": i+1,
                 "page_t": len(a[1]),
+                "download": s3,
             }))
 
 
