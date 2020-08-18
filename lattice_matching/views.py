@@ -11,12 +11,8 @@ def lattice_matching_view(request, *args,**kwargs):
     context.update({"is_signed_in": is_signed_in})
 
     if request.method == 'POST':
-        print('HERE')
-        print(request.POST.get('submit'))
         if 'submit' in request.POST:
             print('SUBMIT HIT')
-        else:
-            print('Submit Not Hit')
         i = 0
         user_input_1 = request.FILES.get('user_input_1', None)
         user_input_2 = request.FILES.get('user_input_2', None)
@@ -25,7 +21,7 @@ def lattice_matching_view(request, *args,**kwargs):
         user_area = request.POST.get('user_area', None)
         user_strain = request.POST.get('user_strain', None)
         a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
-        if request.POST.get('next'):
+        if 'next' in request.POST:
             print('NEXT!!!!!!!!!!!')
             i = i + 1
             print(i)
