@@ -13,7 +13,7 @@ def lattice_matching_view(request, *args,**kwargs):
     if request.method == 'POST':
         print('HERE')
         print(request.POST.get('submit'))
-        if request.POST.get('submit'):
+        if 'submit' in request.POST:
             print('SUBMIT HIT')
         else:
             print('Submit Not Hit')
