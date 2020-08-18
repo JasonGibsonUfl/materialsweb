@@ -18,7 +18,6 @@ def lattice_matching_view(request, *args,**kwargs):
         user_area = request.POST.get('user_area', None)
         user_strain = request.POST.get('user_strain', None)
         a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
-        print((a[1][-1]))
         s3 =a[1][-1].to(fmt='poscar')
         context.update({"data": a})
         context.update({"structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar'))})
