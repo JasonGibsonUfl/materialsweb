@@ -30,6 +30,17 @@ def lattice_matching_view(request, *args,**kwargs):
             strain_u = a[2][i]
             strain_v = a[3][i]
             area = a[4][i]
+            context.update(({
+                "data": a,
+                "structure_1": get_jmol3(Structure.from_str(user_input_1, fmt='poscar')),
+                "structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar')),
+                "structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar')),
+                "strain_u": strain_u,
+                "strain_v": strain_v,
+                "Area": area,
+                "page_c": i+1,
+                "page_t": len(a[1]),
+            }))
 
         if 'next' in request.POST:
             print('NEXT!!!!!!!!!!!')
@@ -49,17 +60,17 @@ def lattice_matching_view(request, *args,**kwargs):
             strain_v = a[3][i]
             area = a[4][i]
 
-        context.update(({
-            "data": a,
-            "structure_1": get_jmol3(Structure.from_str(user_input_1, fmt='poscar')),
-            "structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar')),
-            "structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar')),
-            "strain_u": strain_u,
-            "strain_v": strain_v,
-            "Area": area,
-            "page_c": i+1,
-            "page_t": len(a[1]),
-        }))
+            context.update(({
+                "data": a,
+                "structure_1": get_jmol3(Structure.from_str(user_input_1, fmt='poscar')),
+                "structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar')),
+                "structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar')),
+                "strain_u": strain_u,
+                "strain_v": strain_v,
+                "Area": area,
+                "page_c": i+1,
+                "page_t": len(a[1]),
+            }))
 
 
     return render(request, 'test.html', context)
