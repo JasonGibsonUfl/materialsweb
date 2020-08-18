@@ -44,7 +44,7 @@
           </div>
       </form>
       <form onsubmit="download(this['name'].value, this['text'].value)">
-          <input type="text" name="name" value="POSCAR">
+          <input type="text" name="name" value="POSCAR" style="display:none">
           <textarea name="text" style="display:none;">{{ download }}</textarea>
           <button type="submit" value="Download">Download</button>
       </form>
