@@ -99,7 +99,7 @@
             viewer.render();
           })();
         </script>
-    <button id="Help">[Help]</button>
+    <button id="Help">Help</button>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -107,15 +107,14 @@
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">X</span>
-        <p>There are several ways to query the database:</p>
-        <p>1. Click on elements to search for a general composition</p>
-        <p>2. Enter a specific formula</p>
-        <p>3. Enter an mpquery (dictionary-style search). For example, entering
-          {} will return all materials in the database. Entering
-          {'elements':{'$in':['Y']}} will return all materials that contain Y.
-          Please see the <a style="color: #fcb040; font-size: 16;" target="_blank" href="https://github.com/materialsproject/mapidoc">
-          Materials Project API documentation</a> for more details on the
-          mpquery syntax.</p>
+        <p>How to create your heterostructure:</p>
+        <p>1. Upload two POSCARs for your monolayer materials</p>
+        <p>2. Enter the maximum acceptable area of the resultant unit cell</p>
+        <p>3. Enter the maximum acceptable strain in the resultant unit cell</p>
+        <p>4. Hit submit</p>
+        <p>You can download the result POSCAR files using the Download POSCAR button.
+            Keep in mind that POSCAR 1 will be the top part of the heterostructure and POSCAR 2 will be the bottom part of the heterostructure.
+            The structures will be the same regardless unless either of the monolayers is asymmetric.</p>
       </div>
 
     </div>
