@@ -15,16 +15,28 @@ def lattice_matching_view(request, *args,**kwargs):
         if 'submit' in request.POST:
             print('SUBMIT HIT')
             i = 0
-        user_input_1 = request.FILES.get('user_input_1',)
-        user_input_2 = request.FILES.get('user_input_2', )
-        user_input_1 = user_input_1.read().decode("utf-8")
-        user_input_2 = user_input_2.read().decode("utf-8")
-        user_area = request.POST.get('user_area', None)
-        user_strain = request.POST.get('user_strain', None)
-        a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+            user_input_1 = request.FILES.get('user_input_1', None)
+            user_input_2 = request.FILES.get('user_input_2', None)
+            user_input_1 = user_input_1.read().decode("utf-8")
+            user_input_2 = user_input_2.read().decode("utf-8")
+            request.session['user_input_1'] = user_input_1
+            request.session['user_input_2'] = user_input_2
+            user_area = request.POST.get('user_area', None)
+            user_strain = request.POST.get('user_strain', None)
+            request.session['user_area'] = user_area
+            request.session['user_strain'] = user_strain
+            request.session['i'] = i
+            a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
         if 'next' in request.POST:
             print('NEXT!!!!!!!!!!!')
+            user_input_1 = request.session.get('user_input_1')
+            user_input_2 = request.session.get('user_input_2')
+            user_area = request.session.get('user_area')
+            user_strain = request.session.get('user_strain')
+            i = request.session.get('i')
             i = i + 1
+            a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+            request.session['i'] = i
             print(i)
         s3 =a[1][i].to(fmt='poscar')
         strain_u = a[2][i]
