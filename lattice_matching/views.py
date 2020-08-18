@@ -19,6 +19,10 @@ def lattice_matching_view(request, *args,**kwargs):
         user_area = request.POST.get('user_area', None)
         user_strain = request.POST.get('user_strain', None)
         a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+        if request.GET.get('next'):
+            print('NEXT!!!!!!!!!!!')
+            i = i + 1
+            print(i)
         s3 =a[1][i].to(fmt='poscar')
         strain_u = a[2][i]
         strain_v = a[3][i]
