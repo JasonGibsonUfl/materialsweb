@@ -18,24 +18,25 @@ def lattice_matching_view(request, *args,**kwargs):
             user_input_2 = request.FILES.get('user_input_2', None)
             user_input_1 = user_input_1.read().decode("utf-8")
             user_input_2 = user_input_2.read().decode("utf-8")
-            #request.session['user_input_1'] = user_input_1
-            #request.session['user_input_2'] = user_input_2
+            request.session['user_input_1'] = user_input_1
+            request.session['user_input_2'] = user_input_2
             user_area = request.POST.get('user_area', None)
             user_strain = request.POST.get('user_strain', None)
-            #request.session['user_area'] = user_area
-            #request.session['user_strain'] = user_strain
+            request.session['user_area'] = user_area
+            request.session['user_strain'] = user_strain
             request.session['i'] = i
             a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
-            request.session['a'] = a
         if 'next' in request.POST:
             print('NEXT!!!!!!!!!!!')
-            #user_input_1 = request.session.get('user_input_1')
-            #user_input_2 = request.session.get('user_input_2')
-            #user_area = request.session.get('user_area')
-            #user_strain = request.session.get('user_strain')
+            user_input_1 = request.session.get('user_input_1')
+            user_input_2 = request.session.get('user_input_2')
+            user_area = request.session.get('user_area')
+            user_strain = request.session.get('user_strain')
             i = request.session.get('i')
             i = i + 1
-            a = request.session.get('a')#StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+            a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+            if i == len(a[1]):
+                i = 0
             request.session['i'] = i
             print(i)
         s3 =a[1][i].to(fmt='poscar')
@@ -51,6 +52,8 @@ def lattice_matching_view(request, *args,**kwargs):
             "strain_u": strain_u,
             "strain_v": strain_v,
             "Area": area,
+            "page_c": i+1,
+            "page_t": len(a[1]),
         }))
 
 
