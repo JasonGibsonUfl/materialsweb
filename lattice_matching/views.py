@@ -11,6 +11,10 @@ def lattice_matching_view(request, *args,**kwargs):
     context.update({"is_signed_in": is_signed_in})
 
     if request.method == 'POST':
+        if request.GET.get('submit'):
+            print('SUBMIT HIT')
+        else:
+            print('Submit Not Hit')
         i = 0
         user_input_1 = request.FILES.get('user_input_1', None)
         user_input_2 = request.FILES.get('user_input_2', None)

@@ -21,6 +21,13 @@
           <p>Strain (%)</p>
           <input type="text" name="user_strain" value="10" id="user_strain">
           <button type="submit">Submit</button>
+          <div id="Structure_info" style="position: absolute; left: 1200px; top: 220 px;">
+            <p>Strain U = {{ strain_u }} (%)</p>
+            <p>Strain V = {{ strain_v }} (%)</p>
+            <p>Area = {{ Area }} (Angstrom^2)</p>
+            <p>POST</p>
+            <button id="next" name="next">Next</button>
+          </div>
       </form>
 
     <div id="3Dmolborderdivsub" style="width: 425px; height: 425px;
@@ -63,16 +70,7 @@
         <div id="3Dmoldivresult" style="width: 420px; height: 420px; position: relative;">
         </div>
     </div>
-    <div id="Structure_info" style="position: absolute; left: 1200px; top: 220 px;">
-        <p>Strain U = {{ strain_u }} (%)</p>
-        <p>Strain V = {{ strain_v }} (%)</p>
-        <p>Area = {{ Area }} (Angstrom^2)</p>
-        <form method="post">
-          {% csrf_token %}
-          <p>POST</p>
-          <button id="next" name="next">Next</button>
-        </form>
-    </div>
+
 
         <script>
           (function() {
