@@ -51,9 +51,9 @@ def lattice_matching_view(request, *args,**kwargs):
 
         context.update(({
             "data": a,
-            "structure_1": get_jmol3(Structure.from_str(user_input_1, fmt='poscar')),
-            "structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar')),
-            "structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar')),
+            "structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar')),
+            "structure_2": get_jmol2(Structure.from_str(user_input_2, fmt='poscar')),
+            "structure_3": get_jmol2(Structure.from_str(s3, fmt='poscar')),
             "strain_u": strain_u,
             "strain_v": strain_v,
             "Area": area,
@@ -92,7 +92,7 @@ def get_jmol2(structure):
                 needs_shift = True
         if needs_shift:
             structure.apply_operation(translation)
-        structure.make_supercell([1, 6, 6])
+        structure.make_supercell([1, 4, 4])
     elif structure.lattice.b == max(structure.lattice.abc):
         translation = SymmOp.from_rotation_and_translation(translation_vec=(0, structure.lattice.b / 2, 0))
         for site in structure.sites:
@@ -100,7 +100,7 @@ def get_jmol2(structure):
                 needs_shift = True
         if needs_shift:
             structure.apply_operation(translation)
-        structure.make_supercell([6, 1, 6])
+        structure.make_supercell([4, 1, 4])
     else:
         translation = SymmOp.from_rotation_and_translation(translation_vec=(0, 0, structure.lattice.c / 2))
         for site in structure.sites:
@@ -109,7 +109,7 @@ def get_jmol2(structure):
         if needs_shift:
             structure.apply_operation(translation)
 
-        structure.make_supercell([6, 6, 1])
+        structure.make_supercell([4, 4, 1])
         print('frac_coord: '+ str(site._frac_coords[2]))
 
     print(structure.lattice.b)
