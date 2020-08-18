@@ -23,10 +23,11 @@ def lattice_matching_view(request, *args,**kwargs):
         strain_u = a[2][i]
         strain_v = a[3][i]
         area = a[4][i]
+        print(a[4])
         context.update(({
             "data": a,
-            "structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar')),
-            "structure_2": get_jmol2(Structure.from_str(user_input_2, fmt='poscar')),
+            "structure_1": get_jmol3(Structure.from_str(user_input_1, fmt='poscar')),
+            "structure_2": get_jmol3(Structure.from_str(user_input_2, fmt='poscar')),
             "structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar')),
             "strain_u": strain_u,
             "strain_v": strain_v,
