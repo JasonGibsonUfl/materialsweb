@@ -11,6 +11,7 @@ def lattice_matching_view(request, *args,**kwargs):
     context.update({"is_signed_in": is_signed_in})
 
     if request.method == 'POST':
+        i = 0
         user_input_1 = request.FILES.get('user_input_1', None)
         user_input_2 = request.FILES.get('user_input_2', None)
         user_input_1 = user_input_1.read().decode("utf-8")
@@ -18,11 +19,19 @@ def lattice_matching_view(request, *args,**kwargs):
         user_area = request.POST.get('user_area', None)
         user_strain = request.POST.get('user_strain', None)
         a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
-        s3 =a[1][-1].to(fmt='poscar')
-        context.update({"data": a})
-        context.update({"structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar'))})
-        context.update({"structure_2": get_jmol2(Structure.from_str(user_input_2, fmt='poscar'))})
-        context.update({"structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar'))})
+        s3 =a[1][i].to(fmt='poscar')
+        strain_u = a[2][i]
+        strain_v = a[3][i]
+        area = a[4][i]
+        context.update(({
+            "data": a,
+            "structure_1": get_jmol2(Structure.from_str(user_input_1, fmt='poscar')),
+            "structure_2": get_jmol2(Structure.from_str(user_input_2, fmt='poscar')),
+            "structure_3": get_jmol3(Structure.from_str(s3, fmt='poscar')),
+            "strain_u": strain_u,
+            "strain_v": strain_v,
+            "Area": area,
+        }))
 
 
     return render(request, 'test.html', context)
@@ -30,7 +39,7 @@ def lattice_matching_view(request, *args,**kwargs):
 def get_jmol3(structure):
     analyzer = SpacegroupAnalyzer(structure)
     structure = analyzer.get_refined_structure()
-    structure.make_supercell([2, 2, 2])
+    #structure.make_supercell([2, 2, 2])
     xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
     for site in structure.sites:
         element = site._species.reduced_formula.replace('2', '')
@@ -42,8 +51,7 @@ def get_jmol3(structure):
     string = string.replace(']', '')
     string = string.replace(', ', r'\n')
     string = string.replace("'", "")
-    string = string.replace('Se', 'H')
-    string = string.replace('Mo', 'C')
+
     print(string)
     return string
 
