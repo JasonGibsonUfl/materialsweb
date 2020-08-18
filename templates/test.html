@@ -32,7 +32,7 @@
         <script>
           (function() {
             var viewer = $3Dmol.createViewer($("#3Dmoldivsub"));
-            var data = "{{  structure_3  }}"
+            var data = "{{  structure_1  }}"
             viewer.setBackgroundColor(0xffffff);
             viewer.addModel(data, "xyz");
             viewer.setStyle({}, {sphere:{}, line:{}});
@@ -67,13 +67,14 @@
         <p>Strain U = {{ strain_u }} (%)</p>
         <p>Strain V = {{ strain_v }} (%)</p>
         <p>Area = {{ Area }} (Angstrom^2)</p>
+        <button>Next</button>
 
     </div>
 
         <script>
           (function() {
             var viewer = $3Dmol.createViewer($("#3Dmoldivresult"));
-            var data = "{{  structure_1  }}"
+            var data = "{{  structure_3  }}"
             viewer.setBackgroundColor(0xffffff);
             viewer.addModel(data, "xyz");
             viewer.setStyle({}, {sphere:{}, line:{}});
