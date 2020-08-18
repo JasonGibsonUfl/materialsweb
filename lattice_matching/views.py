@@ -20,7 +20,7 @@ def lattice_matching_view(request, *args,**kwargs):
             user_input_2 = user_input_2.read().decode("utf-8")
             user_area = request.POST.get('user_area', None)
             user_strain = request.POST.get('user_strain', None)
-        a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+            a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
         if 'next' in request.POST:
             print('NEXT!!!!!!!!!!!')
             i = i + 1
