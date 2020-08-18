@@ -40,14 +40,14 @@
             <p>Area = {{ Area }} (Angstrom^2)</p>
             <p>POST</p>
             <button type="submit" id="next" name="next">Next</button>
-            <form onsubmit="download(this['name'].value, this['text'].value)">
-              <input type="text" name="name" value="POSCAR">
-              <textarea name="text"></textarea>
-              <input type="submit" value="Download">
-            </form>
+
           </div>
       </form>
-
+        <form onsubmit="download(this['name'].value, this['text'].value)">
+          <input type="text" name="name" value="POSCAR">
+          <textarea name="text"></textarea>
+          <input type="submit" value="Download">
+        </form>
     <div id="3Dmolborderdivsub" style="width: 425px; height: 425px;
     position: absolute; border: 1px solid black;
     border-radius: 3px; left: 330px; top: 180px;">
