@@ -15,8 +15,8 @@ def lattice_matching_view(request, *args,**kwargs):
         if 'submit' in request.POST:
             print('SUBMIT HIT')
             i = 0
-        user_input_1 = request.FILES.get('user_input_1', 'user_input_1',)
-        user_input_2 = request.FILES.get('user_input_2', 'user_input_2',)
+        user_input_1 = request.FILES.get('user_input_1',)
+        user_input_2 = request.FILES.get('user_input_2', )
         user_input_1 = user_input_1.read().decode("utf-8")
         user_input_2 = user_input_2.read().decode("utf-8")
         user_area = request.POST.get('user_area', None)
