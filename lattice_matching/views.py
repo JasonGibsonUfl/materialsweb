@@ -23,6 +23,7 @@ def lattice_matching_view(request, *args,**kwargs):
         strain_u = a[2][i]
         strain_v = a[3][i]
         area = a[4][i]
+        print('area')
         print(a[4])
         context.update(({
             "data": a,
@@ -44,7 +45,6 @@ def get_jmol3(structure):
     xyz_structure = [str(structure.num_sites),structure.composition.reduced_formula]
     for site in structure.sites:
         element = site._species.reduced_formula.replace('2', '')
-        print(element)
         atom = '{} {} {} {}'.format(element, str(site.x), str(site.y),str(site.z))
         xyz_structure.append(atom)
     string = str(xyz_structure)
@@ -53,7 +53,6 @@ def get_jmol3(structure):
     string = string.replace(', ', r'\n')
     string = string.replace("'", "")
 
-    print(string)
     return string
 
 def get_jmol2(structure):
