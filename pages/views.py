@@ -236,14 +236,14 @@ def models_view(request, *args,**kwargs):
                 soap = mwr.get_soap(temp.name, fmt='poscar')
                 model = mwr.get_KRR('Cd-Te')
                 result = model.predict(soap)
-                print(result)
+                print(result[0])
 
             request.session['user_input_1'] = user_input_1
         else:
             print('else')
 
         context.update(({
-            "data": result[0],
+            "data": str(result[0]),
         }))
 
 
