@@ -237,6 +237,8 @@ def models_view(request, *args,**kwargs):
                 print(result)
 
             request.session['user_input_1'] = user_input_1
+        else:
+            print('else')
 
         context.update(({
             "data": result,
