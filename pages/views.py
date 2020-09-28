@@ -231,6 +231,8 @@ def models_view(request, *args,**kwargs):
                 print('temp')
                 mwr = MWRester()
                 temp.write(bytes(user_input_1, encoding='utf-8'))
+                for line in temp:
+                    print(line)
                 soap = mwr.get_soap(temp.name, fmt='poscar')
                 model = mwr.get_KRR('Cd-Te')
                 result = model.predict(soap)
