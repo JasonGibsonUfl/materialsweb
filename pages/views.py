@@ -267,4 +267,4 @@ def models_view(request, *args,**kwargs):
         }))
 
 
-    return render(request, 'test.html', context)
+    return render(request, 'models.html', context)
