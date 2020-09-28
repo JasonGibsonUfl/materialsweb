@@ -234,7 +234,7 @@ def models_view(request, *args,**kwargs):
                 for line in temp:
                     print(line)
                 soap = mwr.get_soap(temp.name, fmt='poscar')
-                model = mwr.get_KRR('CdTe')
+                model = mwr.get_KRR('Cd-Te')
                 result = model.predict(soap)
                 print(result)
 
