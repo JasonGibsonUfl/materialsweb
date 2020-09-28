@@ -217,7 +217,7 @@ def models_view(request, *args,**kwargs):
     context = {}
     is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
     context.update({"is_signed_in": is_signed_in})
-
+    result = ''
     if request.method == 'POST':
         if 'submit' in request.POST:
             i = 0
