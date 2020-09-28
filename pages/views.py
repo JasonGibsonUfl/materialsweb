@@ -205,4 +205,66 @@ def result_view(request, *args, **kwargs):
 
     return render(request, 'result.html', context)
 
+from django.shortcuts import render
+from lattice_matching.eg_Ima import  StructureMatcher
+from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+from pymatgen import Structure
 
+from django.core.files.storage import FileSystemStorage
+# Create your views here.
+def models_view(request, *args,**kwargs):
+    context = {}
+    is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
+    context.update({"is_signed_in": is_signed_in})
+
+    if request.method == 'POST':
+        if 'submit' in request.POST:
+            i = 0
+            user_input_1 = request.FILES.get('user_input_1', None)
+            user_input_2 = request.FILES.get('user_input_2', None)
+            user_input_1 = user_input_1.read().decode("utf-8")
+            user_input_2 = user_input_2.read().decode("utf-8")
+            request.session['user_input_1'] = user_input_1
+            request.session['user_input_2'] = user_input_2
+            user_area = request.POST.get('user_area', None)
+            user_strain = request.POST.get('user_strain', None)
+            request.session['user_area'] = user_area
+            request.session['user_strain'] = user_strain
+            request.session['i'] = i
+            a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+            s3 =a[1][i].to(fmt='poscar')
+            strain_u = a[2][i]
+            strain_v = a[3][i]
+            area = a[4][i]
+
+        if 'next' in request.POST:
+            print('NEXT!!!!!!!!!!!')
+            user_input_1 = request.session.get('user_input_1')
+            user_input_2 = request.session.get('user_input_2')
+            user_area = request.session.get('user_area')
+            user_strain = request.session.get('user_strain')
+            i = request.session.get('i')
+            i = i + 1
+            a= StructureMatcher(user_input_1, user_input_2, float(user_area), float(user_strain))
+            if i == len(a[1]):
+                i = 0
+            request.session['i'] = i
+            print(i)
+            s3 =a[1][i].to(fmt='poscar')
+            strain_u = a[2][i]
+            strain_v = a[3][i]
+            area = a[4][i]
+
+        context.update(({
+            "data": a,
+
+            "strain_u": strain_u,
+            "strain_v": strain_v,
+            "Area": area,
+            "page_c": i+1,
+            "page_t": len(a[1]),
+            "download": s3,
+        }))
+
+
+    return render(request, 'test.html', context)
