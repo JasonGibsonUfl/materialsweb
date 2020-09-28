@@ -243,7 +243,7 @@ def models_view(request, *args,**kwargs):
             print('else')
 
         context.update(({
-            "data": result,
+            "data": result[0],
         }))
 
 
