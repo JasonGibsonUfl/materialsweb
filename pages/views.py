@@ -241,7 +241,7 @@ def models_view(request, *args,**kwargs):
             request.session['user_input_1'] = user_input_1
         print('result = ' + str(result[0]))
         context.update(({
-            "data": str(result[0]),
+            "data": str(result[0])[:6],
         }))
 
 
