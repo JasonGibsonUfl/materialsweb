@@ -218,21 +218,25 @@ def models_view(request, *args,**kwargs):
     is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
     context.update({"is_signed_in": is_signed_in})
     result = ''
+    print('befor')
     if request.method == 'POST':
+        print('post')
         if 'submit' in request.POST:
+            print('submit')
             i = 0
             user_input_1 = request.FILES.get('user_input_1', None)
             user_input_1 = user_input_1.read().decode("utf-8")
             import tempfile
             with tempfile.NamedTemporaryFile() as temp:
+                print('temp')
                 mwr = MWRester()
                 temp.write(bytes(user_input_1, encoding='utf-8'))
                 soap = mwr.get_soap(temp.name, fmt='poscar')
                 model = mwr.get_KRR('Cd-Te')
                 result = model.predict(soap)
+                print(result)
 
             request.session['user_input_1'] = user_input_1
-
 
         context.update(({
             "data": result,
