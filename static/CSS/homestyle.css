@@ -82,7 +82,7 @@ a {
     text-decoration: none;
 }
 
-#Menu {
+.Menu {
     height: 50px;
     width: 850px;
     position: absolute;
