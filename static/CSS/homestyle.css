@@ -82,8 +82,8 @@ a {
     text-decoration: none;
 }
 
-#Menui {
-    height: 100px;
+#Menu {
+    height: 50px;
     width: 850px;
     position: absolute;
     top: 50;
@@ -93,7 +93,7 @@ a {
     font-size: 30px;
 }
 
-.MenuiLink {
+.MenuLink {
     display: inline-block;
     background-color: transparent;
     -webkit-transition: background 0.5s;
@@ -106,7 +106,7 @@ a {
     z-index: 10;
 }
 
-.MenuiLink:hover{
+.MenuLink:hover{
     background-color: #F7F7F7; /*#454343; #c0c0c0;*/
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
