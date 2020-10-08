@@ -10,6 +10,10 @@
   background-color: inherit;
   font-family: inherit;
   margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .navbar a:hover, .dropdown:hover .dropbtn {
@@ -68,6 +72,7 @@
 
     <div id="HomePageHeaderBox">
         <div id="Menu">
+            <div class="dropdown">
                 <button class="dropbtn">Test
                     <i class="fa fa-caret-down"></i>
                 </button>
@@ -75,6 +80,7 @@
                     <a href="/" >Home</a>
                     <a href="/about" >About</a>
                 </div>
+            </div>
             <a class="hvr-float-shadow" href="/" id="Home">Home</a>
             <a class="hvr-float-shadow" href="/about" id="About">About</a>
             <a class="hvr-float-shadow" href="/docs" id="Docs">Docs</a>
