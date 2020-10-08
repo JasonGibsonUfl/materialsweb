@@ -4,13 +4,16 @@
   overflow: hidden;
   background-color: white;
   position: absolute;
-  top: 10%;
-  left:30%;
+  top: 0%;
   height: 225px;
   width: 100%;
   opacity: 0.9;
 }
-
+.cent {
+  position: absolute;
+  top: 10%;
+  left:30%;
+}
 .navbar a {
   color: #454343;
   font-size: 24;
@@ -100,12 +103,8 @@
 
 
         <div class="navbar">
-            <!--<div id="Menu" style="left: 400">-->
+            <div class="cent">
                 <a href="/" style="float: none; position: absolute; top: 10%; left: 50%;">Home</a>
-
-
-
-
                 <!--{% if is_signed_in %}
                   <a class="hvr-float-shadow" href="/" id="SignOut">Sign Out</a>
                 {% else %}
@@ -134,8 +133,8 @@
                       <a href="substrate"></a>
                     </div>
                 </div>
+            </div>
 
-            <!--</div>-->
         </div>
 
 
