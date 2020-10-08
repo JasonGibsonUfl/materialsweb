@@ -101,7 +101,7 @@
 
         <div class="navbar">
             <!--<div id="Menu" style="left: 400">-->
-                <a href="/" style="float: right">Home</a>
+                <a href="/" style="float: none; position: absolute; top: 50%; left: 50%;">Home</a>
 
 
 
@@ -112,7 +112,7 @@
                   <a class="hvr-float-shadow" href="/accounts/login" id="SignOut">Sign In</a>
                   <a class="hvr-float-shadow" href="/accounts/register" id="Register">Register</a>
                 {% endif %}-->
-               <div class="dropdown">
+               <div class="dropdown" style="position: relative;">
                     <button class="dropbtn">About
                       <i class="fa fa-caret-down"></i>
                     </button>
@@ -123,7 +123,7 @@
                         <a href="/api" id="Api">API</a>
                     </div>
                 </div>
-                <div class="dropdown">
+                <div class="dropdown" style="position: relative;">
                     <button class="dropbtn">Dropdown
                       <i class="fa fa-caret-down"></i>
                     </button>
