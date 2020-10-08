@@ -92,7 +92,27 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="{% static 'parallax.js' %}"></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script>
+      /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
 
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+  </script>
   <div style="position: relative; top: 0px; left: 0px; background-color: black; opacity: 0.9; width: 100%;"></div>
 
 
@@ -106,10 +126,10 @@
                   <a class="hvr-float-shadow" href="/accounts/register" id="Register">Register</a>
                 {% endif %}-->
                <div class="dropdown" style="float:left;">
-                    <button class="dropbtn">About
+                    <button onclick="myFunction()" class="dropbtn">About
                       <i class="fa fa-caret-down"></i>
                     </button>
-                    <div class="dropdown-content">
+                    <div id="myDropdown" class="dropdown-content">
                         <a href="/about" id="About">About</a>
                         <a href="/docs" id="Docs">Docs</a>
                         <a href="/contact" id="Contact">Contact</a>
