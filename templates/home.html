@@ -84,7 +84,16 @@
 
 
         <div class="navbar">
-          <div class="dropdown">
+            {% if is_signed_in %}
+              <a class="hvr-float-shadow" href="/" id="SignOut">Sign Out</a>
+            {% else %}
+              <a class="hvr-float-shadow" href="/accounts/login" id="SignOut">Sign In</a>
+              <a class="hvr-float-shadow" href="/accounts/register" id="Register">Register</a>
+            {% endif %}
+            <a href="/api" id="Api">API</a>
+            <a href="/contact" id="Contact">Contact</a>
+            <a class="hvr-float-shadow" href="/docs" id="Docs">Docs</a>
+            <div class="dropdown">
             <button class="dropbtn">Dropdown
               <i class="fa fa-caret-down"></i>
             </button>
@@ -94,8 +103,8 @@
               <a href="#">Link 3</a>
             </div>
           </div>
-          <a href="#home">Home</a>
-          <a href="#news">News</a>
+            <a href="#home">Home</a>
+            <a href="#news">News</a>
         </div>
 
 
