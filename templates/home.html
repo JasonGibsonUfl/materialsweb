@@ -98,10 +98,9 @@
         <div class="navbar">
             <div id="Menu" style="left: 400">
                 <a href="/">Home</a>
-                <a href="/about" id="About">About</a>
-                <a href="/docs" id="Docs">Docs</a>
-                <a href="/contact" id="Contact">Contact</a>
-                <a href="/api" id="Api">API</a>
+
+
+
 
                 <!--{% if is_signed_in %}
                   <a class="hvr-float-shadow" href="/" id="SignOut">Sign Out</a>
@@ -109,6 +108,17 @@
                   <a class="hvr-float-shadow" href="/accounts/login" id="SignOut">Sign In</a>
                   <a class="hvr-float-shadow" href="/accounts/register" id="Register">Register</a>
                 {% endif %}-->
+               <div class="dropdown">
+                    <button class="dropbtn">About
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/about" id="About">About</a>
+                        <a href="/docs" id="Docs">Docs</a>
+                        <a href="/contact" id="Contact">Contact</a>
+                        <a href="/api" id="Api">API</a>
+                    </div>
+                </div>
                 <div class="dropdown">
                     <button class="dropbtn">Dropdown
                       <i class="fa fa-caret-down"></i>
