@@ -31,7 +31,6 @@
 
 #dropdown div:hover + #dropdown-content,#dropdown-content:hover{
   display: block;
-  position: relative;
 }
 
 .dropdown .dropbtn {
@@ -108,7 +107,7 @@
                   <a class="hvr-float-shadow" href="/accounts/login" id="SignOut">Sign In</a>
                   <a class="hvr-float-shadow" href="/accounts/register" id="Register">Register</a>
                 {% endif %}-->
-               <div class="dropdown" style="float:left; ">
+               <div class="dropdown" style="float:left; display: block;">
                     <button class="dropbtn">About
                       <i class="fa fa-caret-down"></i>
                     </button>
