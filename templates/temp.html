@@ -111,7 +111,7 @@ body {margin:0;font-family:Arial}
 </style>
 </head>
 <body>
-
+<script src="{% static 'parallax.js' %}"></script>
 <div class="topnav" id="myTopnav">
   <a href="#home" class="active">Home</a>
   <a href="#news">News</a>
@@ -146,7 +146,6 @@ body {margin:0;font-family:Arial}
   <p>Hover over the dropdown button to open the dropdown menu.</p>
 </div>
 <div id="UnderVideo" style="background-color: transparent; position: absolute; z-index: -1; top: 10; height: 930px; width: 100%;" data-parallax="scroll" data-image-src="{% static 'Images/Icon.svg' %}"></div>
-
 <div id="InfoBlock" style="background-color: white; position: absolute; top: 540; height: 400px; width: 100%; opacity: 0.9;">
   <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Browse our databases of structural, electronic,</br>and thermodynamic data for 2D/3D materials</p>
   <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Write your own python workflows for using</br>VASP to characterize your own 2D</br>materials</p>
