@@ -127,18 +127,17 @@ body {
 <script src="{% static 'parallax.js' %}"></script>
 
 <div class="topnav" id="myTopnav">
-    <a><img src="{% static 'Images/Logo.png' %}" width="148px" height="38px" ></a>
-  <a  href="#home" class="active">Home</a>
-  <a href="#news">News</a>
-  <a href="#contact">Contact</a>
+    <a><img src="{% static 'Images/Logo.png' %}" width="148px" height="30px" ></a>
+  <a  href="/">Home</a>
   <div class="dropdown">
-    <button class="dropbtn">Dropdown
+    <button class="dropbtn">About
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="#">Link 1</a>
-      <a href="#">Link 2</a>
-      <a href="#">Link 3</a>
+        <a href="/about" id="About">About</a>
+        <a href="/docs" id="Docs">Docs</a>
+        <a href="/contact" id="Contact">Contact</a>
+        <a href="/api" id="Api">API</a>
     </div>
   </div>
   <div class="dropdown">
