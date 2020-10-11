@@ -14,7 +14,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="{% static 'CSS//homestyle.css' %}" />
 <style>
-body {margin:0;font-family:Arial}
+body {
+    margin:0;font-family:Arial;
+    background-image: url("{% static 'Images/Icon.svg' %}");
+}
 
 .topnav {
   overflow: hidden;
@@ -122,48 +125,48 @@ body {margin:0;font-family:Arial}
 </head>
 <body>
 <script src="{% static 'parallax.js' %}"></script>
-<div style="background-image: url('{% static "Images/Icon.svg" %}');">
-    <div class="topnav" id="myTopnav">
-      <a href="#home" class="active">Home</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
-      <div class="dropdown">
-        <button class="dropbtn">Dropdown
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropbtn">Dropdown2
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
-        </div>
-      </div>
-      <a href="#about">About</a>
-      <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
-    </div>
 
-    <div style="padding-left:16px">
-      <h2>Responsive Topnav with Dropdown</h2>
-      <p>Resize the browser window to see how it works.</p>
-      <p>Hover over the dropdown button to open the dropdown menu.</p>
+<div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <div class="dropdown">
+    <button class="dropbtn">Dropdown
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="#">Link 1</a>
+      <a href="#">Link 2</a>
+      <a href="#">Link 3</a>
     </div>
-    <div id="UnderVideo" style="background-color: transparent; position: absolute; z-index: -1; top: 10; height: 930px; width: 100%;" data-parallax="scroll" data-image-src="{% static 'Images/Icon.svg' %}"></div>
-    <div id="InfoBlock" style="background-color: white; position: absolute; top: 540; height: 400px; width: 100%; opacity: 0.9;">
-      <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Browse our databases of structural, electronic,</br>and thermodynamic data for 2D/3D materials</p>
-      <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Write your own python workflows for using</br>VASP to characterize your own 2D</br>materials</p>
+  </div>
+  <div class="dropdown">
+    <button class="dropbtn">Dropdown2
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="#">Link 1</a>
+      <a href="#">Link 2</a>
+      <a href="#">Link 3</a>
     </div>
-    <img src="{% static 'Images/db_glyphicon.png'%}" style="position: absolute; top: 580px; left: 50px; height: 50px;"></img>
-    <img src="{% static 'Images/coding_glyphicon.png'%}" style="position: absolute; top: 690px; left: 50px; height: 45px;"></img>
+  </div>
+  <a href="#about">About</a>
+  <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 </div>
+
+<div style="padding-left:16px">
+  <h2>Responsive Topnav with Dropdown</h2>
+  <p>Resize the browser window to see how it works.</p>
+  <p>Hover over the dropdown button to open the dropdown menu.</p>
+</div>
+<div id="UnderVideo" style="background-color: transparent; position: absolute; z-index: -1; top: 10; height: 930px; width: 100%;" data-parallax="scroll" data-image-src="{% static 'Images/Icon.svg' %}"></div>
+<div id="InfoBlock" style="background-color: white; position: absolute; top: 540; height: 400px; width: 100%; opacity: 0.9;">
+  <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Browse our databases of structural, electronic,</br>and thermodynamic data for 2D/3D materials</p>
+  <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Write your own python workflows for using</br>VASP to characterize your own 2D</br>materials</p>
+</div>
+<img src="{% static 'Images/db_glyphicon.png'%}" style="position: absolute; top: 580px; left: 50px; height: 50px;"></img>
+<img src="{% static 'Images/coding_glyphicon.png'%}" style="position: absolute; top: 690px; left: 50px; height: 45px;"></img>
+
 <script>
 function myFunction() {
   var x = document.getElementById("myTopnav");
