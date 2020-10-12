@@ -208,7 +208,7 @@ code {
         bands_diagram.style.height = '350px';
         bands_diagram.style.position = 'relative';
 
-        document.getElementByID("BandsDiagramContainer").innerHTML = bands_diagram;
+        document.getElementById("BandsDiagramContainer").innerHTML = bands_diagram;
         var pbx_link = document.getElementById("Pourbaix_Link");
         pbx_link.href ="{{ baseUrl }}pourbaix/{{ mwid }}.pdf";
         pbx_diagram = document.createElement("img");
@@ -256,12 +256,13 @@ code {
           KPOINTS
         </a>
     </div>
-    <div id="BandsDiagramContainer" style="background-color: #c0c0c0; opacity: 0.9; position: absolute; top: 575; height: 450px; width: 100%;"></div>
+    <div id="BandsDiagramContainer" style="background-color: #c0c0c0; opacity: 0.9; position: absolute; top: 575; height: 450px; width: 100%;">
         <a id='Bands_Link' style='position: relative; top: 575px; left: -400px;'
             download="{{ redform }}_bands.pdf">
             <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
             Bandstructure
         </a>
+    </div>
     <div id="PourbaixDiagramContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 1025; height: 450px; width: 100%;"></div>
 
 
