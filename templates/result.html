@@ -11,9 +11,9 @@
         rel='stylesheet' type='text/css'>/
 </head>
 
-<body onload="displayResults();">
-{% block apps %}
 
+{% block apps %}
+<body onload="displayResults();">
     <script type="text/javascript" src="{% static 'javascript/3Dmol/jquery.js' %}">
     </script>
     <script>
@@ -169,8 +169,8 @@
       ga('send', 'pageview');
 
     </script>
-{% endblock %}
-  
+
     <!--<img id="BandsDiagram" src="{% static '{{ label }}' %}" style="display: inline-block; width: 500px; height: 350px; position: relative; left: 450px; top: -50px;">
     <img id="PourbaixDiagram" src="{% static 'mp-691133/pourbaix.png' %}" style="display: inline-block; width: 600px; height: 450px; position: absolute; clear: both; left: 0px; top: 1025px;">-->
 </body>
+{% endblock %}
