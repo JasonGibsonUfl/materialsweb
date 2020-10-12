@@ -184,7 +184,7 @@ code {
         }
 
         document.getElementById("StructureResultsBox").innerHTML = structureProperties;
-        document.getElementById("ElectronicResultsBox").innerHTML = electronicProperties;
+        document.getElementById("ElectronicResultsBox2").innerHTML = electronicProperties;
 
         var poscar_link = document.getElementById('Poscar_Link');
         poscar_link.href = label_POSCAR;
@@ -258,7 +258,7 @@ code {
         </a>
     </div>
     <div id="BandsDiagramContainer" style="background-color: #c0c0c0; opacity: 0.9; position: absolute; top: 575; height: 450px; width: 100%;">
-        <div id="ElectronicResultsBox"></div>
+        <div id="ElectronicResultsBox2"></div>
 
         <a id='Bands_Link' style='position: relative;'
             download="{{ redform }}_bands.pdf">
