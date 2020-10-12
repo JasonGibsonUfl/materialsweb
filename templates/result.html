@@ -208,7 +208,7 @@ code {
         bands_diagram.style.height = '350px';
         bands_diagram.style.position = 'relative';
 
-        document.body.appendChild(bands_diagram);
+        document.getElementByID("BandsDiagramContainer").innerHTML = bands_diagram;
         var pbx_link = document.getElementById("Pourbaix_Link");
         pbx_link.href ="{{ baseUrl }}pourbaix/{{ mwid }}.pdf";
         pbx_diagram = document.createElement("img");
