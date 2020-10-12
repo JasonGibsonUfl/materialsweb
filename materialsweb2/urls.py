@@ -40,6 +40,6 @@ urlpatterns = [
     path('lattice_matching/', include(('lattice_matching.urls', 'lattice_matching'), namespace='lattice_matching')),
     path('models', views.models_view, name='models'),    
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
