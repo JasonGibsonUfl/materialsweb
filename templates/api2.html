@@ -195,7 +195,7 @@
         The best way to access our database is through the MWRester class implemented in <a style="font-size:24; color: #fcb040" href="https://www.materialsproject.org/open">QuantumML</a>
         as shown below.
       <figure>
-          <figcaption>Default</figcaption>
+          <figcaption>Connecting to materialsweb</figcaption>
                  <pre aria-describedby="example1-description" aria-labelledby="example1-caption"><code
                          contenteditable="true" tabindex="0"
                          spellcheck="false"><b>from</b> quantumML.rest <b>import</b>b> MWRester
@@ -203,14 +203,23 @@
     mwr.get_calculation(<u>filter/s</u>)</code></pre>
       </figure>
 <h1 id="queries">Queries</h1>
+      <p> To refine the query results the following filters may be applied</p>
 <ul>
 <li><strong>band_gap_range</strong><br>Range of bandgaps in <em>eV</em> as a two valued list eg. [1.2, 3.1]  </li>
 <li><strong>Formation_energy_range</strong><br>Range of formation energies in <em>meV</em> as two values list eg. [50, 150]</li>
 <li><strong>elements</strong><br>List of elements contained in entry eg. [&#39;Na&#39;, &#39;Cl&#39;]<br>note: this will return all entries that contain Na and Cl as well as any other element </li>
 <li><strong>space_group_number</strong><br>integer of space group number eg. 5</li>
-<li><strong>dimention</strong><br>integer of dimension of material eg. 2</li>
+<li><strong>dimension</strong><br>integer of dimension of material eg. 2</li>
 <li><strong>crystal_system</strong><br>crystal system as a string eg. &#39;Tetragonal&#39;  </li>
 </ul>
+      <figure>
+          <figcaption>Connecting to materialsweb</figcaption>
+                 <pre aria-describedby="example1-description" aria-labelledby="example1-caption"><code
+                         contenteditable="true" tabindex="0"
+                         spellcheck="false"><b>from</b> quantumML.rest <b>import</b>b> MWRester
+<b>with</b> MWRester() <b>as</b> mwr:
+                     mwr.get_calculation(band_gap_range<i>=</i>[<u>1</u>,<u>1.5</u>], formation_energy_range<i>=</i>[<u>124</u>,<u>150</u> )</code></pre>
+      </figure>
 
         and as a result can be interacted with in mostly similar ways to those described in the
         <a style="font-size:24; color: #fcb040" href="https://www.materialsproject.org/docs/api">MAPI documentation</a>. For convenience,
