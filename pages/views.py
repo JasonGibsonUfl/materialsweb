@@ -29,7 +29,7 @@ CAFFEINE = ('24+Caffeine+H -3.3804130 -1.1272367 0.5733036+N 0.9668296 '
 def home_view(request, *args,**kwargs):
     is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
     context= {"is_signed_in": is_signed_in}
-    return render(request, 'temp.html', context)
+    return render(request, 'home.html', context)
 
 def gasp_view(request, *args,**kwargs):
     return render(request, 'gasp.html', {})
