@@ -212,6 +212,7 @@
 <li><strong>space_group_number</strong><br>integer of space group number eg. 5</li>
 <li><strong>dimension</strong><br>integer of dimension of material eg. 2</li>
 <li><strong>crystal_system</strong><br>crystal system as a string eg. &#39;Tetragonal&#39;  </li>
+<p>The below code shows how to apply the filters for a querry:</p>
 </ul>
       <figure>
           <figcaption>Applying filters</figcaption>
@@ -220,6 +221,41 @@
                          spellcheck="false"><b>from</b> quantumML.rest <b>import</b>b> MWRester
 <b>with</b> MWRester() <b>as</b> mwr:
     mwr.get_calculation(band_gap_range<i>=</i>[<u>1</u>,<u>1.5</u>], formation_energy_range<i>=</i>[<u>124</u>,<u>150</u>])</code></pre>
+      </figure>
+      <p>This will store the querry as a list that can be accessed by <i>mwr.results</i>. this will return a list of Json responses
+      with a single entry responce as seen below:</p>
+      <figure>
+          <figcaption>Json response</figcaption>
+                 <pre aria-describedby="example1-description" aria-labelledby="example1-caption"><code
+                         contenteditable="true" tabindex="0"
+                         spellcheck="false">mwr.results[1]
+Out:
+{'url': 'http://172.16.170.227:7800/rest/calculation/106/',
+ 'configuration': None,
+ 'dimension': 2,
+ 'label': 'mp-700',
+ 'path': '/var/www/materialsweb/static/database/mp-700',
+ 'natoms': 4,
+ 'settings': "{'potentials': [{'name': 'Ge_d', 'xc': 'PBE', 'us': False, 'paw': True}, {'name': 'Se', 'xc': 'PBE', 'us': False, 'paw': True}], 'nbands': 28, 'prec': 'accura', 'istart': 0, 'icharg': 2, 'ispin': 2, 'encut': 500.0, 'nelm': 60, 'nelmin': 2, 'ediff': 1e-06, 'lreal': True, 'nsw': 50, 'ibrion': 2, 'isif': 3, 'potim': 0.5, 'pstress': 0.0, 'ismear': 1, 'sigma': 0.1, 'algo': 'fast', 'lwave': True, 'lcharg': True, 'lvtot': False, 'lorbit': 0, 'ldipol': False, 'idipol': 0, 'epsilon': 1.0}",
+ 'energy': -10.4702046,
+ 'energy_pa': -2.61755115,
+ 'magmom': -0.0001349,
+ 'magmom_pa': -3.3725e-05,
+ 'band_gap': 1.2107,
+ 'is_direct': False,
+ 'irreducible_kpoints': 42.0,
+ 'formation_energy': 133.0,
+ 'attempt': 0,
+ 'nsteps': 32,
+ 'converged': True,
+ 'runtime': None,
+ 'entry': 'http://172.16.170.227:7800/rest/entry/113/',
+ 'composition': 'http://172.16.170.227:7800/rest/composition/Ge1%20Se1/',
+ 'input': 'http://172.16.170.227:7800/rest/structure/325/',
+ 'output': 'http://172.16.170.227:7800/rest/structure/324/',
+ 'dos': 'http://172.16.170.227:7800/rest/dos/107/',
+ 'element_set': ['http://172.16.170.227:7800/rest/elements/Ge/',
+  'http://172.16.170.227:7800/rest/elements/Se/']}</code></pre>
       </figure>
 <hr>
 <h1>Write files</h1>
