@@ -238,6 +238,17 @@ code {
     <script src="{% static 'javascript/3Dmol/3Dmol-nojquery-min.js' %}"></script>
     <div id="ParallaxContainer" style="background-color: transparent; position: absolute; top: 125; height: 1350px; width: 100%;" data-parallax="scroll" data-image-src="{% static 'Images/Icon.png' %}"></div>
     <div id="StructureContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 125; height: 450px; width: 100%;">
+        <div id="StructureResultsBox">
+        <!--Formula: {{  entry.composition.formula  }}
+        <br>
+        a: {{  a  }}
+        <br>
+        b: {{  b  }}
+        <br>
+        {{  structure.spacegroup.hm  }}-->
+
+    </div>
+
         <a id='Poscar_Link' style='position: relative; top: 105px; left: 543px;'
           download="POSCAR">
           <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
@@ -289,16 +300,6 @@ code {
           })();
         </script>
 
-    <div id="StructureResultsBox">
-        <!--Formula: {{  entry.composition.formula  }}
-        <br>
-        a: {{  a  }}
-        <br>
-        b: {{  b  }}
-        <br>
-        {{  structure.spacegroup.hm  }}-->
-
-    </div>
     <div id="ElectronicResultsBox"></div>
 
     <script>
