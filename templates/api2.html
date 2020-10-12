@@ -19,7 +19,7 @@
 		margin:2em auto;
 	}
 
-figure
+	figure
 	{
 		display:block;
 
@@ -31,7 +31,6 @@ figure
 		background:#eee;
 	}
 
-	/* code example caption */
 	figure figcaption
 	{
 		display:block;
@@ -49,23 +48,145 @@ figure
 
 
 
-	/* the code example itself */
-	pre, pre code, pre samp
+	pre, pre *
 	{
-		display:block;
-		margin:10;
-
-		cursor:text;
-
-		/* same core font for outer and inner elements */
 		font:normal normal normal 1em/1.4 monaco, courier, monospace;
 	}
 	pre
 	{
+		font-size:0.8em;
+	}
+	pre, pre code, pre samp
+	{
+		display:block;
+		margin:0;
+
+		cursor:text;
+	}
+	pre code, pre samp
+	{
+		/* enforce white-space for IE7 */
+		white-space:pre;
+
+		/* enforce word-wrap for mobile safari */
+		word-wrap:normal;
+
 		padding:10px;
 
-		/* overall font-size */
-		font-size:0.8em;
+		-moz-tab-size:4;
+		-o-tab-size:4;
+		tab-size:4;
+
+		overflow-x:auto;
+	}
+
+	/* additional focus rules to provide a visual cue */
+	pre [contenteditable]:focus
+	{
+		border-radius:0 0 3px 0;
+
+		background:#fff;
+
+		outline:none;
+
+		box-shadow:inset 0 1px 4px 1px rgba(0,0,0,0.5);
+	}
+
+	pre.line-numbers
+	{
+		position:relative;
+	}
+	pre.line-numbers code,
+	pre.line-numbers samp
+	{
+		margin-left:3em;
+
+		border-left:1px solid #ccc;
+	}
+
+	pre.line-numbers > div
+	{
+		display:block;
+
+		position:absolute;
+		top:0;
+		left:0;
+
+		height:100%;
+
+		border-radius:0 0 0 3px;
+
+		background:#e5e5e5;
+
+		overflow:hidden;
+
+		counter-reset:line;
+	}
+
+	pre.line-numbers > div > span
+	{
+		display:block;
+		width:2.5em;
+		padding:0 0.5em 0 0;
+
+		text-align:right;
+
+		color:#777;
+
+		overflow:hidden;
+
+		counter-increment:line;
+	}
+	pre.line-numbers > div > span::before
+	{
+		content:counter(line);
+	}
+	pre.line-numbers > div > span:first-child
+	{
+		margin-top:10px;
+	}
+	pre.line-numbers > div > span:nth-child(odd)
+	{
+		background:#dfdfdf;
+	}
+
+	@media print
+	{
+		pre code
+		{
+			overflow-x:visible;
+			white-space:pre-wrap;
+		}
+		pre.line-numbers div
+		{
+			display:none;
+		}
+		pre.line-numbers > code,
+		pre.line-numbers > samp
+		{
+			margin-left:0;
+		}
+	}
+
+
+
+	/* double-up the syntax elements for cross-browser RTF-keystroke support */
+	pre b, pre strong
+	{
+		font-weight:normal;
+		color:#039;
+	}
+	pre u, pre u b, pre u strong
+	{
+		text-decoration:none;
+		color:#083;
+	}
+	pre i, pre em, pre i *, pre em *, pre i * *, pre em * *
+	{
+		letter-spacing:-0.1em;
+		text-decoration:none;
+		font-style:normal;
+		color:#c55;
 	}
 </style>
   <div style="position: relative; left : 5%; width : 90%;">
@@ -75,10 +196,11 @@ figure
         as shown below.
       <figure>
           <figcaption>Default</figcaption>
-                  <pre class="line-numbers">
-            <code>from quantumML.rest import MWRester
-    with MWRester() as mwr:
-    mwr.get_calculation(*filter/s*)</code>
+                 <pre aria-describedby="example1-description" aria-labelledby="example1-caption">
+                     <code contenteditable="true" tabindex="0" spellcheck="false">
+                         from quantumML.rest import MWRester
+                         <b>with</b> MWRester() <b>as</b> mwr:
+                         mwr.get_calculation(<u>filter/s*</u>)</code>
         </pre>
 
       </figure>
