@@ -202,7 +202,8 @@
 <b>with</b> MWRester() <b>as</b> mwr:
     mwr.get_calculation(<u>filter/s</u>)</code></pre>
       </figure>
-<h1 id="queries">Queries</h1>
+<hr>
+<h1 id="queries">Filters</h1>
       <p> To refine the query results the following filters may be applied</p>
 <ul>
 <li><strong>band_gap_range</strong><br>Range of bandgaps in <em>eV</em> as a two valued list eg. [1.2, 3.1]  </li>
@@ -213,13 +214,19 @@
 <li><strong>crystal_system</strong><br>crystal system as a string eg. &#39;Tetragonal&#39;  </li>
 </ul>
       <figure>
-          <figcaption>Connecting to materialsweb</figcaption>
+          <figcaption>Applying filters</figcaption>
                  <pre aria-describedby="example1-description" aria-labelledby="example1-caption"><code
                          contenteditable="true" tabindex="0"
                          spellcheck="false"><b>from</b> quantumML.rest <b>import</b>b> MWRester
 <b>with</b> MWRester() <b>as</b> mwr:
-                     mwr.get_calculation(band_gap_range<i>=</i>[<u>1</u>,<u>1.5</u>], formation_energy_range<i>=</i>[<u>124</u>,<u>150</u> )</code></pre>
+    mwr.get_calculation(band_gap_range<i>=</i>[<u>1</u>,<u>1.5</u>], formation_energy_range<i>=</i>[<u>124</u>,<u>150</u>])</code></pre>
       </figure>
+<hr>
+<h1>Write files</h1>
+      <p>currently there are two methods to write the files from a query. The <i>get_calculation</i> method will store all the entries as a list.
+          As a result one can write all of the files from a querry to a directory using the <i>write_all</i> method or write the files of a specific entry
+      using the <i>write</i> method:</p>
+
 
         and as a result can be interacted with in mostly similar ways to those described in the
         <a style="font-size:24; color: #fcb040" href="https://www.materialsproject.org/docs/api">MAPI documentation</a>. For convenience,
