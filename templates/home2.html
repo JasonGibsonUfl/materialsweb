@@ -1,0 +1,180 @@
+{% load static %}
+<style>
+.navbar {
+  overflow: hidden;
+  background-color: white;
+  position: absolute;
+  top: 0%;
+  height: 425px;
+  width: 100%;
+  opacity: 0.9;
+}
+.cent {
+  position: absolute;
+  top: 10%;
+  left:30%;
+}
+.navbar a {
+  color: #454343;
+  font-size: 24;
+  background-color: transparent;
+  text-decoration: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dropdown {
+  overflow: hidden;
+
+}
+
+#dropdown div:hover + #dropdown-content,#dropdown-content:hover{
+  display: block;
+}
+
+.dropdown .dropbtn {
+  font-size: 24px;
+  border: none;
+  outline: none;
+  color: #454343;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 24px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+</style>
+<head>
+    <title>materialsweb</title>
+    <link rel="icon" href="{% static 'Images/Black_Icon.png' %}" sizes="16x16">
+    <link href='https://fonts.googleapis.com/css?family=Nunito:300' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8"/>
+    <meta name="description" content="An online repository of electronic structure data for 2D and bulk layered materials"/>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <meta name="google-site-verification" content="SBScCrEfGtKxeXsL5FNkENAr08afbfdwDszHH9iJo_4" />
+    <meta name="google-signin-client_id" content="788957396257-ep109gm4v4hg6qvtv8nqj7gqf4mirduh.apps.googleusercontent.com">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS//homestyle.css' %}" />
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="{% static 'parallax.js' %}"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <div style="position: relative; top: 0px; left: 0px; background-color: black; opacity: 0.9; width: 100%;"></div>
+
+
+        <div class="navbar">
+            <div class="cent">
+                <a href="/" style="float: left; width: 85px;" >Home  </a>
+                <!--{% if is_signed_in %}
+                  <a class="hvr-float-shadow" href="/" id="SignOut">Sign Out</a>
+                {% else %}
+                  <a class="hvr-float-shadow" href="/accounts/login" id="SignOut">Sign In</a>
+                  <a class="hvr-float-shadow" href="/accounts/register" id="Register">Register</a>
+                {% endif %}-->
+               <div class="dropdown" style="float:left; display: block;">
+                    <button class="dropbtn">About
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/about" id="About">About</a>
+                        <a href="/docs" id="Docs">Docs</a>
+                        <a href="/contact" id="Contact">Contact</a>
+                        <a href="/api" id="Api">API</a>
+                        <a href="/api" id="Api2">API2</a>
+
+                    </div>
+                </div>
+
+                <div class="dropdown" style="float:left;">
+                    <button class="dropbtn">Dropdown
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                      <a href="lattice_matching/app">Lattice Matching</a>
+                      <a href="electronic_visualization">Electronic Visualization</a>
+                      <a href="database">Database</a>
+                      <a href="substrate"></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+  <img src="{% static 'Images/Logo.png' %}" width="295px" height="115px" style="display: inline; overflow: hidden; position: absolute; top: 10px; left: 50px; background-color: transparent"/>
+{%  block apps  %}
+    <div id="DBContainer">
+
+
+
+    </div>
+
+     <div id="UnderVideo" style="background-color: transparent; position: absolute; z-index: -1; top: 10; height: 930px; width: 100%;" data-parallax="scroll" data-image-src="{% static 'Images/Icon.svg' %}"></div>
+
+    <div id="InfoBlock" style="background-color: white; position: absolute; top: 540; height: 400px; width: 100%; opacity: 0.9;">
+      <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Browse our databases of structural, electronic,</br>and thermodynamic data for 2D/3D materials</p>
+      <p style="position: relative; width: 800px; left: 100px; top: 0px; font-size: 32px; color: black;"> Write your own python workflows for using</br>VASP to characterize your own 2D</br>materials</p>
+    </div>
+    <img src="{% static 'Images/db_glyphicon.png'%}" style="position: absolute; top: 580px; left: 50px; height: 50px;"></img>
+    <img src="{% static 'Images/coding_glyphicon.png'%}" style="position: absolute; top: 690px; left: 50px; height: 45px;"></img>
+
+{%  endblock  %}
+
+
+    <div id="BottomBlock" style="background-color: #454343; color: white; position: absolute; top: 940; height: 300px; width: 100%;">
+      <p style="position: relative; top: 100px; left: 50px; font-size: 32px; width: 700px;"> powered by <a href="https://github.com/henniggroup/MPInterfaces" style="font-size: 32px; color: #fcb040;">MPInterfaces</a> and <a href="https://github.com/materialsproject/pymatgen" style="font-size: 32px; color: #fcb040;">Pymatgen</a></p>
+    </div>
+
+    {% if dbs_loaded %}
+        <p style="display: None">DBs Loaded</p>
+    {% endif %}
+
+    <script>
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-85193239-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+</body>
