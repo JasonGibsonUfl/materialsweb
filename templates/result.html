@@ -14,9 +14,9 @@ body {
     background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), url("{% static 'Images/Icon.svg' %}");
 }
 .center {
-  line-height: 200px;
-  height: 200px;
-  border: 3px solid green;
+  margin: auto;
+  width: 60%;
+  padding: 10px;
 }
 
 .topnav {
@@ -263,15 +263,14 @@ code {
         </a>
     </div>
     <div id="BandsDiagramContainer" style="background-color: #c0c0c0; opacity: 0.9; position: absolute; top: 575; height: 450px; width: 100%;">
-        <div class="center">
-            <div id="ElectronicResultsBox2" style="font-size: 24; top 30px;"></div>
-            <div style="float: left;">
-                <a id='Bands_Link' download="{{ redform }}_bands.pdf">
-                    <br>
-                <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
-                Bandstructure
-            </a>
-            </div>
+
+        <div id="ElectronicResultsBox2" style="font-size: 24; top 30px;"></div>
+        <div style="float: left;">
+            <a id='Bands_Link' download="{{ redform }}_bands.pdf">
+                <br>
+            <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
+            Bandstructure
+        </a>
         </div>
     </div>
     <div id="PourbaixDiagramContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 1025; height: 450px; width: 100%;"></div>
