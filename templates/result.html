@@ -1,4 +1,3 @@
-{% extends 'home.html' %}
 {% load static %}
 {% static "" as baseUrl %}
 
@@ -8,13 +7,155 @@
     <link rel="stylesheet" type="text/css"
         href="{% static 'CSS/dbstyle.css' %}" />
     <link href='https://fonts.googleapis.com/css?family=Nunito:300'
-        rel='stylesheet' type='text/css'>/
+        rel='stylesheet' type='text/css'>
+    <style>
+body {
+    margin:0;font-family:Arial;
+    background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), url("{% static 'Images/Icon.svg' %}");
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #454343;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 17px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.topnav a:hover, .dropdown:hover .dropbtn {
+  background-color: #555;
+  color: white;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child), .dropdown .dropbtn {
+    display: none;
+  }
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .topnav.responsive .dropdown {float: none;}
+  .topnav.responsive .dropdown-content {position: relative;}
+  .topnav.responsive .dropdown .dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+code {
+    font-family: monospace;
+  }
+.entry-content code {
+    background-color: #000;
+    color: #ddd;
+  }
+}
+</style>
 </head>
 
-
 <body onload="displayResults();">
-{% block apps %}
 
+<div class="topnav" id="myTopnav">
+    <a><img src="{% static 'Images/Logo.png' %}" width="148px" height="58px" ></a>
+  <a  href="/">Home</a>
+  <div class="dropdown">
+    <button class="dropbtn">About
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+        <a href="/about" id="About">About</a>
+        <a href="/docs" id="Docs">Docs</a>
+        <a href="/contact" id="Contact">Contact</a>
+        <a href="/api" id="Api">API</a>
+    </div>
+  </div>
+  <div class="dropdown">
+    <button class="dropbtn">Apps
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="lattice_matching/app">Lattice Matching</a>
+      <a href="electronic_visualization">Electronic Visualization</a>
+      <a href="database">Database</a>
+      <a href="substrate">Substrate</a>
+    </div>
+  </div>
+  <!--<a href="#about">About</a>
+  <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>-->
+</div>
     <script type="text/javascript" src="{% static 'javascript/3Dmol/jquery.js' %}">
     </script>
     <script>
@@ -170,9 +311,8 @@
       ga('send', 'pageview');
 
     </script>
-{% endblock %}
+    {% endwith %}
 
     <!--<img id="BandsDiagram" src="{% static '{{ label }}' %}" style="display: inline-block; width: 500px; height: 350px; position: relative; left: 450px; top: -50px;">
     <img id="PourbaixDiagram" src="{% static 'mp-691133/pourbaix.png' %}" style="display: inline-block; width: 600px; height: 450px; position: absolute; clear: both; left: 0px; top: 1025px;">-->
-
 </body>
