@@ -200,9 +200,18 @@
                          contenteditable="true" tabindex="0"
                          spellcheck="false"><b>from</b> quantumML.rest <b>import</b>b> MWRester
 <b>with</b> MWRester() <b>as</b> mwr:
-    mwr.get_calculation(<u>filter/s</u>)</code>
-        </pre>
+    mwr.get_calculation(<u>filter/s</u>)</code></pre>
       </figure>
+<h1 id="queries">Queries</h1>
+<ul>
+<li><strong>band_gap_range</strong><br>Range of bandgaps in <em>eV</em> as a two valued list eg. [1.2, 3.1]  </li>
+<li><strong>Formation_energy_range</strong><br>Range of formation energies in <em>meV</em> as two values list eg. [50, 150]</li>
+<li><strong>elements</strong><br>List of elements contained in entry eg. [&#39;Na&#39;, &#39;Cl&#39;]<br>note: this will return all entries that contain Na and Cl as well as any other element </li>
+<li><strong>space_group_number</strong><br>integer of space group number eg. 5</li>
+<li><strong>dimention</strong><br>integer of dimension of material eg. 2</li>
+<li><strong>crystal_system</strong><br>crystal system as a string eg. &#39;Tetragonal&#39;  </li>
+</ul>
+
         and as a result can be interacted with in mostly similar ways to those described in the
         <a style="font-size:24; color: #fcb040" href="https://www.materialsproject.org/docs/api">MAPI documentation</a>. For convenience,
         <a style="font-size:24; color: #fcb040" href="https://github.com/henniggroup/mpinterfaces">MPInterfaces</a> has built-in classes
