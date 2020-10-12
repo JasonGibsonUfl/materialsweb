@@ -13,6 +13,11 @@ body {
     margin:0;font-family:Arial;
     background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), url("{% static 'Images/Icon.svg' %}");
 }
+.center {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
 
 .topnav {
   overflow: hidden;
@@ -207,10 +212,7 @@ code {
         bands_diagram.style.height = '350px';
         bands_diagram.style.float = 'right';
         bands_diagram.style.position = 'relative';
-        //bands_diagram.style.display = 'block';
-        //bands_diagram.style.margin-left = 'auto';
-        //bands_diagram.style.margin-right = 'auto';
-        //bands_diagram.style.width = '40%';
+
         document.getElementById("BandsDiagramContainer").appendChild(bands_diagram);
 
         var pbx_link = document.getElementById("Pourbaix_Link");
