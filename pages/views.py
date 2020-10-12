@@ -52,7 +52,7 @@ def docs_view(request, *args,**kwargs):
     context = {}
     is_signed_in = request.user.is_authenticated and not request.user.is_anonymous
     context.update({"is_signed_in": is_signed_in})
-    return render(request, 'docs.html', context)
+    return render(request, 'docs2.html', context)
 
 
 def contact_view(request, *args,**kwargs):
