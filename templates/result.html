@@ -211,6 +211,7 @@ code {
         bands_diagram.style.width = '500px';
         bands_diagram.style.height = '350px';
         bands_diagram.style.float = 'right';
+        bands_diagram.style.position = 'relative';
 
         document.getElementById("BandsDiagramContainer").appendChild(bands_diagram);
 
@@ -223,10 +224,8 @@ code {
         pbx_diagram.style.display = 'inline-block';
         pbx_diagram.style.width = '600px';
         pbx_diagram.style.height = '450px';
-        pbx_diagram.style.position = 'absolute';
+        pbx_diagram.style.float = 'right';
         pbx_diagram.style.clear = 'both';
-        pbx_diagram.style.left = '0px';
-        pbx_diagram.style.top = '1025px';
         pbx_diagram.onerror = function() {
           document.getElementById('PourbaixDiagram').src="{% static '/Images/not_found.png' %}";
           document.getElementById('PourbaixDiagram').style.top = '1075px';
@@ -234,8 +233,8 @@ code {
           document.getElementById('PourbaixDiagram').style.height = '350px';
           document.getElementById('PourbaixDiagram').style.width = '310px';
         };
-        document.body.appendChild(pbx_diagram);
-    }
+        document.getElementById("PourbaixDiagramContainer").appendChild(pbx_diagram);
+        }
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="{% static "parallax.js" %}"></script>
@@ -262,7 +261,7 @@ code {
         </a>
     </div>
     <div id="BandsDiagramContainer" style="background-color: #c0c0c0; opacity: 0.9; position: absolute; top: 575; height: 450px; width: 100%;">
-        <br><br><br>
+        <br>
         <div id="ElectronicResultsBox2" style="font-size: 24; top 30px;"></div>
         <div style="float: left;">
             <a id='Bands_Link' download="{{ redform }}_bands.pdf">
@@ -272,16 +271,20 @@ code {
         </a>
         </div>
     </div>
-    <div id="PourbaixDiagramContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 1025; height: 450px; width: 100%;"></div>
+    <div id="PourbaixDiagramContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 1025; height: 450px; width: 100%;">
+
+        <a id='Pourbaix_Link' style='position: relative; top: 925px; left: 0px;'
+          download="{{ redform }}_pbx.pdf">
+          <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
+          Pourbaix Diagram
+        </a>
+
+
+    </div>
 
 
 
 
-    <a id='Pourbaix_Link' style='position: relative; top: 925px; left: 0px;'
-      download="{{ redform }}_pbx.pdf">
-      <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
-      Pourbaix Diagram
-    </a>
 
     <div id="3Dmolborderdiv" style="width: 402px; height: 402px;
     position: absolute; border: 1px solid black;
