@@ -38,8 +38,8 @@ urlpatterns = [
     path('substrate', views.substrate_view, name='substrate'),
     path('django_plotly_dash/', include('django_plotly_dash.urls')),
     path('lattice_matching/', include(('lattice_matching.urls', 'lattice_matching'), namespace='lattice_matching')),
-    path('models', views.models_view, name='models'),
-
+    path('models', views.models_view, name='models'),    
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
