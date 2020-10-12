@@ -258,12 +258,13 @@ code {
         </a>
     </div>
     <div id="BandsDiagramContainer" style="background-color: #c0c0c0; opacity: 0.9; position: absolute; top: 575; height: 450px; width: 100%;">
-        <div id="ElectronicResultsBox2" style="font-size: 24; position: relative;"></div>
-
-        <a id='Bands_Link' download="{{ redform }}_bands.pdf">
+        <div id="ElectronicResultsBox2" style="font-size: 24; position: absolute;"></div>
+        <div style="position:relative;">
+            <a id='Bands_Link' download="{{ redform }}_bands.pdf">
             <img src="{% static 'Images/download.png' %}" style="height: 60px;"></img>
             Bandstructure
         </a>
+        </div>
     </div>
     <div id="PourbaixDiagramContainer" style="background-color: white; opacity: 0.9; position: absolute; top: 1025; height: 450px; width: 100%;"></div>
 
