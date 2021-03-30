@@ -83,7 +83,7 @@ pybind11==2.5.0
 pycparser==2.20
 pydotplus==2.0.2
 pyfiglet==0.8.post1
-Pygments==2.6.1
+Pygments==2.7.4
 PyHamcrest==2.0.2
 pymatgen==2020.4.29
 pymatgen-db==2019.3.28
