@@ -33,7 +33,7 @@ dash-table==4.8.1
 dataclasses==0.6
 decorator==4.4.2
 distlib==0.3.0
-Django==2.2.12
+Django==2.2.22
 django-better-admin-arrayfield==1.1.0
 django-extensions==2.2.9
 django-plotly-dash==1.4.2
